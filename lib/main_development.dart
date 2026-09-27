@@ -7,8 +7,13 @@ import 'package:t_store/t_store.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables
-  await dotenv.load(fileName: '.env');
+  // Load environment variables (optional: --dart-define works too).
+  try {
+    await dotenv.load(fileName: '.env');
+  } catch (_) {
+    // No .env present — SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY must come
+    // from --dart-define. SupabaseConfig fails clearly if both are missing.
+  }
 
   // Initialize Supabase
   await SupabaseService.initialize();

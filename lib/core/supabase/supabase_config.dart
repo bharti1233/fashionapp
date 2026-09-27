@@ -1,18 +1,48 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-/// Supabase Configuration
+/// Supabase Configuration (build-time, no committed secrets).
 ///
-/// Uses environment variables from .env file for security
-/// Never commit .env file to version control
+/// Resolution order for each value:
+///   1. `--dart-define` (CI / release builds via GitHub Secrets)
+///   2. `.env` file (local development only, never committed)
+///
+/// Precedence of key names: `SUPABASE_PUBLISHABLE_KEY` (preferred, current
+/// Supabase terminology) then `SUPABASE_ANON_KEY` (legacy name, still
+/// accepted by the `supabase_flutter` SDK as the `anonKey` parameter).
+///
+/// Missing configuration fails fast with a clear message instead of
+/// silently connecting anywhere. Only the publishable/anon key may be
+/// shipped in the app — never a service_role / secret key.
 class SupabaseConfig {
-  /// Supabase Project URL
-  static String get supabaseUrl =>
-      dotenv.env['SUPABASE_URL'] ?? 'https://lskwrhujwhbxdefasppr.supabase.co';
+  static const _urlKey = 'SUPABASE_URL';
+  static const _publishableKey = 'SUPABASE_PUBLISHABLE_KEY';
+  static const _anonKey = 'SUPABASE_ANON_KEY';
 
-  /// Supabase Anonymous Key (safe to expose in client)
+  static String _resolve(List<String> defineKeys, List<String> envKeys) {
+    for (final key in defineKeys) {
+      final value = String.fromEnvironment(key);
+      if (value.isNotEmpty) return value;
+    }
+    if (dotenv.isInitialized) {
+      for (final key in envKeys) {
+        final value = dotenv.env[key];
+        if (value != null && value.isNotEmpty) return value;
+      }
+    }
+    throw StateError(
+      'Missing Supabase configuration. Provide it via '
+      '--dart-define=${defineKeys.first}=... '
+      'or a local .env file (see .env.example).',
+    );
+  }
+
+  /// Supabase Project URL
+  static String get supabaseUrl => _resolve([_urlKey], [_urlKey]);
+
+  /// Supabase publishable (anon) key — safe to expose in the client.
+  /// Protected server-side by RLS; never use a service_role key here.
   static String get supabaseAnonKey =>
-      dotenv.env['SUPABASE_ANON_KEY'] ??
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3dyaHVqd2hieGRlZmFzcHByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODA3MzIsImV4cCI6MjA4MTE1NjczMn0.1O_7OARrC4lSaFzyigEPes5Pn1j9s1aZE2l4ZwnSJCE';
+      _resolve([_publishableKey, _anonKey], [_publishableKey, _anonKey]);
 
   // Storage bucket names
   static const String productImagesBucket = 'product-images';
