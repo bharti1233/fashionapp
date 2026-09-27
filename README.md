@@ -342,12 +342,12 @@ The app uses Supabase (PostgreSQL) with the following tables:
 
 ## Sample Data
 
-The `supabase_sample_data.sql` includes:
-- 5 Categories (Electronics, Clothes, Shoes, Furniture, Accessories)
-- 5 Brands
-- 29 Products with real images
+The `supabase_sample_data.sql` is a 100% fictional fashion seed (no retailer data):
+- 6 Categories (Men's, Women's, Kids Fashion, Footwear, Accessories, Sportswear)
+- 6 Fictional brands (NorthThread, VelvetLane, SoleCraft, Cotton and Oak, UrbanWeave, StrideLab)
+- 72 Products with fashion attributes JSONB (gender, sizes, colors, material, fit, pattern, occasion, season) and neutral placeholder images
 - 5 Promotional Banners
-- 3 Discount Coupons (WELCOME10, SAVE20, FLASH25)
+- 3 Discount Coupons (WELCOME10, STYLE20, FLAT200)
 
 ## Contributing
 
