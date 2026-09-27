@@ -22,18 +22,19 @@ Clean Architecture layers, Supabase auth/shop/cart/wishlist/orders/reviews/perso
 
 Single DI (was 3), single auth/shop stack (was 2), orders cancel gap, coupons RLS gap, malformed `flutter_launcher_icons.yaml` dev-deps entry, app identity placeholders.
 
-## Tests / analyze / CI
+## Tests / analyze / CI (actual results, 2026-09-27)
 
-- `flutter pub get`: resolves ("Changed 27 dependencies"); plugin-symlink step fails on no-symlink filesystem (local-only; CI unaffected). See exact log in report.
-- `flutter analyze`: PENDING — first run still building context at time of writing; result appended below when complete.
-- `flutter test`: PENDING — runs after analyze in same job.
-- CI: workflow created; first run requires push to a fork with Actions enabled — NOT YET RUN (no credentials in this environment).
+- `flutter pub get`: resolves ("Changed 27 dependencies"); plugin-symlink step fails on no-symlink filesystem (local-only; CI unaffected).
+- `flutter analyze`: **No issues found (exit 0)** — after restoring `OnBoardingCubit` (17 errors) and awaiting a future in `profile_repository_impl.dart` (1 warning).
+- `flutter test`: **202/202 passed (exit 0)** — full suite incl. `widget_test.dart`; one expectation fixed (availability strings localized, test updated not deleted).
+- `dart format --set-exit-if-changed`: clean after `style: apply dart format` commit (repo was not format-clean upstream: 203 files).
+- CI: workflow created (`.github/workflows/flutter.yml`); first run requires push to a fork with Actions enabled — NOT YET RUN (no credentials in this environment).
 
-## Verification status (updated when jobs complete)
+## Verification status
 
-- Analyze: _pending_
-- Tests: _pending_
-- Format: `dart format` enforced in CI (not run locally to save cycles; CI gate covers it)
+- Analyze: **clean — No issues found (exit 0)**
+- Tests: **202/202 passed (exit 0)**
+- Format: clean (`style: apply dart format` committed; CI gate covers future changes)
 - APK: deferred to CI per constraint (no local `flutter run`/`flutter build`)
 
 ## Known issues (genuine)

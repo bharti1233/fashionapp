@@ -33,7 +33,8 @@ Future: Flutter → FastAPI → Supabase/Postgres (+ Redis/ARQ + AI/VTON provide
 ## Build / Test / CI Status
 
 - `flutter pub get`: resolves (27 deps changed); plugin-symlink step fails on no-symlink filesystem (local-only, documented).
-- `flutter analyze` / `flutter test`: running; results recorded in `docs/PHASE-1-FOUNDATION-COMPLETION.md` when complete.
+- `flutter analyze`: **clean — No issues found (exit 0)**.
+- `flutter test`: **202/202 passed (exit 0)**.
 - CI (`.github/workflows/flutter.yml`): created, not yet run (requires push to a fork with Actions enabled).
 - No local `flutter run` / APK build performed (deferred to CI per constraint).
 
