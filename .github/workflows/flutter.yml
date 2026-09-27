@@ -40,10 +40,11 @@ jobs:
       - name: Build Android APK (release)
         # Supabase config comes from repository secrets via build-time
         # defines. Secrets are never printed, logged, or committed.
+        # The production flavor is required (see android/app/build.gradle).
         # The APK is signed with the debug keystore (CI release APK);
         # Play Store production signing is a separate setup.
         run: >
-          flutter build apk --release -t lib/main_production.dart
+          flutter build apk --release --flavor production -t lib/main_production.dart
           --dart-define=SUPABASE_URL="${{ secrets.SUPABASE_URL }}"
           --dart-define=SUPABASE_PUBLISHABLE_KEY="${{ secrets.SUPABASE_PUBLISHABLE_KEY }}"
 
@@ -51,4 +52,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: fashion-app-release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-production-release.apk
