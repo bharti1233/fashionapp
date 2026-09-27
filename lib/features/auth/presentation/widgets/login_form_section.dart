@@ -12,7 +12,7 @@ import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
 import 'package:t_store/features/auth/presentation/views/password_configuration/forget_password_view.dart';
 import 'package:t_store/features/auth/presentation/views/signup/sign_up_view.dart';
-import 'package:t_store/features/shop/presentation/controller/shop_cubit.dart';
+import 'package:t_store/features/shop/presentation/cubit/products_cubit.dart';
 
 class LoginFormSection extends StatefulWidget {
   const LoginFormSection({super.key});
@@ -62,9 +62,13 @@ class _LoginFormSectionState extends State<LoginFormSection> {
                 BlocProvider(
                   create: (context) => sl<NavigationMenuCubit>(),
                 ),
-                BlocProvider(
-                  create: (context) => sl<ShopCubit>()
-                    ..getSortedProducts(sortBy: 'rating', sortType: "desc"),
+                BlocProvider.value(
+                  value: sl<ProductsCubit>()
+                    ..getProducts(
+                      sortBy: 'rating',
+                      ascending: false,
+                      refresh: true,
+                    ),
                 ),
               ],
               child: const NavigationMenu(),

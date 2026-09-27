@@ -87,11 +87,6 @@ import 'package:t_store/features/personalization/domain/usecases/get_profile_use
 import 'package:t_store/features/personalization/domain/usecases/update_profile_usecase.dart';
 import 'package:t_store/features/personalization/presentation/cubit/profile_cubit.dart';
 
-// Chat
-import 'package:t_store/features/chat/data/repositories/chat_repository_impl.dart';
-import 'package:t_store/features/chat/domain/repositories/chat_repository.dart';
-import 'package:t_store/features/chat/presentation/cubit/chat_cubit.dart';
-
 // Notifications
 import 'package:t_store/features/notifications/data/repositories/notification_repository_impl.dart';
 import 'package:t_store/features/notifications/domain/repositories/notification_repository.dart';
@@ -290,15 +285,6 @@ Future<void> setupServiceLocator() async {
         getProfileUsecase: sl(),
         updateProfileUsecase: sl(),
       ));
-
-  // ==================== Chat ====================
-  // Repository
-  sl.registerLazySingleton<ChatRepository>(
-    () => ChatRepositoryImpl(supabaseService: sl()),
-  );
-
-  // Cubit
-  sl.registerFactory(() => ChatCubit(repository: sl()));
 
   // ==================== Notifications ====================
   // Repository

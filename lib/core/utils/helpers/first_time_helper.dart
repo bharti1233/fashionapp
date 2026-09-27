@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:t_store/core/depandancy_injection/service_locator.dart';
+import 'package:t_store/core/dependency_injection/service_locator.dart';
 import 'package:t_store/core/utils/helpers/logger_helper.dart';
 import 'package:t_store/core/utils/helpers/shared_preferences_exception_helper.dart';
 
