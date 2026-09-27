@@ -6,20 +6,22 @@ Fashion commerce + AI fashion platform (commerce foundation complete; AI phases 
 
 ## Current Phase
 
-Phase 1 — Fashion Commerce Foundation: COMPLETE (implementation), CI validation pending push.
+Phase 1 — Fashion Commerce Foundation: COMPLETE (implementation + live Supabase + CI).
 
 ## Completed (verified in `TStore/`)
 
 - Flutter Clean Architecture foundation, Supabase Auth, onboarding, Home/Explore/Wishlist/Cart/Profile nav.
-- Fashion catalog: 6 categories, 6 fictional brands, 72 seeded products with size/color/material/fit/pattern/occasion/season/gender attributes, search, filter, sort, product details, variants via attributes.
+- Fashion catalog: 6 categories, 6 fictional brands, 76 seeded products with size/color/material/fit/pattern/occasion/season/gender attributes, search, filter, sort, product details, variants via attributes.
 - Wishlist, cart, checkout view, orders (+cancel own pending), addresses, reviews/ratings, notifications, coupons, theme, shimmer/loading/empty/error states.
-- Security: RLS on all tables, coupons RLS added, no committed secrets (`.env.example` placeholders only), anon-key-only client.
+- Security: RLS on all tables (+ owner-scoped user data, public active catalog, coupon/RLS hardening, function search_path pinning, trigger-function RPC revoked), no committed secrets (`.env.example` placeholders only), publishable-key-only client via `--dart-define`.
 - Legacy removal: DummyJSON stacks, chat demo, unused deps; single DI; `flutter_launcher_icons`/`flutter_native_splash` → dev deps.
+- Live Supabase project `ttjpmsgmmnvyyzbesoda`: schema + RLS + 76 products + 6 buckets + image policies applied and query-verified.
+- GitHub repo `bharti1233/fashionapp` (branch `main`, TStore content only) with release-APK CI.
 - Docs: `docs/{REPOSITORY-AUDIT,FASHION-APP-ARCHITECTURE,BUILD-AND-CI}.md`, Phase-0 addendum.
 
 ## In Progress
 
-- Local `flutter analyze` / `flutter test` verification (env-limited); CI workflow created, awaiting push + green run.
+- GitHub Actions release-APK validation (autonomous loop until green).
 
 ## Planned
 
@@ -32,17 +34,17 @@ Future: Flutter → FastAPI → Supabase/Postgres (+ Redis/ARQ + AI/VTON provide
 
 ## Build / Test / CI Status
 
-- `flutter pub get`: resolves (27 deps changed); plugin-symlink step fails on no-symlink filesystem (local-only, documented).
-- `flutter analyze`: **clean — No issues found (exit 0)**.
-- `flutter test`: **202/202 passed (exit 0)**.
-- CI (`.github/workflows/flutter.yml`): created, not yet run (requires push to a fork with Actions enabled).
+- `flutter pub get`: resolves locally; CI installs clean.
+- `flutter analyze`: **clean — No issues found (exit 0)** locally and in CI.
+- `flutter test`: **202/202 passed (exit 0)** locally; CI runs the same suite.
+- CI (`.github/workflows/flutter.yml`): release APK + `fashion-app-release-apk` artifact; secrets `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`.
 - No local `flutter run` / APK build performed (deferred to CI per constraint).
 
 ## Known Issues
 
-- Test suite still references removed chat tests (deleted with feature — intended); old-stack test targets verified new-stack only.
-- `analysis_options.yaml` auto-upgraded by Flutter tool (exclude build/platform dirs) — kept.
-- Sample images are `picsum.photos` placeholders until licensed catalog arrives (Phase 8).
+- Seed/product images are `picsum.photos` placeholders until licensed catalog arrives (Phase 8).
+- CI release APK uses the debug keystore (documented as CI release APK, not Play Store signing).
+- Local FS lacks symlink support (documented; CI unaffected).
 
 ## Next Phase
 
