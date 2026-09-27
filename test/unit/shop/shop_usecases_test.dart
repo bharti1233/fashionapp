@@ -363,13 +363,13 @@ void main() {
       );
 
       expect(outOfStock.isInStock, false);
-      expect(outOfStock.availabilityStatus, 'غير متوفر');
+      expect(outOfStock.availabilityStatus, 'Out of stock');
 
       expect(limitedStock.isInStock, true);
-      expect(limitedStock.availabilityStatus, 'كمية محدودة');
+      expect(limitedStock.availabilityStatus, 'Low stock');
 
       expect(inStock.isInStock, true);
-      expect(inStock.availabilityStatus, 'متوفر');
+      expect(inStock.availabilityStatus, 'In stock');
     });
 
     test('copyWith should create a new instance with updated values', () {
