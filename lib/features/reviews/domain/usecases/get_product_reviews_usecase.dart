@@ -11,7 +11,8 @@ class GetProductReviewsUsecase
 
   @override
   Future<Either<String, List<ReviewEntity>>> call(
-      GetProductReviewsParams params) async {
+    GetProductReviewsParams params,
+  ) async {
     return await repository.getProductReviews(
       params.productId,
       page: params.page,

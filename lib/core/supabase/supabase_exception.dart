@@ -6,11 +6,7 @@ class SupabaseException implements Exception {
   final String? code;
   final dynamic originalError;
 
-  SupabaseException({
-    required this.message,
-    this.code,
-    this.originalError,
-  });
+  SupabaseException({required this.message, this.code, this.originalError});
 
   /// Create from AuthException
   factory SupabaseException.fromAuthException(AuthException e) {
@@ -48,10 +44,7 @@ class SupabaseException implements Exception {
     } else if (e is StorageException) {
       return SupabaseException.fromStorageException(e);
     } else {
-      return SupabaseException(
-        message: e.toString(),
-        originalError: e,
-      );
+      return SupabaseException(message: e.toString(), originalError: e);
     }
   }
 

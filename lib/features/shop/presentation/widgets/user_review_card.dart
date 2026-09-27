@@ -24,40 +24,30 @@ class UserReviewCard extends StatelessWidget {
                 const CircleAvatar(
                   backgroundImage: AssetImage(TImages.userProfileImage2),
                 ),
-                const SizedBox(
-                  width: TSizes.spaceBtwItems,
-                ),
+                const SizedBox(width: TSizes.spaceBtwItems),
                 Text(
                   "Mahmoud Hamdy",
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],
             ),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+            IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
           ],
         ),
-        const SizedBox(
-          width: TSizes.spaceBtwItems,
-        ),
+        const SizedBox(width: TSizes.spaceBtwItems),
         Row(
           children: [
             const CustomRatingBarIndicator(rating: 4.5),
-            const SizedBox(
-              width: TSizes.spaceBtwItems,
-            ),
+            const SizedBox(width: TSizes.spaceBtwItems),
             Text("01 Aug, 2022", style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
-        const SizedBox(
-          height: TSizes.spaceBtwItems,
-        ),
+        const SizedBox(height: TSizes.spaceBtwItems),
         const ReadMore(
           text:
               "mahmoud hamdy fathy elashwah fluttei major to make backword by etoo in pes 6 ",
         ),
-        const SizedBox(
-          height: TSizes.spaceBtwItems,
-        ),
+        const SizedBox(height: TSizes.spaceBtwItems),
         CircularContainer(
           circularContainerModel: CircularContainerModel(
             color: dark ? TColors.darkerGrey : TColors.grey,
@@ -68,15 +58,17 @@ class UserReviewCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("T_Store ",
-                          style: Theme.of(context).textTheme.titleMedium),
-                      Text("02 Aug, 2022",
-                          style: Theme.of(context).textTheme.bodyMedium),
+                      Text(
+                        "T_Store ",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Text(
+                        "02 Aug, 2022",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     ],
                   ),
-                  const SizedBox(
-                    height: TSizes.spaceBtwItems,
-                  ),
+                  const SizedBox(height: TSizes.spaceBtwItems),
                   const ReadMore(
                     text:
                         "mahmoud hamdy fathy elashwah flutter developer at myself and i major to make backword by etoo in pes 6 ",
@@ -86,9 +78,7 @@ class UserReviewCard extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(
-          height: TSizes.spaceBtwSections,
-        )
+        const SizedBox(height: TSizes.spaceBtwSections),
       ],
     );
   }

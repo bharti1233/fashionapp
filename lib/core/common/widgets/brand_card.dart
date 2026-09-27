@@ -40,9 +40,7 @@ class BrandCard extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(
-                width: TSizes.spaceBtwItems / 2,
-              ),
+              const SizedBox(width: TSizes.spaceBtwItems / 2),
               // Expanded widget to ensure the text part takes up the remaining space
               Expanded(
                 child: Column(
@@ -55,9 +53,7 @@ class BrandCard extends StatelessWidget {
                         Flexible(
                           child: Text(
                             brandCardModel.brandName,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
+                            style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(overflow: TextOverflow.ellipsis),
                           ),
                         ),

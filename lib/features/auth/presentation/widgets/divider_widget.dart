@@ -3,10 +3,7 @@ import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 
 class DividerWidget extends StatelessWidget {
-  const DividerWidget({
-    super.key,
-    required this.text,
-  });
+  const DividerWidget({super.key, required this.text});
   final String text;
   @override
   Widget build(BuildContext context) {
@@ -22,10 +19,7 @@ class DividerWidget extends StatelessWidget {
             endIndent: 5,
           ),
         ),
-        Text(
-          text,
-          style: Theme.of(context).textTheme.labelMedium,
-        ),
+        Text(text, style: Theme.of(context).textTheme.labelMedium),
         Flexible(
           child: Divider(
             color: dark ? TColors.darkGrey : TColors.grey,

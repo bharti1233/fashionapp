@@ -15,60 +15,55 @@ class SingleAddress extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
     return CircularContainer(
       circularContainerModel: CircularContainerModel(
-          padding: const EdgeInsets.all(TSizes.md),
-          width: double.infinity,
-          showBorder: true,
-          color: singleAddressModel.isSelected
-              ? TColors.primary.withValues(alpha: .5)
-              : Colors.transparent,
-          borderColor: singleAddressModel.isSelected
-              ? Colors.transparent
-              : dark
-                  ? TColors.darkerGrey
-                  : TColors.grey,
-          margin: const EdgeInsets.only(bottom: TSizes.spaceBtwItems),
-          child: Stack(
-            children: [
-              Positioned(
-                right: 5,
-                top: 0,
-                child: Icon(
-                  singleAddressModel.isSelected ? Iconsax.tick_circle5 : null,
-                  color: singleAddressModel.isSelected
-                      ? dark
+        padding: const EdgeInsets.all(TSizes.md),
+        width: double.infinity,
+        showBorder: true,
+        color: singleAddressModel.isSelected
+            ? TColors.primary.withValues(alpha: .5)
+            : Colors.transparent,
+        borderColor: singleAddressModel.isSelected
+            ? Colors.transparent
+            : dark
+            ? TColors.darkerGrey
+            : TColors.grey,
+        margin: const EdgeInsets.only(bottom: TSizes.spaceBtwItems),
+        child: Stack(
+          children: [
+            Positioned(
+              right: 5,
+              top: 0,
+              child: Icon(
+                singleAddressModel.isSelected ? Iconsax.tick_circle5 : null,
+                color: singleAddressModel.isSelected
+                    ? dark
                           ? TColors.light
-                          : TColors.dark //.withValues(alpha:.6)
-                      : null,
-                ),
+                          : TColors
+                                .dark //.withValues(alpha:.6)
+                    : null,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    singleAddressModel.name,
-                    style: Theme.of(context).textTheme.titleLarge,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(
-                    height: TSizes.sm / 2,
-                  ),
-                  Text(
-                    singleAddressModel.phoneNumber,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(
-                    height: TSizes.sm / 2,
-                  ),
-                  Text(
-                    singleAddressModel.address,
-                    softWrap: true,
-                  ),
-                ],
-              )
-            ],
-          )),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  singleAddressModel.name,
+                  style: Theme.of(context).textTheme.titleLarge,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: TSizes.sm / 2),
+                Text(
+                  singleAddressModel.phoneNumber,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: TSizes.sm / 2),
+                Text(singleAddressModel.address, softWrap: true),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

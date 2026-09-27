@@ -26,12 +26,8 @@ class LoginView extends StatelessWidget {
                 children: [
                   LoginHeaderSection(),
                   LoginFormSection(),
-                  DividerWidget(
-                    text: TTexts.orSignInWith,
-                  ),
-                  SizedBox(
-                    height: TSizes.spaceBtwSections,
-                  ),
+                  DividerWidget(text: TTexts.orSignInWith),
+                  SizedBox(height: TSizes.spaceBtwSections),
                   SignInMethodsSection(),
                 ],
               ),

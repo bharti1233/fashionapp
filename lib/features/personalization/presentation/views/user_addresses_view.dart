@@ -19,17 +19,21 @@ class UserAddressesView extends StatelessWidget {
         backgroundColor: TColors.primary,
         onPressed: () {
           THelperFunctions.navigateToScreen(
-              context, const AddNewAddressesView());
+            context,
+            const AddNewAddressesView(),
+          );
         },
         child: const Icon(Iconsax.add, color: TColors.white),
       ),
       appBar: CustomAppBar(
-          appBarModel: AppBarModel(
-              hasArrowBack: true,
-              title: Text(
-                "Addresses",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ))),
+        appBarModel: AppBarModel(
+          hasArrowBack: true,
+          title: Text(
+            "Addresses",
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -38,17 +42,19 @@ class UserAddressesView extends StatelessWidget {
               children: [
                 SingleAddress(
                   singleAddressModel: SingleAddressModel(
-                      name: "Mahmoud Hamdy",
-                      phoneNumber: "0123456789",
-                      address: "8th of October,Cairo,Egypt",
-                      isSelected: true),
+                    name: "Mahmoud Hamdy",
+                    phoneNumber: "0123456789",
+                    address: "8th of October,Cairo,Egypt",
+                    isSelected: true,
+                  ),
                 ),
                 SingleAddress(
                   singleAddressModel: SingleAddressModel(
-                      name: "Mahmoud Hamdy",
-                      phoneNumber: "0123456789",
-                      address: "8th of October,Cairo,Egypt",
-                      isSelected: false),
+                    name: "Mahmoud Hamdy",
+                    phoneNumber: "0123456789",
+                    address: "8th of October,Cairo,Egypt",
+                    isSelected: false,
+                  ),
                 ),
               ],
             ),

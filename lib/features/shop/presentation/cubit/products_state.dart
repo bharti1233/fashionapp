@@ -76,10 +76,7 @@ class ProductsSearchResult extends ProductsState {
   final List<ProductEntity> products;
   final String query;
 
-  const ProductsSearchResult({
-    required this.products,
-    required this.query,
-  });
+  const ProductsSearchResult({required this.products, required this.query});
 
   @override
   List<Object?> get props => [products, query];

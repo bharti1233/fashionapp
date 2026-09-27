@@ -25,9 +25,6 @@ class WishlistItemModel extends WishlistItemEntity {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'user_id': userId,
-      'product_id': productId,
-    };
+    return {'user_id': userId, 'product_id': productId};
   }
 }

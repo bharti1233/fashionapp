@@ -5,13 +5,14 @@ import 'interceptors.dart';
 class DioClient {
   late final Dio _dio;
   DioClient()
-      : _dio = Dio(
-          BaseOptions(
-              headers: {'Content-Type': 'application/json; charset=UTF-8'},
-              responseType: ResponseType.json,
-              sendTimeout: const Duration(seconds: 15),
-              receiveTimeout: const Duration(seconds: 15)),
-        )..interceptors.addAll([LoggerInterceptor()]);
+    : _dio = Dio(
+        BaseOptions(
+          headers: {'Content-Type': 'application/json; charset=UTF-8'},
+          responseType: ResponseType.json,
+          sendTimeout: const Duration(seconds: 15),
+          receiveTimeout: const Duration(seconds: 15),
+        ),
+      )..interceptors.addAll([LoggerInterceptor()]);
 
   // GET METHOD
   Future<Response> get(

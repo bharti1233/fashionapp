@@ -11,7 +11,8 @@ class UpdateCartItemUsecase
 
   @override
   Future<Either<String, CartItemEntity>> call(
-      UpdateCartItemParams params) async {
+    UpdateCartItemParams params,
+  ) async {
     return await repository.updateCartItem(
       cartItemId: params.cartItemId,
       quantity: params.quantity,
@@ -23,8 +24,5 @@ class UpdateCartItemParams {
   final String cartItemId;
   final int quantity;
 
-  UpdateCartItemParams({
-    required this.cartItemId,
-    required this.quantity,
-  });
+  UpdateCartItemParams({required this.cartItemId, required this.quantity});
 }

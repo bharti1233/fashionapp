@@ -14,34 +14,36 @@ class ProductDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        bottomNavigationBar: BottomAddToCart(),
-        body: SafeArea(
-          child: SingleChildScrollView(
-              child: Column(
+      bottomNavigationBar: BottomAddToCart(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
             children: [
               ProductImageSlider(),
               Padding(
-                padding: EdgeInsets.fromLTRB(TSizes.defaultSpace, 0,
-                    TSizes.defaultSpace, TSizes.defaultSpace),
+                padding: EdgeInsets.fromLTRB(
+                  TSizes.defaultSpace,
+                  0,
+                  TSizes.defaultSpace,
+                  TSizes.defaultSpace,
+                ),
                 child: Column(
                   children: [
                     RatingAndShare(),
                     ProductMetadata(),
                     ProductAttributes(),
-                    SizedBox(
-                      height: TSizes.spaceBtwSections,
-                    ),
+                    SizedBox(height: TSizes.spaceBtwSections),
                     CheckoutButton(),
-                    SizedBox(
-                      height: TSizes.spaceBtwSections,
-                    ),
+                    SizedBox(height: TSizes.spaceBtwSections),
                     ProductDescriptionAndReviewsSection(),
                     SizedBox(height: TSizes.spaceBtwSections),
                   ],
                 ),
-              )
+              ),
             ],
-          )),
-        ));
+          ),
+        ),
+      ),
+    );
   }
 }

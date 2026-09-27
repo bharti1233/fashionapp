@@ -22,52 +22,57 @@ class WishlistView extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return Scaffold(
-        appBar: CustomAppBar(
-          appBarModel: AppBarModel(
-            actions: [
-              CircularIcon(
-                circularIconModel: CircularIconModel(
-                    color: dark ? TColors.white : TColors.dark,
-                    icon: Iconsax.add,
-                    onPressed: () =>
-                        context.read<NavigationMenuCubit>().changeIndex(0)),
-              )
-            ],
-            title: Text(TTexts.wishlistView,
-                style: Theme.of(context).textTheme.headlineMedium),
-          ),
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(TSizes.defaultSpace),
-              child: Column(
-                children: [
-                  GridLayout(
-                    gridLayoutModel: GridLayoutModel(
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return VerticalProductCard(
-                          product: ProductEntity(
-                              id: index.toString(),
-                              name: "Product $index",
-                              price: 100,
-                              images: const ["https://picsum.photos/200"],
-                              categoryId: "category-$index",
-                              description: "Description $index",
-                              rating: 4.5,
-                              stock: 5,
-                              thumbnail: "https://picsum.photos/200",
-                              brandName: "Brand $index",
-                              categoryName: "Category $index"),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+      appBar: CustomAppBar(
+        appBarModel: AppBarModel(
+          actions: [
+            CircularIcon(
+              circularIconModel: CircularIconModel(
+                color: dark ? TColors.white : TColors.dark,
+                icon: Iconsax.add,
+                onPressed: () =>
+                    context.read<NavigationMenuCubit>().changeIndex(0),
               ),
             ),
+          ],
+          title: Text(
+            TTexts.wishlistView,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
-        ));
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
+            child: Column(
+              children: [
+                GridLayout(
+                  gridLayoutModel: GridLayoutModel(
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return VerticalProductCard(
+                        product: ProductEntity(
+                          id: index.toString(),
+                          name: "Product $index",
+                          price: 100,
+                          images: const ["https://picsum.photos/200"],
+                          categoryId: "category-$index",
+                          description: "Description $index",
+                          rating: 4.5,
+                          stock: 5,
+                          thumbnail: "https://picsum.photos/200",
+                          brandName: "Brand $index",
+                          categoryName: "Category $index",
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -47,12 +47,12 @@ class _SignUpFormSectionState extends State<SignUpFormSection> {
   void _handleRegistration() {
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().signUp(
-            email: _emailController.text.trim().toLowerCase(),
-            password: _passwordController.text.trim(),
-            fullName:
-                '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}',
-            phone: _phoneController.text.trim(),
-          );
+        email: _emailController.text.trim().toLowerCase(),
+        password: _passwordController.text.trim(),
+        fullName:
+            '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}',
+        phone: _phoneController.text.trim(),
+      );
     }
   }
 
@@ -62,17 +62,21 @@ class _SignUpFormSectionState extends State<SignUpFormSection> {
       listener: (context, state) {
         if (state is AuthEmailConfirmationRequired) {
           THelperFunctions.showSnackBar(
-              context: context,
-              message: 'تم إرسال رابط التأكيد إلى ${state.email}',
-              type: SnackBarType.success);
+            context: context,
+            message: 'تم إرسال رابط التأكيد إلى ${state.email}',
+            type: SnackBarType.success,
+          );
 
           THelperFunctions.navigateReplacementToScreen(
-              context, const LoginView());
+            context,
+            const LoginView(),
+          );
         } else if (state is AuthError) {
           THelperFunctions.showSnackBar(
-              context: context,
-              message: state.message,
-              type: SnackBarType.error);
+            context: context,
+            message: state.message,
+            type: SnackBarType.error,
+          );
         }
       },
       child: Form(
@@ -166,7 +170,9 @@ class _SignUpFormSectionState extends State<SignUpFormSection> {
               keyboardType: TextInputType.visiblePassword,
               controller: _confirmPasswordController,
               validator: (value) => TValidator.validateConfirmPassword(
-                  value, _passwordController),
+                value,
+                _passwordController,
+              ),
               obscureText: _obscurePassword,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Iconsax.password_check),

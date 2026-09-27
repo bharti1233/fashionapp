@@ -27,30 +27,21 @@ class SettingsView extends StatelessWidget {
         title: "Geolocation",
         subtitle: "Set Recommendation Based On Location",
         leading: Iconsax.document_download,
-        trailing: Switch(
-          value: true,
-          onChanged: (value) {},
-        ),
+        trailing: Switch(value: true, onChanged: (value) {}),
       ),
       SettingsMenuTileModel(
         onTap: () {},
         title: "Safe Mode",
         subtitle: "Search Result Is Safe For All Ages",
         leading: Iconsax.security_user,
-        trailing: Switch(
-          value: false,
-          onChanged: (value) {},
-        ),
+        trailing: Switch(value: false, onChanged: (value) {}),
       ),
       SettingsMenuTileModel(
         onTap: () {},
         title: "HD Image Quality",
         subtitle: "Set Image Quality To High Quality",
         leading: Iconsax.image,
-        trailing: Switch(
-          value: true,
-          onChanged: (value) {},
-        ),
+        trailing: Switch(value: true, onChanged: (value) {}),
       ),
     ];
     final List<SettingsMenuTileModel> accountSettingsTiles = [
@@ -113,14 +104,11 @@ class SettingsView extends StatelessWidget {
               child: Column(
                 children: [
                   AccountSettingsSection(
-                      accountSettingsTiles: accountSettingsTiles),
-                  const SizedBox(
-                    height: TSizes.spaceBtwSections,
+                    accountSettingsTiles: accountSettingsTiles,
                   ),
+                  const SizedBox(height: TSizes.spaceBtwSections),
                   AppSettingsSection(appSettingsTiles: appSettingsTiles),
-                  const SizedBox(
-                    height: TSizes.spaceBtwItems,
-                  ),
+                  const SizedBox(height: TSizes.spaceBtwItems),
                 ],
               ),
             ),

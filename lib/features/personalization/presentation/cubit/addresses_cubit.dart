@@ -43,25 +43,24 @@ class AddressesCubit extends Cubit<AddressesState> {
   }) async {
     emit(AddressAdding());
 
-    final result = await addAddressUsecase(AddAddressParams(
-      fullName: fullName,
-      phone: phone,
-      addressLine1: addressLine1,
-      addressLine2: addressLine2,
-      city: city,
-      state: state,
-      postalCode: postalCode,
-      country: country,
-      isDefault: isDefault,
-    ));
-
-    result.fold(
-      (error) => emit(AddressesError(error)),
-      (address) {
-        emit(AddressAdded(address));
-        getAddresses();
-      },
+    final result = await addAddressUsecase(
+      AddAddressParams(
+        fullName: fullName,
+        phone: phone,
+        addressLine1: addressLine1,
+        addressLine2: addressLine2,
+        city: city,
+        state: state,
+        postalCode: postalCode,
+        country: country,
+        isDefault: isDefault,
+      ),
     );
+
+    result.fold((error) => emit(AddressesError(error)), (address) {
+      emit(AddressAdded(address));
+      getAddresses();
+    });
   }
 
   Future<void> updateAddress({
@@ -78,37 +77,33 @@ class AddressesCubit extends Cubit<AddressesState> {
   }) async {
     emit(AddressUpdating());
 
-    final result = await updateAddressUsecase(UpdateAddressParams(
-      id: id,
-      fullName: fullName,
-      phone: phone,
-      addressLine1: addressLine1,
-      addressLine2: addressLine2,
-      city: city,
-      state: state,
-      postalCode: postalCode,
-      country: country,
-      isDefault: isDefault,
-    ));
-
-    result.fold(
-      (error) => emit(AddressesError(error)),
-      (address) {
-        emit(AddressUpdated(address));
-        getAddresses();
-      },
+    final result = await updateAddressUsecase(
+      UpdateAddressParams(
+        id: id,
+        fullName: fullName,
+        phone: phone,
+        addressLine1: addressLine1,
+        addressLine2: addressLine2,
+        city: city,
+        state: state,
+        postalCode: postalCode,
+        country: country,
+        isDefault: isDefault,
+      ),
     );
+
+    result.fold((error) => emit(AddressesError(error)), (address) {
+      emit(AddressUpdated(address));
+      getAddresses();
+    });
   }
 
   Future<void> deleteAddress(String id) async {
     final result = await deleteAddressUsecase(id);
 
-    result.fold(
-      (error) => emit(AddressesError(error)),
-      (_) {
-        emit(AddressDeleted(id));
-        getAddresses();
-      },
-    );
+    result.fold((error) => emit(AddressesError(error)), (_) {
+      emit(AddressDeleted(id));
+      getAddresses();
+    });
   }
 }

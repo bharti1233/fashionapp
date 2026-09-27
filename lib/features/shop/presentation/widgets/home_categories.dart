@@ -5,9 +5,7 @@ import 'package:t_store/core/utils/constants/image_strings.dart';
 import 'package:t_store/core/utils/constants/text_strings.dart';
 
 class HomeCategories extends StatelessWidget {
-  const HomeCategories({
-    super.key,
-  });
+  const HomeCategories({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +13,13 @@ class HomeCategories extends StatelessWidget {
     const List<String> categoriesImages = TImages.categoryIcons;
 
     final List<HorizontalSmallListViewItemModel> items = List.generate(
-        categoriesImages.length,
-        (index) => HorizontalSmallListViewItemModel(
-              title: categoriesTitles[index],
-              image: categoriesImages[index],
-            ));
-
-    return SizedBox(
-      height: 100,
-      child: HorizontalSmallListView(items: items),
+      categoriesImages.length,
+      (index) => HorizontalSmallListViewItemModel(
+        title: categoriesTitles[index],
+        image: categoriesImages[index],
+      ),
     );
+
+    return SizedBox(height: 100, child: HorizontalSmallListView(items: items));
   }
 }

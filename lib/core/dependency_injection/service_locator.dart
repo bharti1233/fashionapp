@@ -112,13 +112,15 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => GetCurrentUserUsecase(sl()));
 
   // Cubit
-  sl.registerFactory(() => AuthCubit(
-        signInUsecase: sl(),
-        signUpUsecase: sl(),
-        signOutUsecase: sl(),
-        resetPasswordUsecase: sl(),
-        getCurrentUserUsecase: sl(),
-      ));
+  sl.registerFactory(
+    () => AuthCubit(
+      signInUsecase: sl(),
+      signUpUsecase: sl(),
+      signOutUsecase: sl(),
+      resetPasswordUsecase: sl(),
+      getCurrentUserUsecase: sl(),
+    ),
+  );
 
   // ==================== Products ====================
   // Repository
@@ -132,11 +134,13 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => SearchProductsUsecase(sl()));
 
   // Cubit
-  sl.registerFactory(() => ProductsCubit(
-        getProductsUsecase: sl(),
-        getProductByIdUsecase: sl(),
-        searchProductsUsecase: sl(),
-      ));
+  sl.registerFactory(
+    () => ProductsCubit(
+      getProductsUsecase: sl(),
+      getProductByIdUsecase: sl(),
+      searchProductsUsecase: sl(),
+    ),
+  );
 
   // ==================== Categories ====================
   // Repository
@@ -188,13 +192,15 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => ClearCartUsecase(sl()));
 
   // Cubit
-  sl.registerFactory(() => CartCubit(
-        getCartItemsUsecase: sl(),
-        addToCartUsecase: sl(),
-        updateCartItemUsecase: sl(),
-        removeFromCartUsecase: sl(),
-        clearCartUsecase: sl(),
-      ));
+  sl.registerFactory(
+    () => CartCubit(
+      getCartItemsUsecase: sl(),
+      addToCartUsecase: sl(),
+      updateCartItemUsecase: sl(),
+      removeFromCartUsecase: sl(),
+      clearCartUsecase: sl(),
+    ),
+  );
 
   // ==================== Wishlist ====================
   // Repository
@@ -208,11 +214,13 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => RemoveFromWishlistUsecase(sl()));
 
   // Cubit
-  sl.registerFactory(() => WishlistCubit(
-        getWishlistUsecase: sl(),
-        addToWishlistUsecase: sl(),
-        removeFromWishlistUsecase: sl(),
-      ));
+  sl.registerFactory(
+    () => WishlistCubit(
+      getWishlistUsecase: sl(),
+      addToWishlistUsecase: sl(),
+      removeFromWishlistUsecase: sl(),
+    ),
+  );
 
   // ==================== Orders ====================
   // Repository
@@ -227,12 +235,14 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => CancelOrderUsecase(sl()));
 
   // Cubit
-  sl.registerFactory(() => OrdersCubit(
-        getOrdersUsecase: sl(),
-        getOrderByIdUsecase: sl(),
-        createOrderUsecase: sl(),
-        cancelOrderUsecase: sl(),
-      ));
+  sl.registerFactory(
+    () => OrdersCubit(
+      getOrdersUsecase: sl(),
+      getOrderByIdUsecase: sl(),
+      createOrderUsecase: sl(),
+      cancelOrderUsecase: sl(),
+    ),
+  );
 
   // ==================== Addresses ====================
   // Repository
@@ -247,12 +257,14 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => DeleteAddressUsecase(sl()));
 
   // Cubit
-  sl.registerFactory(() => AddressesCubit(
-        getAddressesUsecase: sl(),
-        addAddressUsecase: sl(),
-        updateAddressUsecase: sl(),
-        deleteAddressUsecase: sl(),
-      ));
+  sl.registerFactory(
+    () => AddressesCubit(
+      getAddressesUsecase: sl(),
+      addAddressUsecase: sl(),
+      updateAddressUsecase: sl(),
+      deleteAddressUsecase: sl(),
+    ),
+  );
 
   // ==================== Reviews ====================
   // Repository
@@ -265,10 +277,9 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => AddReviewUsecase(sl()));
 
   // Cubit
-  sl.registerFactory(() => ReviewsCubit(
-        getProductReviewsUsecase: sl(),
-        addReviewUsecase: sl(),
-      ));
+  sl.registerFactory(
+    () => ReviewsCubit(getProductReviewsUsecase: sl(), addReviewUsecase: sl()),
+  );
 
   // ==================== Profile ====================
   // Repository
@@ -281,10 +292,9 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => UpdateProfileUsecase(sl()));
 
   // Cubit
-  sl.registerFactory(() => ProfileCubit(
-        getProfileUsecase: sl(),
-        updateProfileUsecase: sl(),
-      ));
+  sl.registerFactory(
+    () => ProfileCubit(getProfileUsecase: sl(), updateProfileUsecase: sl()),
+  );
 
   // ==================== Notifications ====================
   // Repository

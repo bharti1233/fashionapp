@@ -33,8 +33,9 @@ enum FavouritesStatus {
   addingToFavouritesFailure,
   fetchingFavouritesLoading,
   fetchingFavouritesSuccess,
-  fetchingFavouritesFailure
+  fetchingFavouritesFailure,
 }
+
 enum SnackBarType { info, success, error, warning }
 
 enum CartStatus { initial, loading, success, error }

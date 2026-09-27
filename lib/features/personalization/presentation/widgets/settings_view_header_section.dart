@@ -12,32 +12,31 @@ import 'package:t_store/features/personalization/presentation/views/profile_view
 import 'package:t_store/features/personalization/presentation/widgets/user_profile_tile.dart';
 
 class SettingsViewHeaderSection extends StatelessWidget {
-  const SettingsViewHeaderSection({
-    super.key,
-  });
+  const SettingsViewHeaderSection({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         CustomAppBar(
           appBarModel: AppBarModel(
-              title: Text(
-            TTexts.account,
-            style: Theme.of(context)
-                .textTheme
-                .headlineMedium!
-                .apply(color: TColors.white),
-          )),
+            title: Text(
+              TTexts.account,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium!.apply(color: TColors.white),
+            ),
+          ),
         ),
         const SizedBox(height: TSizes.spaceBtwSections),
         UserProfileTile(
           userProfileTileModel: UserProfileTileModel(
-              title: "Mahmoud Hamdy",
-              subtitle: "hmdy7486@gmail.com",
-              onTap: () => THelperFunctions.navigateToScreen(
-                  context, const ProfileView()),
-              trailing: Iconsax.edit,
-              leading: TImages.user),
+            title: "Mahmoud Hamdy",
+            subtitle: "hmdy7486@gmail.com",
+            onTap: () =>
+                THelperFunctions.navigateToScreen(context, const ProfileView()),
+            trailing: Iconsax.edit,
+            leading: TImages.user,
+          ),
         ),
         const SizedBox(height: TSizes.spaceBtwSections * 1.2),
       ],

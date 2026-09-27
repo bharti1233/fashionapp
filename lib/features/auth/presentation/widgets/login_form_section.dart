@@ -38,9 +38,9 @@ class _LoginFormSectionState extends State<LoginFormSection> {
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().signIn(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
-          );
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
     }
   }
 
@@ -59,9 +59,7 @@ class _LoginFormSectionState extends State<LoginFormSection> {
             context,
             MultiBlocProvider(
               providers: [
-                BlocProvider(
-                  create: (context) => sl<NavigationMenuCubit>(),
-                ),
+                BlocProvider(create: (context) => sl<NavigationMenuCubit>()),
                 BlocProvider.value(
                   value: sl<ProductsCubit>()
                     ..getProducts(
@@ -90,8 +88,9 @@ class _LoginFormSectionState extends State<LoginFormSection> {
       },
       builder: (context, state) {
         return Padding(
-          padding:
-              const EdgeInsets.symmetric(vertical: TSizes.spaceBtwSections),
+          padding: const EdgeInsets.symmetric(
+            vertical: TSizes.spaceBtwSections,
+          ),
           child: Form(
             key: _formKey,
             child: Column(

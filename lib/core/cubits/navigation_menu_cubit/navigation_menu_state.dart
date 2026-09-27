@@ -8,6 +8,7 @@ sealed class NavigationMenuState extends Equatable {
 }
 
 final class NavigationMenuInitial extends NavigationMenuState {}
+
 final class NavigationMenuChanged extends NavigationMenuState {
   final int selectedIndex;
   const NavigationMenuChanged({required this.selectedIndex});

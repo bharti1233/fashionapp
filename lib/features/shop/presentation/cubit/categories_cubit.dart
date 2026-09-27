@@ -7,7 +7,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   final GetCategoriesUsecase getCategoriesUsecase;
 
   CategoriesCubit({required this.getCategoriesUsecase})
-      : super(CategoriesInitial());
+    : super(CategoriesInitial());
 
   Future<void> getCategories() async {
     emit(CategoriesLoading());

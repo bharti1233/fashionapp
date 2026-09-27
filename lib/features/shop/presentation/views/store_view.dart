@@ -14,6 +14,7 @@ import 'package:t_store/core/utils/constants/image_strings.dart';
 import 'package:t_store/core/utils/constants/text_strings.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/features/shop/presentation/views/cart_view.dart';
+
 // [Previous imports remain the same]
 
 class StoreView extends StatelessWidget {
@@ -36,14 +37,18 @@ class StoreView extends StatelessWidget {
       child: Scaffold(
         appBar: CustomAppBar(
           appBarModel: AppBarModel(
-            title:
-                Text("Store", style: Theme.of(context).textTheme.headlineSmall),
+            title: Text(
+              "Store",
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             actions: [
               CartCounterIcon(
                 cartCounterIconModel: CartCounterIconModel(
                   onPressed: () {
                     THelperFunctions.navigateToScreen(
-                        context, const CartView());
+                      context,
+                      const CartView(),
+                    );
                   },
                   color: dark ? TColors.white : TColors.dark,
                 ),
@@ -64,31 +69,34 @@ class StoreView extends StatelessWidget {
                         .toList(),
                   ),
                 ),
-              )
+              ),
             ];
           },
           body: TabBarView(
             children: categories
-                .map((category) => CategoryTab(
-                      categoryTabModel: CategoryTabModel(
-                        brandShowcaseModel: BrandShowcaseModel(
-                          brandCardModel: BrandCardModel(
-                            isVerified: true,
-                            image: brandIcons[categories.indexOf(category) %
-                                brandIcons.length],
-                            brandName: brandTitles[
-                                categories.indexOf(category) %
-                                    brandTitles.length],
-                            showBorder: false,
-                            onTap: () {},
-                            productCount: 25,
-                          ),
-                          topThreeProductsOfBrand: topProducts,
+                .map(
+                  (category) => CategoryTab(
+                    categoryTabModel: CategoryTabModel(
+                      brandShowcaseModel: BrandShowcaseModel(
+                        brandCardModel: BrandCardModel(
+                          isVerified: true,
+                          image:
+                              brandIcons[categories.indexOf(category) %
+                                  brandIcons.length],
+                          brandName:
+                              brandTitles[categories.indexOf(category) %
+                                  brandTitles.length],
+                          showBorder: false,
+                          onTap: () {},
+                          productCount: 25,
                         ),
-                        products: products,
-                        categoryTitle: category,
+                        topThreeProductsOfBrand: topProducts,
                       ),
-                    ))
+                      products: products,
+                      categoryTitle: category,
+                    ),
+                  ),
+                )
                 .toList(),
           ),
         ),

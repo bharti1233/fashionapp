@@ -50,13 +50,16 @@ class THelperFunctions {
           transitionDuration: const Duration(milliseconds: 300),
           pageBuilder: (context, animation, secondaryAnimation) {
             return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 0.2),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(
-                parent: animation,
-                curve: Curves.easeOutBack,
-              )),
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(0, 0.2),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutBack,
+                    ),
+                  ),
               child: AlertDialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -89,10 +92,7 @@ class THelperFunctions {
                       ),
                       child: const Row(
                         children: [
-                          Icon(
-                            Icons.info_outline,
-                            color: secondaryOrange,
-                          ),
+                          Icon(Icons.info_outline, color: secondaryOrange),
                           SizedBox(width: 12),
                           Expanded(
                             child: Text(
@@ -158,8 +158,11 @@ class THelperFunctions {
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.settings,
-                                  color: Colors.white, size: 18),
+                              Icon(
+                                Icons.settings,
+                                color: Colors.white,
+                                size: 18,
+                              ),
                               SizedBox(width: 8),
                               Text(
                                 'فتح الإعدادات',
@@ -226,10 +229,7 @@ class THelperFunctions {
                     Text(
                       'يحتاج التطبيق إلى الوصول إلى موقعك لتوفير خدمة أفضل وتحديد عنوان التسليم الخاص بك',
                       textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: secondaryPurple,
-                      ),
+                      style: TextStyle(fontSize: 16, color: secondaryPurple),
                     ),
                     SizedBox(height: 24),
                   ],
@@ -303,7 +303,7 @@ class THelperFunctions {
         case SnackBarType.warning:
           return warning;
         case SnackBarType.info:
-        return info;
+          return info;
       }
     }
 
@@ -316,7 +316,7 @@ class THelperFunctions {
         case SnackBarType.warning:
           return Icons.warning_amber_rounded;
         case SnackBarType.info:
-        return Icons.info_outline;
+          return Icons.info_outline;
       }
     }
 
@@ -359,29 +359,30 @@ class THelperFunctions {
     VoidCallback? secondaryAction,
   }) {
     LoggerHelper.info(
-        "Showing AlertDialog: Title - $title, Message - $message"); // Log Alert action
+      "Showing AlertDialog: Title - $title, Message - $message",
+    ); // Log Alert action
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: Text(
             title,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
-          content: Text(
-            message,
-            style: const TextStyle(fontSize: 16),
-          ),
+          content: Text(message, style: const TextStyle(fontSize: 16)),
           actions: [
             if (secondaryButtonText != null)
               TextButton(
-                onPressed: secondaryAction ??
+                onPressed:
+                    secondaryAction ??
                     () {
                       LoggerHelper.info(
-                          "Alert secondary button pressed: $secondaryButtonText");
+                        "Alert secondary button pressed: $secondaryButtonText",
+                      );
                       Navigator.of(context).pop();
                     },
                 child: Text(
@@ -390,16 +391,19 @@ class THelperFunctions {
                 ),
               ),
             ElevatedButton(
-              onPressed: primaryAction ??
+              onPressed:
+                  primaryAction ??
                   () {
                     LoggerHelper.info(
-                        "Alert primary button pressed: ${primaryButtonText ?? 'OK'}");
+                      "Alert primary button pressed: ${primaryButtonText ?? 'OK'}",
+                    );
                     Navigator.of(context).pop();
                   },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
+                  borderRadius: BorderRadius.circular(30),
+                ),
               ),
               child: Text(
                 primaryButtonText ?? 'OK',
@@ -414,10 +418,7 @@ class THelperFunctions {
 
   static void navigateToScreen(BuildContext context, Widget screen) {
     LoggerHelper.info("Navigating to screen: ${screen.runtimeType}");
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => screen),
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 
   static void popScreen(BuildContext context) {
@@ -427,7 +428,8 @@ class THelperFunctions {
 
   static void navigateReplacementToScreen(BuildContext context, Widget screen) {
     LoggerHelper.info(
-        "Navigating with replacement to screen: ${screen.runtimeType}");
+      "Navigating with replacement to screen: ${screen.runtimeType}",
+    );
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => screen),
@@ -467,8 +469,10 @@ class THelperFunctions {
     return width;
   }
 
-  static String getFormattedDate(DateTime date,
-      {String format = 'dd MMM yyyy'}) {
+  static String getFormattedDate(
+    DateTime date, {
+    String format = 'dd MMM yyyy',
+  }) {
     String formattedDate = DateFormat(format).format(date);
     LoggerHelper.info("Formatted date: $formattedDate");
     return formattedDate;
@@ -484,7 +488,9 @@ class THelperFunctions {
     final wrappedList = <Widget>[];
     for (var i = 0; i < widgets.length; i += rowSize) {
       final rowChildren = widgets.sublist(
-          i, i + rowSize > widgets.length ? widgets.length : i + rowSize);
+        i,
+        i + rowSize > widgets.length ? widgets.length : i + rowSize,
+      );
       wrappedList.add(Row(children: rowChildren));
     }
     return wrappedList;

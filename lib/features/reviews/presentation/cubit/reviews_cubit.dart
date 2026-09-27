@@ -17,7 +17,10 @@ class ReviewsCubit extends Cubit<ReviewsState> {
   int _currentPage = 0;
   static const int _limit = 20;
 
-  Future<void> getProductReviews(String productId, {bool refresh = false}) async {
+  Future<void> getProductReviews(
+    String productId, {
+    bool refresh = false,
+  }) async {
     if (refresh) {
       _currentPage = 0;
       _allReviews = [];
@@ -27,24 +30,25 @@ class ReviewsCubit extends Cubit<ReviewsState> {
       emit(ReviewsLoading());
     }
 
-    final result = await getProductReviewsUsecase(GetProductReviewsParams(
-      productId: productId,
-      page: _currentPage,
-      limit: _limit,
-    ));
+    final result = await getProductReviewsUsecase(
+      GetProductReviewsParams(
+        productId: productId,
+        page: _currentPage,
+        limit: _limit,
+      ),
+    );
 
-    result.fold(
-      (error) => emit(ReviewsError(error)),
-      (reviews) {
-        _allReviews = [..._allReviews, ...reviews];
-        _currentPage++;
-        emit(ReviewsLoaded(
+    result.fold((error) => emit(ReviewsError(error)), (reviews) {
+      _allReviews = [..._allReviews, ...reviews];
+      _currentPage++;
+      emit(
+        ReviewsLoaded(
           reviews: _allReviews,
           hasReachedMax: reviews.length < _limit,
           currentPage: _currentPage,
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   Future<void> loadMoreReviews(String productId) async {
@@ -64,21 +68,20 @@ class ReviewsCubit extends Cubit<ReviewsState> {
   }) async {
     emit(ReviewAdding());
 
-    final result = await addReviewUsecase(AddReviewParams(
-      productId: productId,
-      rating: rating,
-      title: title,
-      comment: comment,
-      images: images,
-    ));
-
-    result.fold(
-      (error) => emit(ReviewsError(error)),
-      (review) {
-        emit(ReviewAdded(review));
-        getProductReviews(productId, refresh: true);
-      },
+    final result = await addReviewUsecase(
+      AddReviewParams(
+        productId: productId,
+        rating: rating,
+        title: title,
+        comment: comment,
+        images: images,
+      ),
     );
+
+    result.fold((error) => emit(ReviewsError(error)), (review) {
+      emit(ReviewAdded(review));
+      getProductReviews(productId, refresh: true);
+    });
   }
 
   void resetReviews() {

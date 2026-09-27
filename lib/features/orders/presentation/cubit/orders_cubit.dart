@@ -53,15 +53,17 @@ class OrdersCubit extends Cubit<OrdersState> {
   }) async {
     emit(OrderCreating());
 
-    final result = await createOrderUsecase(CreateOrderParams(
-      addressId: addressId,
-      items: items,
-      paymentMethod: paymentMethod,
-      couponCode: couponCode,
-      notes: notes,
-      shippingCost: shippingCost,
-      discount: discount,
-    ));
+    final result = await createOrderUsecase(
+      CreateOrderParams(
+        addressId: addressId,
+        items: items,
+        paymentMethod: paymentMethod,
+        couponCode: couponCode,
+        notes: notes,
+        shippingCost: shippingCost,
+        discount: discount,
+      ),
+    );
 
     result.fold(
       (error) => emit(OrdersError(error)),

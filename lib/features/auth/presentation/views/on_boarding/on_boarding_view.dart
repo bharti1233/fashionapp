@@ -53,7 +53,7 @@ class OnBoardingView extends StatelessWidget {
               ),
               const OnBoardingSkipButton(),
               const OnBoardingDotNavigation(),
-              const OnBoardingNextButton()
+              const OnBoardingNextButton(),
             ],
           ),
         );

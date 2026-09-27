@@ -9,10 +9,7 @@ import 'package:t_store/core/common/widgets/brand_card.dart';
 import 'package:t_store/core/common/widgets/circular_container.dart';
 
 class BrandShowcase extends StatelessWidget {
-  const BrandShowcase(
-    this.brandShowcaseModel, {
-    super.key,
-  });
+  const BrandShowcase(this.brandShowcaseModel, {super.key});
 
   final BrandShowcaseModel brandShowcaseModel;
 
@@ -24,29 +21,33 @@ class BrandShowcase extends StatelessWidget {
     return Column(
       children: [
         CircularContainer(
-            circularContainerModel: CircularContainerModel(
-                color: Colors.transparent,
-                borderColor: TColors.darkGrey,
-                padding: const EdgeInsets.all(TSizes.md),
-                margin: const EdgeInsets.only(bottom: TSizes.spaceBtwItems),
-                showBorder: true,
-                child: Column(
-                  children: [
-                    BrandCard(
-                      brandCardModel: BrandCardModel(
-                          showBorder: false,
-                          productCount: 5,
-                          image: brandIcon,
-                          brandName: brandTitle),
-                    ),
-                    Row(
-                      children: products
-                          .map((product) =>
-                              brandTopProductsWidget(context, product))
-                          .toList(),
-                    ),
-                  ],
-                )))
+          circularContainerModel: CircularContainerModel(
+            color: Colors.transparent,
+            borderColor: TColors.darkGrey,
+            padding: const EdgeInsets.all(TSizes.md),
+            margin: const EdgeInsets.only(bottom: TSizes.spaceBtwItems),
+            showBorder: true,
+            child: Column(
+              children: [
+                BrandCard(
+                  brandCardModel: BrandCardModel(
+                    showBorder: false,
+                    productCount: 5,
+                    image: brandIcon,
+                    brandName: brandTitle,
+                  ),
+                ),
+                Row(
+                  children: products
+                      .map(
+                        (product) => brandTopProductsWidget(context, product),
+                      )
+                      .toList(),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -56,16 +57,12 @@ class BrandShowcase extends StatelessWidget {
     return Expanded(
       child: CircularContainer(
         circularContainerModel: CircularContainerModel(
-            padding: const EdgeInsets.all(TSizes.md),
-            margin: const EdgeInsets.only(right: TSizes.sm),
-            height: 100,
-            color: dark ? TColors.darkerGrey : TColors.light,
-            child: Image(
-              image: AssetImage(
-                product,
-              ),
-              fit: BoxFit.contain,
-            )),
+          padding: const EdgeInsets.all(TSizes.md),
+          margin: const EdgeInsets.only(right: TSizes.sm),
+          height: 100,
+          color: dark ? TColors.darkerGrey : TColors.light,
+          child: Image(image: AssetImage(product), fit: BoxFit.contain),
+        ),
       ),
     );
   }

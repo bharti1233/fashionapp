@@ -8,11 +8,11 @@ class OrdersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-        shrinkWrap: true,
-        itemBuilder: (context, index) => const OrderListItem(),
-        separatorBuilder: (context, index) => const SizedBox(
-              height: TSizes.spaceBtwItems,
-            ),
-        itemCount: 6);
+      shrinkWrap: true,
+      itemBuilder: (context, index) => const OrderListItem(),
+      separatorBuilder: (context, index) =>
+          const SizedBox(height: TSizes.spaceBtwItems),
+      itemCount: 6,
+    );
   }
 }

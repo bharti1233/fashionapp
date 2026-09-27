@@ -15,9 +15,7 @@ class FirstTimeHelper {
       LoggerHelper.info('User First Time status: $isFirstTime');
       return isFirstTime;
     } catch (e, stackTrace) {
-      LoggerHelper.error(
-        'Error checking First Time status $e',
-      );
+      LoggerHelper.error('Error checking First Time status $e');
       throw SharedPreferencesException(
         SharedPreferencesExceptionHelper.handleException(e),
         error: e,

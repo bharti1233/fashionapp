@@ -84,8 +84,9 @@ void main() {
       blocTest<ProductsCubit, ProductsState>(
         'emits [ProductsLoading, ProductsLoaded] when getProducts succeeds',
         build: () {
-          when(() => mockGetProductsUsecase(any()))
-              .thenAnswer((_) async => Right(testProducts));
+          when(
+            () => mockGetProductsUsecase(any()),
+          ).thenAnswer((_) async => Right(testProducts));
           return productsCubit;
         },
         act: (cubit) => cubit.getProducts(),
@@ -102,8 +103,9 @@ void main() {
       blocTest<ProductsCubit, ProductsState>(
         'emits [ProductsLoading, ProductsError] when getProducts fails',
         build: () {
-          when(() => mockGetProductsUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to fetch products'));
+          when(
+            () => mockGetProductsUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to fetch products'));
           return productsCubit;
         },
         act: (cubit) => cubit.getProducts(),
@@ -117,10 +119,13 @@ void main() {
         'emits [ProductsLoading, ProductsLoaded] with hasReachedMax=false when more products available',
         build: () {
           // Return exactly 20 products to indicate more may be available
-          final manyProducts =
-              List.generate(20, (i) => testProducts.first.copyWith(id: 'p$i'));
-          when(() => mockGetProductsUsecase(any()))
-              .thenAnswer((_) async => Right(manyProducts));
+          final manyProducts = List.generate(
+            20,
+            (i) => testProducts.first.copyWith(id: 'p$i'),
+          );
+          when(
+            () => mockGetProductsUsecase(any()),
+          ).thenAnswer((_) async => Right(manyProducts));
           return productsCubit;
         },
         act: (cubit) => cubit.getProducts(),
@@ -137,8 +142,9 @@ void main() {
       blocTest<ProductsCubit, ProductsState>(
         'passes filter parameters to usecase',
         build: () {
-          when(() => mockGetProductsUsecase(any()))
-              .thenAnswer((_) async => Right(testProducts));
+          when(
+            () => mockGetProductsUsecase(any()),
+          ).thenAnswer((_) async => Right(testProducts));
           return productsCubit;
         },
         act: (cubit) => cubit.getProducts(
@@ -149,9 +155,9 @@ void main() {
           ascending: false,
         ),
         verify: (_) {
-          final captured = verify(() => mockGetProductsUsecase(captureAny()))
-              .captured
-              .first as GetProductsParams;
+          final captured =
+              verify(() => mockGetProductsUsecase(captureAny())).captured.first
+                  as GetProductsParams;
           expect(captured.categoryId, 'cat-1');
           expect(captured.brandId, 'brand-1');
           expect(captured.isFeatured, true);
@@ -163,8 +169,9 @@ void main() {
       blocTest<ProductsCubit, ProductsState>(
         'resets pagination when refresh is true',
         build: () {
-          when(() => mockGetProductsUsecase(any()))
-              .thenAnswer((_) async => Right(testProducts));
+          when(
+            () => mockGetProductsUsecase(any()),
+          ).thenAnswer((_) async => Right(testProducts));
           return productsCubit;
         },
         seed: () => ProductsLoaded(
@@ -174,9 +181,9 @@ void main() {
         ),
         act: (cubit) => cubit.getProducts(refresh: true),
         verify: (_) {
-          final captured = verify(() => mockGetProductsUsecase(captureAny()))
-              .captured
-              .first as GetProductsParams;
+          final captured =
+              verify(() => mockGetProductsUsecase(captureAny())).captured.first
+                  as GetProductsParams;
           expect(captured.page, 0);
         },
       );
@@ -186,8 +193,9 @@ void main() {
       blocTest<ProductsCubit, ProductsState>(
         'emits [ProductDetailLoading, ProductDetailLoaded] when getProductById succeeds',
         build: () {
-          when(() => mockGetProductByIdUsecase('product-1'))
-              .thenAnswer((_) async => Right(testProducts.first));
+          when(
+            () => mockGetProductByIdUsecase('product-1'),
+          ).thenAnswer((_) async => Right(testProducts.first));
           return productsCubit;
         },
         act: (cubit) => cubit.getProductById('product-1'),
@@ -200,8 +208,9 @@ void main() {
       blocTest<ProductsCubit, ProductsState>(
         'emits [ProductDetailLoading, ProductDetailError] when getProductById fails',
         build: () {
-          when(() => mockGetProductByIdUsecase('non-existent'))
-              .thenAnswer((_) async => const Left('Product not found'));
+          when(
+            () => mockGetProductByIdUsecase('non-existent'),
+          ).thenAnswer((_) async => const Left('Product not found'));
           return productsCubit;
         },
         act: (cubit) => cubit.getProductById('non-existent'),
@@ -216,8 +225,9 @@ void main() {
       blocTest<ProductsCubit, ProductsState>(
         'emits [ProductsSearching, ProductsSearchResult] when search succeeds',
         build: () {
-          when(() => mockSearchProductsUsecase('Test'))
-              .thenAnswer((_) async => Right(testProducts));
+          when(
+            () => mockSearchProductsUsecase('Test'),
+          ).thenAnswer((_) async => Right(testProducts));
           return productsCubit;
         },
         act: (cubit) => cubit.searchProducts('Test'),
@@ -237,8 +247,9 @@ void main() {
       blocTest<ProductsCubit, ProductsState>(
         'emits [ProductsSearching, ProductsError] when search fails',
         build: () {
-          when(() => mockSearchProductsUsecase('Test'))
-              .thenAnswer((_) async => const Left('Search failed'));
+          when(
+            () => mockSearchProductsUsecase('Test'),
+          ).thenAnswer((_) async => const Left('Search failed'));
           return productsCubit;
         },
         act: (cubit) => cubit.searchProducts('Test'),
@@ -251,8 +262,9 @@ void main() {
       blocTest<ProductsCubit, ProductsState>(
         'emits empty search result when no products match',
         build: () {
-          when(() => mockSearchProductsUsecase('NonExistent'))
-              .thenAnswer((_) async => const Right([]));
+          when(
+            () => mockSearchProductsUsecase('NonExistent'),
+          ).thenAnswer((_) async => const Right([]));
           return productsCubit;
         },
         act: (cubit) => cubit.searchProducts('NonExistent'),

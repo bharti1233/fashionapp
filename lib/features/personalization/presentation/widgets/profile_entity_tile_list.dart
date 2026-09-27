@@ -3,8 +3,10 @@ import 'package:t_store/features/personalization/presentation/view_models/profil
 import 'package:t_store/features/personalization/presentation/widgets/profile_entity_tile.dart';
 
 class ProfileEntityTileList extends StatelessWidget {
-  const ProfileEntityTileList(
-      {super.key, required this.profileEntityTileModelList});
+  const ProfileEntityTileList({
+    super.key,
+    required this.profileEntityTileModelList,
+  });
   final List<ProfileEntityTileModel> profileEntityTileModelList;
   @override
   Widget build(BuildContext context) {
@@ -12,9 +14,11 @@ class ProfileEntityTileList extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: profileEntityTileModelList
-          .map((profileEntityTileModel) => ProfileEntityTile(
-                profileEntityTileModel: profileEntityTileModel,
-              ))
+          .map(
+            (profileEntityTileModel) => ProfileEntityTile(
+              profileEntityTileModel: profileEntityTileModel,
+            ),
+          )
           .toList(),
     );
   }

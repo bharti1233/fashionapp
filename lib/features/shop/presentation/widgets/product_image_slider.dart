@@ -11,11 +11,9 @@ import 'package:t_store/features/shop/presentation/widgets/other_same_products_l
 import 'package:t_store/features/shop/presentation/widgets/selected_product_image.dart';
 
 class ProductImageSlider extends StatelessWidget {
-  const ProductImageSlider({
-    super.key,
-  });
+  const ProductImageSlider({super.key});
 
-//ProductImageSlider >> product_image_slider.dart
+  //ProductImageSlider >> product_image_slider.dart
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
@@ -30,12 +28,18 @@ class ProductImageSlider extends StatelessWidget {
             const SelectedProductImage(),
             const OtherSameProductsList(),
             CustomAppBar(
-                appBarModel: AppBarModel(hasArrowBack: true, actions: [
-              CircularIcon(
-                circularIconModel:
-                    CircularIconModel(icon: Iconsax.heart5, color: Colors.red),
+              appBarModel: AppBarModel(
+                hasArrowBack: true,
+                actions: [
+                  CircularIcon(
+                    circularIconModel: CircularIconModel(
+                      icon: Iconsax.heart5,
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
               ),
-            ]))
+            ),
           ],
         ),
       ),

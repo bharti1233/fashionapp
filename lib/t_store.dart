@@ -38,7 +38,8 @@ class TStore extends StatelessWidget {
 
         // UI State
         BlocProvider<BannerCarouselSliderCubit>(
-            create: (_) => BannerCarouselSliderCubit()),
+          create: (_) => BannerCarouselSliderCubit(),
+        ),
       ],
       child: MaterialApp(
         title: TTexts.appName,

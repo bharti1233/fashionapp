@@ -33,9 +33,7 @@ String _sortFieldFor(String option) {
 bool _ascendingFor(String option) => option == 'Price: Low to High';
 
 class SortableProducts extends StatefulWidget {
-  const SortableProducts({
-    super.key,
-  });
+  const SortableProducts({super.key});
 
   @override
   State<SortableProducts> createState() => _SortableProductsState();
@@ -49,46 +47,40 @@ class _SortableProductsState extends State<SortableProducts> {
     return Column(
       children: [
         DropdownButtonFormField<String>(
-          decoration: const InputDecoration(
-            prefixIcon: Icon(Iconsax.sort),
-          ),
+          decoration: const InputDecoration(prefixIcon: Icon(Iconsax.sort)),
           initialValue: _sortBy,
           items: _fashionSortOptions
-              .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ))
+              .map((e) => DropdownMenuItem(value: e, child: Text(e)))
               .toList(),
           onChanged: (value) {
             if (value == null) return;
             setState(() => _sortBy = value);
             context.read<ProductsCubit>().getProducts(
-                  sortBy: _sortFieldFor(value),
-                  ascending: _ascendingFor(value),
-                  refresh: true,
-                );
+              sortBy: _sortFieldFor(value),
+              ascending: _ascendingFor(value),
+              refresh: true,
+            );
           },
         ),
-        const SizedBox(
-          height: TSizes.spaceBtwSections,
-        ),
-        BlocBuilder<ProductsCubit, ProductsState>(builder: (context, state) {
-          if (state is ProductsLoaded) {
-            return GridLayout(
+        const SizedBox(height: TSizes.spaceBtwSections),
+        BlocBuilder<ProductsCubit, ProductsState>(
+          builder: (context, state) {
+            if (state is ProductsLoaded) {
+              return GridLayout(
                 gridLayoutModel: GridLayoutModel(
-              itemCount: state.products.length,
-              itemBuilder: (context, index) {
-                return VerticalProductCard(
-                  product: state.products[index],
-                );
-              },
-            ));
-          } else if (state is ProductsError) {
-            return Text(state.message);
-          }
+                  itemCount: state.products.length,
+                  itemBuilder: (context, index) {
+                    return VerticalProductCard(product: state.products[index]);
+                  },
+                ),
+              );
+            } else if (state is ProductsError) {
+              return Text(state.message);
+            }
 
-          return const ProductShimmer();
-        }),
+            return const ProductShimmer();
+          },
+        ),
       ],
     );
   }

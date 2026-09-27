@@ -6,10 +6,7 @@ import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 
 class RoundedImage extends StatelessWidget {
-  const RoundedImage({
-    super.key,
-    required this.roundedImageModel,
-  });
+  const RoundedImage({super.key, required this.roundedImageModel});
   final RoundedImageModel roundedImageModel;
   @override
   Widget build(BuildContext context) {
@@ -35,8 +32,9 @@ class RoundedImage extends StatelessWidget {
                   placeholderFadeInDuration: Duration.zero,
                   placeholder: (context, url) => Shimmer.fromColors(
                     baseColor: dark ? Colors.grey[850]! : Colors.grey[300]!,
-                    highlightColor:
-                        dark ? Colors.grey[700]! : Colors.grey[100]!,
+                    highlightColor: dark
+                        ? Colors.grey[700]!
+                        : Colors.grey[100]!,
                     child: Container(
                       width: roundedImageModel.width,
                       height: roundedImageModel.height,
@@ -44,7 +42,8 @@ class RoundedImage extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: roundedImageModel.applyImageRadius
                             ? BorderRadius.circular(
-                                roundedImageModel.borderRadius)
+                                roundedImageModel.borderRadius,
+                              )
                             : null,
                       ),
                     ),
@@ -56,7 +55,8 @@ class RoundedImage extends StatelessWidget {
                       color: dark ? TColors.darkerGrey : TColors.light,
                       borderRadius: roundedImageModel.applyImageRadius
                           ? BorderRadius.circular(
-                              roundedImageModel.borderRadius)
+                              roundedImageModel.borderRadius,
+                            )
                           : null,
                     ),
                     child: Icon(
@@ -68,9 +68,7 @@ class RoundedImage extends StatelessWidget {
                   fit: roundedImageModel.fit,
                 )
               : Image(
-                  image: AssetImage(
-                    roundedImageModel.image,
-                  ),
+                  image: AssetImage(roundedImageModel.image),
                   color: roundedImageModel.overlayColor,
                   fit: roundedImageModel.fit,
                 ),

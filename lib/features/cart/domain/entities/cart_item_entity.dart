@@ -31,14 +31,14 @@ class CartItemEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        userId,
-        productId,
-        quantity,
-        selectedAttributes,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    userId,
+    productId,
+    quantity,
+    selectedAttributes,
+    createdAt,
+    updatedAt,
+  ];
 
   CartItemEntity copyWith({
     String? id,

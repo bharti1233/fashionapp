@@ -27,16 +27,16 @@ class CategoryEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        description,
-        imageUrl,
-        parentId,
-        sortOrder,
-        isActive,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    name,
+    description,
+    imageUrl,
+    parentId,
+    sortOrder,
+    isActive,
+    createdAt,
+    updatedAt,
+  ];
 
   CategoryEntity copyWith({
     String? id,

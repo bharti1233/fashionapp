@@ -9,9 +9,7 @@ import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/features/shop/presentation/views/cart_view.dart';
 
 class HomeAppBar extends StatelessWidget {
-  const HomeAppBar({
-    super.key,
-  });
+  const HomeAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +20,15 @@ class HomeAppBar extends StatelessWidget {
           children: [
             Text(
               TTexts.homeAppbarTitle,
-              style: Theme.of(context).textTheme.labelMedium!.apply(
-                    color: TColors.grey,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.labelMedium!.apply(color: TColors.grey),
             ),
             Text(
               TTexts.homeAppbarSubTitle,
-              style: Theme.of(context).textTheme.headlineSmall!.apply(
-                    color: TColors.white,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall!.apply(color: TColors.white),
             ),
           ],
         ),

@@ -6,9 +6,7 @@ import '../../../../core/utils/constants/text_strings.dart';
 import '../../../../core/utils/helpers/helper_functions.dart';
 
 class TermsAndPrivacyAgreement extends StatelessWidget {
-  const TermsAndPrivacyAgreement({
-    super.key,
-  });
+  const TermsAndPrivacyAgreement({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,32 +16,33 @@ class TermsAndPrivacyAgreement extends StatelessWidget {
         SizedBox(
           width: 24,
           height: 24,
-          child: Checkbox(
-            value: true,
-            onChanged: (value) {},
+          child: Checkbox(value: true, onChanged: (value) {}),
+        ),
+        const SizedBox(width: TSizes.spaceBtwInputFields - 8),
+        Text.rich(
+          TextSpan(
+            children: [
+              const TextSpan(text: TTexts.iAgreeTo),
+              TextSpan(
+                text: " ${TTexts.privacyPolicy} ",
+                style: Theme.of(context).textTheme.bodyMedium!.apply(
+                  decoration: TextDecoration.underline,
+                  decorationColor: dark ? TColors.white : TColors.primary,
+                  color: dark ? TColors.white : TColors.primary,
+                ),
+              ),
+              const TextSpan(text: TTexts.and),
+              TextSpan(
+                text: " ${TTexts.termsOfUse}",
+                style: Theme.of(context).textTheme.bodyMedium!.apply(
+                  decoration: TextDecoration.underline,
+                  decorationColor: dark ? TColors.white : TColors.primary,
+                  color: dark ? TColors.white : TColors.primary,
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(
-          width: TSizes.spaceBtwInputFields - 8,
-        ),
-        Text.rich(TextSpan(children: [
-          const TextSpan(text: TTexts.iAgreeTo),
-          TextSpan(
-              text: " ${TTexts.privacyPolicy} ",
-              style: Theme.of(context).textTheme.bodyMedium!.apply(
-                    decoration: TextDecoration.underline,
-                    decorationColor: dark ? TColors.white : TColors.primary,
-                    color: dark ? TColors.white : TColors.primary,
-                  )),
-          const TextSpan(text: TTexts.and),
-          TextSpan(
-              text: " ${TTexts.termsOfUse}",
-              style: Theme.of(context).textTheme.bodyMedium!.apply(
-                    decoration: TextDecoration.underline,
-                    decorationColor: dark ? TColors.white : TColors.primary,
-                    color: dark ? TColors.white : TColors.primary,
-                  )),
-        ]))
       ],
     );
   }

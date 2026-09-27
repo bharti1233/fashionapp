@@ -7,10 +7,8 @@ import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 
 class ProductQuantityWithAddAndRemoveButtons extends StatelessWidget {
-  const ProductQuantityWithAddAndRemoveButtons({
-    super.key,
-  });
-//ProductQuantityWithAddAndRemoveButtons >>
+  const ProductQuantityWithAddAndRemoveButtons({super.key});
+  //ProductQuantityWithAddAndRemoveButtons >>
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
@@ -27,16 +25,9 @@ class ProductQuantityWithAddAndRemoveButtons extends StatelessWidget {
             backgroundColor: dark ? TColors.darkerGrey : TColors.light,
           ),
         ),
-        const SizedBox(
-          width: TSizes.spaceBtwItems,
-        ),
-        Text(
-          "2",
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
-        const SizedBox(
-          width: TSizes.spaceBtwItems,
-        ),
+        const SizedBox(width: TSizes.spaceBtwItems),
+        Text("2", style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(width: TSizes.spaceBtwItems),
         CircularIcon(
           circularIconModel: CircularIconModel(
             icon: Iconsax.add,

@@ -7,10 +7,7 @@ import 'package:t_store/core/utils/helpers/helper_functions.dart';
 
 class CustomChoiceChip extends StatelessWidget {
   //CustomChoiceChip >>
-  const CustomChoiceChip({
-    super.key,
-    required this.choiceChipModel,
-  });
+  const CustomChoiceChip({super.key, required this.choiceChipModel});
   final ChoiceChipModel choiceChipModel;
   @override
   Widget build(BuildContext context) {
@@ -21,9 +18,10 @@ class CustomChoiceChip extends StatelessWidget {
         avatar: isColor
             ? CircularContainer(
                 circularContainerModel: CircularContainerModel(
-                    width: 50,
-                    height: 50,
-                    color: THelperFunctions.getColor(choiceChipModel.label)),
+                  width: 50,
+                  height: 50,
+                  color: THelperFunctions.getColor(choiceChipModel.label),
+                ),
               )
             : null,
         labelPadding: isColor ? const EdgeInsets.all(0) : null,
@@ -32,8 +30,9 @@ class CustomChoiceChip extends StatelessWidget {
         label: isColor ? const SizedBox() : Text(choiceChipModel.label),
         selected: choiceChipModel.selected,
         onSelected: choiceChipModel.onSelected,
-        backgroundColor:
-            isColor ? THelperFunctions.getColor(choiceChipModel.label) : null,
+        backgroundColor: isColor
+            ? THelperFunctions.getColor(choiceChipModel.label)
+            : null,
         labelStyle: TextStyle(
           color: choiceChipModel.selected ? TColors.white : null,
         ),

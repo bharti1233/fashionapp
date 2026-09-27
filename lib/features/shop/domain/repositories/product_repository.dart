@@ -17,9 +17,12 @@ abstract class ProductRepository {
   Future<Either<String, List<ProductEntity>>> searchProducts(String query);
 
   Future<Either<String, List<ProductEntity>>> getProductsByCategory(
-      String categoryId);
+    String categoryId,
+  );
 
-  Future<Either<String, List<ProductEntity>>> getProductsByBrand(String brandId);
+  Future<Either<String, List<ProductEntity>>> getProductsByBrand(
+    String brandId,
+  );
 
   Future<Either<String, List<ProductEntity>>> getFeaturedProducts();
 }

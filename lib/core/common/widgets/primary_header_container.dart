@@ -5,10 +5,7 @@ import 'package:t_store/core/common/widgets/curved_widget.dart';
 import 'package:t_store/core/utils/constants/colors.dart';
 
 class PrimaryHeaderContainer extends StatelessWidget {
-  const PrimaryHeaderContainer({
-    super.key,
-    required this.child,
-  });
+  const PrimaryHeaderContainer({super.key, required this.child});
   final Widget child;
   @override
   Widget build(BuildContext context) {
@@ -32,16 +29,18 @@ class PrimaryHeaderContainer extends StatelessWidget {
                 ),
               ),
               Positioned(
-                  right: -300,
-                  top: 100,
-                  child: CircularContainer(
-                      circularContainerModel: CircularContainerModel(
+                right: -300,
+                top: 100,
+                child: CircularContainer(
+                  circularContainerModel: CircularContainerModel(
                     height: 400,
                     width: 400,
                     borderRadius: 400,
                     color: TColors.textWhite.withValues(alpha: 0.1),
-                  ))),
-              child
+                  ),
+                ),
+              ),
+              child,
             ],
           ),
         ),

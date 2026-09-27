@@ -9,9 +9,7 @@ import 'package:t_store/features/shop/presentation/cubit/banners_cubit.dart';
 import 'package:t_store/features/shop/presentation/cubit/banners_state.dart';
 
 class PromoBannerCarouselSlider extends StatefulWidget {
-  const PromoBannerCarouselSlider({
-    super.key,
-  });
+  const PromoBannerCarouselSlider({super.key});
 
   @override
   State<PromoBannerCarouselSlider> createState() =>
@@ -33,28 +31,28 @@ class _PromoBannerCarouselSliderState extends State<PromoBannerCarouselSlider> {
           if (state.banners.isEmpty) {
             // Fallback to static images if no banners in database
             return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-              child: BannerCarouselSlider(
-                images: TImages.promoBannerImages,
+              padding: const EdgeInsets.symmetric(
+                horizontal: TSizes.defaultSpace,
               ),
+              child: BannerCarouselSlider(images: TImages.promoBannerImages),
             );
           }
           // Filter to show only currently active banners
-          final activeBanners =
-              state.banners.where((b) => b.isCurrentlyActive).toList();
+          final activeBanners = state.banners
+              .where((b) => b.isCurrentlyActive)
+              .toList();
           if (activeBanners.isEmpty) {
             return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-              child: BannerCarouselSlider(
-                images: TImages.promoBannerImages,
+              padding: const EdgeInsets.symmetric(
+                horizontal: TSizes.defaultSpace,
               ),
+              child: BannerCarouselSlider(images: TImages.promoBannerImages),
             );
           }
           return Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+            padding: const EdgeInsets.symmetric(
+              horizontal: TSizes.defaultSpace,
+            ),
             child: BannerCarouselSlider(
               images: activeBanners.map((b) => b.imageUrl).toList(),
             ),
@@ -63,11 +61,10 @@ class _PromoBannerCarouselSliderState extends State<PromoBannerCarouselSlider> {
         if (state is BannersError) {
           // Fallback to static images on error
           return Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-            child: BannerCarouselSlider(
-              images: TImages.promoBannerImages,
+            padding: const EdgeInsets.symmetric(
+              horizontal: TSizes.defaultSpace,
             ),
+            child: BannerCarouselSlider(images: TImages.promoBannerImages),
           );
         }
         // Loading state

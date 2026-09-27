@@ -13,14 +13,15 @@ class CircularContainerModel {
   final Color borderColor;
   final EdgeInsetsGeometry? margin;
 
-  CircularContainerModel(
-      {this.width,
-      this.borderColor = TColors.borderPrimary,
-      this.showBorder = false,
-      this.margin,
-      this.child,
-      this.height,
-      this.color = TColors.white,
-      this.borderRadius = TSizes.cardRadiusLg,
-      this.padding = EdgeInsets.zero});
+  CircularContainerModel({
+    this.width,
+    this.borderColor = TColors.borderPrimary,
+    this.showBorder = false,
+    this.margin,
+    this.child,
+    this.height,
+    this.color = TColors.white,
+    this.borderRadius = TSizes.cardRadiusLg,
+    this.padding = EdgeInsets.zero,
+  });
 }

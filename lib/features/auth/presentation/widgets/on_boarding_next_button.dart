@@ -8,26 +8,23 @@ import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/features/auth/presentation/logic/on_boarding/on_boarding_cubit.dart';
 
 class OnBoardingNextButton extends StatelessWidget {
-  const OnBoardingNextButton({
-    super.key,
-  });
+  const OnBoardingNextButton({super.key});
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return Positioned(
-        bottom: TDeviceUtils.getBottomNavigationBarHeight() + 25,
-        right: TSizes.defaultSpace,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: const CircleBorder(),
-            backgroundColor: dark ? TColors.primary : Colors.black,
-          ),
-          onPressed: (() {
-            context.read<OnBoardingCubit>().goToNextPage(context);
-          }),
-          child: const Icon(
-            Iconsax.arrow_right_3,
-          ),
-        ));
+      bottom: TDeviceUtils.getBottomNavigationBarHeight() + 25,
+      right: TSizes.defaultSpace,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
+          backgroundColor: dark ? TColors.primary : Colors.black,
+        ),
+        onPressed: (() {
+          context.read<OnBoardingCubit>().goToNextPage(context);
+        }),
+        child: const Icon(Iconsax.arrow_right_3),
+      ),
+    );
   }
 }

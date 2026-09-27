@@ -22,43 +22,27 @@ class BillingAddressSection extends StatelessWidget {
         Text("Code With Me ", style: Theme.of(context).textTheme.bodyLarge),
         Row(
           children: [
-            const Icon(
-              Icons.phone,
-              size: 16,
-              color: Colors.grey,
-            ),
-            const SizedBox(
-              width: TSizes.spaceBtwItems,
-            ),
+            const Icon(Icons.phone, size: 16, color: Colors.grey),
+            const SizedBox(width: TSizes.spaceBtwItems),
             Text(
               "+20-123456789",
               style: Theme.of(context).textTheme.bodyMedium,
-            )
+            ),
           ],
         ),
-        const SizedBox(
-          height: TSizes.spaceBtwItems / 2,
-        ),
+        const SizedBox(height: TSizes.spaceBtwItems / 2),
         Row(
           children: [
-            const Icon(
-              Icons.location_history,
-              size: 16,
-              color: Colors.grey,
-            ),
-            const SizedBox(
-              width: TSizes.spaceBtwItems,
-            ),
+            const Icon(Icons.location_history, size: 16, color: Colors.grey),
+            const SizedBox(width: TSizes.spaceBtwItems),
             Text(
               "123 Street, Egypt",
               softWrap: true,
               style: Theme.of(context).textTheme.bodyMedium,
-            )
+            ),
           ],
         ),
-        const SizedBox(
-          height: TSizes.spaceBtwItems / 2,
-        ),
+        const SizedBox(height: TSizes.spaceBtwItems / 2),
       ],
     );
   }

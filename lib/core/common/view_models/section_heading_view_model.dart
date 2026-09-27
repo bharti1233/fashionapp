@@ -7,11 +7,12 @@ class SectionHeadingModel {
   final bool showActionButton;
   final String title, actionButtonTitle;
   final Function()? actionButtonOnPressed;
-  
-  SectionHeadingModel(
-      {this.textColor,
-      this.showActionButton = true,
-      required this.title,
-      this.actionButtonTitle = TTexts.viewAll,
-      this.actionButtonOnPressed});
+
+  SectionHeadingModel({
+    this.textColor,
+    this.showActionButton = true,
+    required this.title,
+    this.actionButtonTitle = TTexts.viewAll,
+    this.actionButtonOnPressed,
+  });
 }

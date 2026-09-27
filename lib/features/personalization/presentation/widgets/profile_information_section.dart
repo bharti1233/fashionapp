@@ -41,11 +41,12 @@ class ProfileInformationSection extends StatelessWidget {
         ),
         const SpaceBetweenSectionsWithDivider(),
         SectionHeading(
-            sectionHeadingModel: SectionHeadingModel(
-                title: "Profile Information", showActionButton: false)),
-        const SizedBox(
-          height: TSizes.spaceBtwItems / 1.5,
+          sectionHeadingModel: SectionHeadingModel(
+            title: "Profile Information",
+            showActionButton: false,
+          ),
         ),
+        const SizedBox(height: TSizes.spaceBtwItems / 1.5),
         ProfileEntityTileList(profileEntityTileModelList: profileInformation),
       ],
     );

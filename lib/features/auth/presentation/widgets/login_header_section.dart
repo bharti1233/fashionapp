@@ -5,9 +5,7 @@ import 'package:t_store/core/utils/constants/text_strings.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 
 class LoginHeaderSection extends StatelessWidget {
-  const LoginHeaderSection({
-    super.key,
-  });
+  const LoginHeaderSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +21,7 @@ class LoginHeaderSection extends StatelessWidget {
           TTexts.loginTitle,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
-        const SizedBox(
-          height: TSizes.sm,
-        ),
+        const SizedBox(height: TSizes.sm),
         Text(
           TTexts.loginSubTitle,
           style: Theme.of(context).textTheme.bodyMedium,

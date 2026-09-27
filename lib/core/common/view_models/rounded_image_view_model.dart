@@ -16,7 +16,7 @@ class RoundedImageModel {
   final Color? overlayColor;
 
   RoundedImageModel({
-     this.overlayColor,
+    this.overlayColor,
     required this.image,
     this.height,
     this.width,

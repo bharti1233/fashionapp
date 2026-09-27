@@ -83,7 +83,7 @@ class TTexts {
   static const String homeAppbarSubTitle = "Mahmoud Hamdy";
   static const String searchContainer = "Search in Store";
   static const String popularCategories = "Popular Categories";
-// -- Categories
+  // -- Categories
   static const String sport = "Sport";
   static const String cloth = "Cloth";
   static const String shoes = "Shoes";
@@ -94,7 +94,7 @@ class TTexts {
   static const String accessories = "Accessories";
   static const String electronics = "Electronics";
   static const String jewellers = "Jewellers";
-//list of categories
+  //list of categories
   static const List<String> categories = [
     "beauty",
     "fragrances",
@@ -119,7 +119,7 @@ class TTexts {
     "womens-dresses",
     "womens-jewellery",
     "womens-shoes",
-    "womens-watches"
+    "womens-watches",
   ];
   static const String applePay = 'Apple Pay';
   static const String googlePay = 'Google Pay';

@@ -20,17 +20,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Iconsax.arrow_left,
-                    color: dark ? TColors.white : TColors.black),
+                icon: Icon(
+                  Iconsax.arrow_left,
+                  color: dark ? TColors.white : TColors.black,
+                ),
               )
             : appBarModel.leadingIcon != null
-                ? IconButton(
-                    onPressed: () {
-                      appBarModel.leadingOnPressed!();
-                    },
-                    icon: Icon(appBarModel.leadingIcon),
-                  )
-                : null,
+            ? IconButton(
+                onPressed: () {
+                  appBarModel.leadingOnPressed!();
+                },
+                icon: Icon(appBarModel.leadingIcon),
+              )
+            : null,
         title: appBarModel.title,
         actions: appBarModel.actions,
         centerTitle: appBarModel.centerTitle,

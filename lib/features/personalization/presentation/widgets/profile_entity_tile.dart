@@ -3,18 +3,16 @@ import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/features/personalization/presentation/view_models/profile_entity_tile_model.dart';
 
 class ProfileEntityTile extends StatelessWidget {
-  const ProfileEntityTile({
-    super.key,
-    required this.profileEntityTileModel,
-  });
+  const ProfileEntityTile({super.key, required this.profileEntityTileModel});
   final ProfileEntityTileModel profileEntityTileModel;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: profileEntityTileModel.onTap,
       child: Padding(
-        padding:
-            const EdgeInsets.symmetric(vertical: TSizes.spaceBtwItems / 1.5),
+        padding: const EdgeInsets.symmetric(
+          vertical: TSizes.spaceBtwItems / 1.5,
+        ),
         child: Row(
           children: [
             Expanded(
@@ -33,12 +31,7 @@ class ProfileEntityTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Expanded(
-              child: Icon(
-                profileEntityTileModel.trailing,
-                size: 18,
-              ),
-            )
+            Expanded(child: Icon(profileEntityTileModel.trailing, size: 18)),
           ],
         ),
       ),

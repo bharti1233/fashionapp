@@ -12,9 +12,7 @@ import 'package:t_store/features/shop/presentation/widgets/home_app_bar.dart';
 import 'package:t_store/features/shop/presentation/widgets/home_categories.dart';
 
 class HomeHeaderSection extends StatelessWidget {
-  const HomeHeaderSection({
-    super.key,
-  });
+  const HomeHeaderSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,22 +34,19 @@ class HomeHeaderSection extends StatelessWidget {
           const HomeAppBar(),
           const SizedBox(height: TSizes.spaceBtwSections),
           SearchContainer(searchContainerModel: searchContainerModel),
-          const SizedBox(
-            height: TSizes.spaceBtwSections,
-          ),
+          const SizedBox(height: TSizes.spaceBtwSections),
           Padding(
-              padding: const EdgeInsets.only(left: TSizes.defaultSpace),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SectionHeading(
-                    sectionHeadingModel: sectionHeadingModel,
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwSections),
-                  const HomeCategories(),
-                  const SizedBox(height: TSizes.spaceBtwSections),
-                ],
-              ))
+            padding: const EdgeInsets.only(left: TSizes.defaultSpace),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SectionHeading(sectionHeadingModel: sectionHeadingModel),
+                const SizedBox(height: TSizes.spaceBtwSections),
+                const HomeCategories(),
+                const SizedBox(height: TSizes.spaceBtwSections),
+              ],
+            ),
+          ),
         ],
       ),
     );

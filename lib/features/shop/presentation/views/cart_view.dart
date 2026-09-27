@@ -7,9 +7,7 @@ import 'package:t_store/features/shop/presentation/views/checkout_view.dart';
 import 'package:t_store/features/shop/presentation/widgets/cart_items_list.dart';
 
 class CartView extends StatelessWidget {
-  const CartView({
-    super.key,
-  });
+  const CartView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

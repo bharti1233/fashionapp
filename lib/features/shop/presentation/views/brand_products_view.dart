@@ -18,23 +18,24 @@ class BrandProductsView extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-            child: Padding(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
-          child: Column(
-            children: [
-              BrandCard(
+          child: Padding(
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
+            child: Column(
+              children: [
+                BrandCard(
                   brandCardModel: BrandCardModel(
-                      productCount: 5,
-                      showBorder: true,
-                      brandName: "Nike",
-                      image: TImages.nikeLogo)),
-              const SizedBox(
-                height: TSizes.spaceBtwSections,
-              ),
-              const SortableProducts(),
-            ],
+                    productCount: 5,
+                    showBorder: true,
+                    brandName: "Nike",
+                    image: TImages.nikeLogo,
+                  ),
+                ),
+                const SizedBox(height: TSizes.spaceBtwSections),
+                const SortableProducts(),
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

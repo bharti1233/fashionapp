@@ -73,21 +73,21 @@ class OrderEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        userId,
-        addressId,
-        status,
-        subtotal,
-        shippingCost,
-        discount,
-        total,
-        couponCode,
-        paymentMethod,
-        paymentStatus,
-        notes,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    userId,
+    addressId,
+    status,
+    subtotal,
+    shippingCost,
+    discount,
+    total,
+    couponCode,
+    paymentMethod,
+    paymentStatus,
+    notes,
+    createdAt,
+    updatedAt,
+  ];
 }
 
 class OrderItemEntity extends Equatable {
@@ -115,15 +115,15 @@ class OrderItemEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        orderId,
-        productId,
-        productName,
-        productImage,
-        price,
-        quantity,
-        selectedAttributes,
-      ];
+    id,
+    orderId,
+    productId,
+    productName,
+    productImage,
+    price,
+    quantity,
+    selectedAttributes,
+  ];
 }
 
 class AddressSnapshotEntity extends Equatable {
@@ -145,9 +145,17 @@ class AddressSnapshotEntity extends Equatable {
     required this.country,
   });
 
-  String get fullAddress => '$address, $city${state != null ? ', $state' : ''}, $country';
+  String get fullAddress =>
+      '$address, $city${state != null ? ', $state' : ''}, $country';
 
   @override
-  List<Object?> get props =>
-      [fullName, phone, address, city, state, postalCode, country];
+  List<Object?> get props => [
+    fullName,
+    phone,
+    address,
+    city,
+    state,
+    postalCode,
+    country,
+  ];
 }

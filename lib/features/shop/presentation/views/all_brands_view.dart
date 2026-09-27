@@ -20,48 +20,50 @@ class AllBrandsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        appBarModel:
-            AppBarModel(title: const Text("All Brands"), hasArrowBack: true),
+        appBarModel: AppBarModel(
+          title: const Text("All Brands"),
+          hasArrowBack: true,
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-            child: Padding(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
-          child: Column(
-            children: [
-              SectionHeading(
-                sectionHeadingModel: SectionHeadingModel(
-                  title: "All Brands",
-                  showActionButton: false,
+          child: Padding(
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
+            child: Column(
+              children: [
+                SectionHeading(
+                  sectionHeadingModel: SectionHeadingModel(
+                    title: "All Brands",
+                    showActionButton: false,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: TSizes.spaceBtwItems,
-              ),
-              GridLayout(
+                const SizedBox(height: TSizes.spaceBtwItems),
+                GridLayout(
                   gridLayoutModel: GridLayoutModel(
-                itemCount: 10,
-                mainAxisExtent: 80,
-                itemBuilder: (context, index) {
-                  return BrandCard(
-                    brandCardModel: BrandCardModel(
-                      onTap: () {
-                        THelperFunctions.navigateToScreen(
-                          context,
-                          const BrandProductsView(),
-                        );
-                      },
-                      showBorder: true,
-                      productCount: TTexts.brandTitles.length,
-                      brandName: TTexts.brandTitles[index],
-                      image: TImages.brandIcons[index],
-                    ),
-                  );
-                },
-              )),
-            ],
+                    itemCount: 10,
+                    mainAxisExtent: 80,
+                    itemBuilder: (context, index) {
+                      return BrandCard(
+                        brandCardModel: BrandCardModel(
+                          onTap: () {
+                            THelperFunctions.navigateToScreen(
+                              context,
+                              const BrandProductsView(),
+                            );
+                          },
+                          showBorder: true,
+                          productCount: TTexts.brandTitles.length,
+                          brandName: TTexts.brandTitles[index],
+                          image: TImages.brandIcons[index],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

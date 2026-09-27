@@ -26,8 +26,9 @@ class WishlistRepositoryImpl implements WishlistRepository {
           .order('created_at', ascending: false);
 
       final items = (response as List)
-          .map((json) =>
-              WishlistItemModel.fromJson(json as Map<String, dynamic>))
+          .map(
+            (json) => WishlistItemModel.fromJson(json as Map<String, dynamic>),
+          )
           .toList();
 
       return Right(items);
@@ -38,7 +39,8 @@ class WishlistRepositoryImpl implements WishlistRepository {
 
   @override
   Future<Either<String, WishlistItemEntity>> addToWishlist(
-      String productId) async {
+    String productId,
+  ) async {
     try {
       if (_userId.isEmpty) {
         return const Left('يرجى تسجيل الدخول أولاً');
@@ -58,10 +60,7 @@ class WishlistRepositoryImpl implements WishlistRepository {
 
       final response = await supabaseService.client
           .from(SupabaseTables.wishlist)
-          .insert({
-            'user_id': _userId,
-            'product_id': productId,
-          })
+          .insert({'user_id': _userId, 'product_id': productId})
           .select('*, products(*, categories(name), brands(name))')
           .single();
 
@@ -114,19 +113,13 @@ class WishlistRepositoryImpl implements WishlistRepository {
   Future<Either<String, void>> toggleWishlist(String productId) async {
     final isInResult = await isInWishlist(productId);
 
-    return isInResult.fold(
-      (error) => Left(error),
-      (isIn) async {
-        if (isIn) {
-          return await removeFromWishlist(productId);
-        } else {
-          final result = await addToWishlist(productId);
-          return result.fold(
-            (error) => Left(error),
-            (_) => const Right(null),
-          );
-        }
-      },
-    );
+    return isInResult.fold((error) => Left(error), (isIn) async {
+      if (isIn) {
+        return await removeFromWishlist(productId);
+      } else {
+        final result = await addToWishlist(productId);
+        return result.fold((error) => Left(error), (_) => const Right(null));
+      }
+    });
   }
 }

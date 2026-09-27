@@ -30,13 +30,10 @@ class CartCubit extends Cubit<CartState> {
 
     final result = await getCartItemsUsecase(const NoParams());
 
-    result.fold(
-      (error) => emit(CartError(error)),
-      (items) {
-        _items = items;
-        emit(CartLoaded(items));
-      },
-    );
+    result.fold((error) => emit(CartError(error)), (items) {
+      _items = items;
+      emit(CartLoaded(items));
+    });
   }
 
   Future<void> addToCart({
@@ -44,29 +41,27 @@ class CartCubit extends Cubit<CartState> {
     int quantity = 1,
     Map<String, dynamic>? selectedAttributes,
   }) async {
-    final result = await addToCartUsecase(AddToCartParams(
-      productId: productId,
-      quantity: quantity,
-      selectedAttributes: selectedAttributes,
-    ));
-
-    result.fold(
-      (error) => emit(CartError(error)),
-      (item) {
-        emit(CartItemAdded(item));
-        getCartItems();
-      },
+    final result = await addToCartUsecase(
+      AddToCartParams(
+        productId: productId,
+        quantity: quantity,
+        selectedAttributes: selectedAttributes,
+      ),
     );
+
+    result.fold((error) => emit(CartError(error)), (item) {
+      emit(CartItemAdded(item));
+      getCartItems();
+    });
   }
 
   Future<void> updateCartItem({
     required String cartItemId,
     required int quantity,
   }) async {
-    final result = await updateCartItemUsecase(UpdateCartItemParams(
-      cartItemId: cartItemId,
-      quantity: quantity,
-    ));
+    final result = await updateCartItemUsecase(
+      UpdateCartItemParams(cartItemId: cartItemId, quantity: quantity),
+    );
 
     result.fold(
       (error) {
@@ -89,10 +84,7 @@ class CartCubit extends Cubit<CartState> {
       (item) => item.id == cartItemId,
       orElse: () => throw Exception('Item not found'),
     );
-    await updateCartItem(
-      cartItemId: cartItemId,
-      quantity: item.quantity + 1,
-    );
+    await updateCartItem(cartItemId: cartItemId, quantity: item.quantity + 1);
   }
 
   Future<void> decrementQuantity(String cartItemId) async {
@@ -100,35 +92,26 @@ class CartCubit extends Cubit<CartState> {
       (item) => item.id == cartItemId,
       orElse: () => throw Exception('Item not found'),
     );
-    await updateCartItem(
-      cartItemId: cartItemId,
-      quantity: item.quantity - 1,
-    );
+    await updateCartItem(cartItemId: cartItemId, quantity: item.quantity - 1);
   }
 
   Future<void> removeFromCart(String cartItemId) async {
     final result = await removeFromCartUsecase(cartItemId);
 
-    result.fold(
-      (error) => emit(CartError(error)),
-      (_) {
-        emit(CartItemRemoved(cartItemId));
-        getCartItems();
-      },
-    );
+    result.fold((error) => emit(CartError(error)), (_) {
+      emit(CartItemRemoved(cartItemId));
+      getCartItems();
+    });
   }
 
   Future<void> clearCart() async {
     final result = await clearCartUsecase(const NoParams());
 
-    result.fold(
-      (error) => emit(CartError(error)),
-      (_) {
-        _items = [];
-        emit(CartCleared());
-        emit(CartLoaded([]));
-      },
-    );
+    result.fold((error) => emit(CartError(error)), (_) {
+      _items = [];
+      emit(CartCleared());
+      emit(CartLoaded([]));
+    });
   }
 
   int get itemCount {

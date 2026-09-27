@@ -12,10 +12,11 @@ class OrdersView extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         appBarModel: AppBarModel(
-            title: Text(
-          "My Orders",
-          style: Theme.of(context).textTheme.headlineSmall,
-        )),
+          title: Text(
+            "My Orders",
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+        ),
       ),
       body: const Padding(
         padding: EdgeInsets.all(TSizes.defaultSpace),

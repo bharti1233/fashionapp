@@ -24,9 +24,7 @@ class BillingPaymentSection extends StatelessWidget {
             actionButtonTitle: "Change",
           ),
         ),
-        const SizedBox(
-          height: TSizes.spaceBtwItems / 2,
-        ),
+        const SizedBox(height: TSizes.spaceBtwItems / 2),
         Row(
           children: [
             CircularContainer(
@@ -36,13 +34,15 @@ class BillingPaymentSection extends StatelessWidget {
                 color: dark ? TColors.light : TColors.white,
                 padding: const EdgeInsets.all(TSizes.sm),
                 child: const Image(
-                    image: AssetImage(TImages.paypal), fit: BoxFit.contain),
+                  image: AssetImage(TImages.paypal),
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             const SizedBox(width: TSizes.spaceBtwItems / 2),
             Text("Paypal", style: Theme.of(context).textTheme.bodyLarge),
           ],
-        )
+        ),
       ],
     );
   }

@@ -95,10 +95,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
           .uploadBinary(
             fileName,
             bytes,
-            fileOptions: const FileOptions(
-              cacheControl: '3600',
-              upsert: true,
-            ),
+            fileOptions: const FileOptions(cacheControl: '3600', upsert: true),
           );
 
       final avatarUrl = supabaseService.client.storage
@@ -132,9 +129,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
       // Try to delete file from storage
       try {
-        await supabaseService.client.storage
-            .from('avatars')
-            .remove(['avatar_$_userId.jpg', 'avatar_$_userId.png']);
+        await supabaseService.client.storage.from('avatars').remove([
+          'avatar_$_userId.jpg',
+          'avatar_$_userId.png',
+        ]);
       } catch (_) {
         // Ignore storage errors
       }

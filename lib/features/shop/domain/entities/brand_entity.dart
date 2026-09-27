@@ -23,15 +23,15 @@ class BrandEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        description,
-        logoUrl,
-        isFeatured,
-        isActive,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    name,
+    description,
+    logoUrl,
+    isFeatured,
+    isActive,
+    createdAt,
+    updatedAt,
+  ];
 
   BrandEntity copyWith({
     String? id,

@@ -40,8 +40,9 @@ class ProductShimmer extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius:
-                      BorderRadius.circular(TSizes.productImageRadius),
+                  borderRadius: BorderRadius.circular(
+                    TSizes.productImageRadius,
+                  ),
                 ),
               ),
               const SizedBox(height: TSizes.spaceBtwItems),
@@ -58,21 +59,13 @@ class ProductShimmer extends StatelessWidget {
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems / 2),
                     // Brand shimmer
-                    Container(
-                      width: 100,
-                      height: 10,
-                      color: Colors.white,
-                    ),
+                    Container(width: 100, height: 10, color: Colors.white),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     // Price and cart button shimmer
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: 60,
-                          height: 15,
-                          color: Colors.white,
-                        ),
+                        Container(width: 60, height: 15, color: Colors.white),
                         Container(
                           width: 40,
                           height: 40,

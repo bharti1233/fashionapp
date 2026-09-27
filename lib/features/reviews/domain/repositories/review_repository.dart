@@ -27,7 +27,8 @@ abstract class ReviewRepository {
   Future<Either<String, void>> deleteReview(String reviewId);
 
   Future<Either<String, ProductReviewStats>> getProductReviewStats(
-      String productId);
+    String productId,
+  );
 
   Future<Either<String, bool>> hasUserReviewed(String productId);
 }

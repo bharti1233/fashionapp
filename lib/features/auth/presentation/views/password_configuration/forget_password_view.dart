@@ -16,9 +16,7 @@ class ForgetPasswordView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ForgetPasswordHeaderSection(),
-            SizedBox(
-              height: TSizes.spaceBtwSections,
-            ),
+            SizedBox(height: TSizes.spaceBtwSections),
             ForgetPasswordFormSection(),
           ],
         ),

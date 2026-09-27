@@ -13,103 +13,99 @@ class OrderListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return CircularContainer(
-        circularContainerModel: CircularContainerModel(
-            showBorder: true,
-            color: dark ? TColors.dark : TColors.light,
-            padding: const EdgeInsets.all(TSizes.md),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+      circularContainerModel: CircularContainerModel(
+        showBorder: true,
+        color: dark ? TColors.dark : TColors.light,
+        padding: const EdgeInsets.all(TSizes.md),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    const Icon(Iconsax.ship),
-                    const SizedBox(
-                      width: TSizes.spaceBtwItems / 2,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Prossessing",
-                            style: Theme.of(context).textTheme.bodyLarge!.apply(
-                                color: TColors.primary, fontWeightDelta: 1),
-                          ),
-                          Text("07 Mar, 2022",
-                              style: Theme.of(context).textTheme.headlineSmall),
-                        ],
+                const Icon(Iconsax.ship),
+                const SizedBox(width: TSizes.spaceBtwItems / 2),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Prossessing",
+                        style: Theme.of(context).textTheme.bodyLarge!.apply(
+                          color: TColors.primary,
+                          fontWeightDelta: 1,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Iconsax.arrow_right_34,
+                      Text(
+                        "07 Mar, 2022",
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
-                      iconSize: TSizes.iconSm,
-                    )
-                  ],
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  height: TSizes.spaceBtwItems,
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Iconsax.arrow_right_34),
+                  iconSize: TSizes.iconSm,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          const Icon(Iconsax.tag),
-                          const SizedBox(
-                            width: TSizes.spaceBtwItems / 2,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text("Order",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                                Text("#123456",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          const Icon(Iconsax.calendar),
-                          const SizedBox(
-                            width: TSizes.spaceBtwItems / 2,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text("Shipping Date",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                                Text("07 Mar, 2022",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
               ],
-            )));
+            ),
+            const SizedBox(height: TSizes.spaceBtwItems),
+            Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      const Icon(Iconsax.tag),
+                      const SizedBox(width: TSizes.spaceBtwItems / 2),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Order",
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                            Text(
+                              "#123456",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      const Icon(Iconsax.calendar),
+                      const SizedBox(width: TSizes.spaceBtwItems / 2),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Shipping Date",
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                            Text(
+                              "07 Mar, 2022",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

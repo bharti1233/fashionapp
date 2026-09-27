@@ -37,28 +37,29 @@ class ProductsCubit extends Cubit<ProductsState> {
       emit(ProductsLoading());
     }
 
-    final result = await getProductsUsecase(GetProductsParams(
-      page: _currentPage,
-      limit: _limit,
-      categoryId: categoryId,
-      brandId: brandId,
-      isFeatured: isFeatured,
-      sortBy: sortBy,
-      ascending: ascending,
-    ));
+    final result = await getProductsUsecase(
+      GetProductsParams(
+        page: _currentPage,
+        limit: _limit,
+        categoryId: categoryId,
+        brandId: brandId,
+        isFeatured: isFeatured,
+        sortBy: sortBy,
+        ascending: ascending,
+      ),
+    );
 
-    result.fold(
-      (error) => emit(ProductsError(error)),
-      (products) {
-        _allProducts = [..._allProducts, ...products];
-        _currentPage++;
-        emit(ProductsLoaded(
+    result.fold((error) => emit(ProductsError(error)), (products) {
+      _allProducts = [..._allProducts, ...products];
+      _currentPage++;
+      emit(
+        ProductsLoaded(
           products: _allProducts,
           hasReachedMax: products.length < _limit,
           currentPage: _currentPage,
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   Future<void> loadMoreProducts({
@@ -105,10 +106,8 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     result.fold(
       (error) => emit(ProductsError(error)),
-      (products) => emit(ProductsSearchResult(
-        products: products,
-        query: query,
-      )),
+      (products) =>
+          emit(ProductsSearchResult(products: products, query: query)),
     );
   }
 

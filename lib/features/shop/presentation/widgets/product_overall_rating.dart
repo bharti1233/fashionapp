@@ -3,19 +3,14 @@ import 'package:t_store/features/shop/presentation/view_models/rating_progress_i
 import 'package:t_store/features/shop/presentation/widgets/rating_progress_indicator.dart';
 
 class ProductOverallRating extends StatelessWidget {
-  const ProductOverallRating({
-    super.key,
-  });
+  const ProductOverallRating({super.key});
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
           flex: 3,
-          child: Text(
-            "4.8",
-            style: Theme.of(context).textTheme.displayLarge,
-          ),
+          child: Text("4.8", style: Theme.of(context).textTheme.displayLarge),
         ),
         Expanded(
           flex: 7,
@@ -53,7 +48,7 @@ class ProductOverallRating extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

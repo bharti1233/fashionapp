@@ -18,6 +18,12 @@ class RegistrationModel extends Equatable {
   });
 
   @override
-  List<Object?> get props =>
-      [name, email, password, cPassword, mobile, address];
+  List<Object?> get props => [
+    name,
+    email,
+    password,
+    cPassword,
+    mobile,
+    address,
+  ];
 }

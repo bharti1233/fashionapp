@@ -10,10 +10,7 @@ import 'package:t_store/features/auth/presentation/widgets/grid_layout.dart';
 import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 
 class CategoryTab extends StatelessWidget {
-  const CategoryTab({
-    super.key,
-    required this.categoryTabModel,
-  });
+  const CategoryTab({super.key, required this.categoryTabModel});
 
   final CategoryTabModel categoryTabModel;
 
@@ -25,12 +22,8 @@ class CategoryTab extends StatelessWidget {
         child: Column(
           children: [
             // Check if brandShowcaseModel exists before using it
-            BrandShowcase(
-              categoryTabModel.brandShowcaseModel,
-            ),
-            const SizedBox(
-              height: TSizes.spaceBtwItems,
-            ),
+            BrandShowcase(categoryTabModel.brandShowcaseModel),
+            const SizedBox(height: TSizes.spaceBtwItems),
             SectionHeading(
               sectionHeadingModel: SectionHeadingModel(
                 title: "You Might Like",
@@ -38,9 +31,7 @@ class CategoryTab extends StatelessWidget {
                 actionButtonOnPressed: () {},
               ),
             ),
-            const SizedBox(
-              height: TSizes.spaceBtwItems,
-            ),
+            const SizedBox(height: TSizes.spaceBtwItems),
             GridLayout(
               gridLayoutModel: GridLayoutModel(
                 // Ensure products list is not null and handle bounds
@@ -72,9 +63,7 @@ class CategoryTab extends StatelessWidget {
                 mainAxisExtent: 280,
               ),
             ),
-            const SizedBox(
-              height: TSizes.spaceBtwSections,
-            ),
+            const SizedBox(height: TSizes.spaceBtwSections),
           ],
         ),
       ),

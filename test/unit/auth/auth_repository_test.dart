@@ -28,10 +28,9 @@ void main() {
     group('signIn', () {
       test('should return UserEntity when sign in is successful', () async {
         // Arrange
-        when(() => mockRepository.signIn(
-              email: testEmail,
-              password: testPassword,
-            )).thenAnswer((_) async => Right(testUser));
+        when(
+          () => mockRepository.signIn(email: testEmail, password: testPassword),
+        ).thenAnswer((_) async => Right(testUser));
 
         // Act
         final result = await mockRepository.signIn(
@@ -41,50 +40,54 @@ void main() {
 
         // Assert
         expect(result.isRight(), true);
-        result.fold(
-          (error) => fail('Expected Right but got Left: $error'),
-          (user) {
-            expect(user.id, 'test-user-id');
-            expect(user.email, testEmail);
-            expect(user.fullName, testFullName);
-          },
-        );
-        verify(() => mockRepository.signIn(
-              email: testEmail,
-              password: testPassword,
-            )).called(1);
+        result.fold((error) => fail('Expected Right but got Left: $error'), (
+          user,
+        ) {
+          expect(user.id, 'test-user-id');
+          expect(user.email, testEmail);
+          expect(user.fullName, testFullName);
+        });
+        verify(
+          () => mockRepository.signIn(email: testEmail, password: testPassword),
+        ).called(1);
       });
 
-      test('should return error message when credentials are invalid',
-          () async {
-        // Arrange
-        when(() => mockRepository.signIn(
+      test(
+        'should return error message when credentials are invalid',
+        () async {
+          // Arrange
+          when(
+            () => mockRepository.signIn(
               email: testEmail,
               password: 'wrongpassword',
-            )).thenAnswer(
-            (_) async => const Left('البريد الإلكتروني أو كلمة المرور غير صحيحة'));
+            ),
+          ).thenAnswer(
+            (_) async =>
+                const Left('البريد الإلكتروني أو كلمة المرور غير صحيحة'),
+          );
 
-        // Act
-        final result = await mockRepository.signIn(
-          email: testEmail,
-          password: 'wrongpassword',
-        );
+          // Act
+          final result = await mockRepository.signIn(
+            email: testEmail,
+            password: 'wrongpassword',
+          );
 
-        // Assert
-        expect(result.isLeft(), true);
-        result.fold(
-          (error) => expect(error, contains('غير صحيحة')),
-          (user) => fail('Expected Left but got Right'),
-        );
-      });
+          // Assert
+          expect(result.isLeft(), true);
+          result.fold(
+            (error) => expect(error, contains('غير صحيحة')),
+            (user) => fail('Expected Left but got Right'),
+          );
+        },
+      );
 
       test('should return error when email not confirmed', () async {
         // Arrange
-        when(() => mockRepository.signIn(
-              email: testEmail,
-              password: testPassword,
-            )).thenAnswer(
-            (_) async => const Left('يرجى تأكيد بريدك الإلكتروني أولاً'));
+        when(
+          () => mockRepository.signIn(email: testEmail, password: testPassword),
+        ).thenAnswer(
+          (_) async => const Left('يرجى تأكيد بريدك الإلكتروني أولاً'),
+        );
 
         // Act
         final result = await mockRepository.signIn(
@@ -111,12 +114,14 @@ void main() {
           phone: '+1234567890',
         );
 
-        when(() => mockRepository.signUp(
-              email: 'newuser@example.com',
-              password: testPassword,
-              fullName: 'New User',
-              phone: '+1234567890',
-            )).thenAnswer((_) async => Right(newUser));
+        when(
+          () => mockRepository.signUp(
+            email: 'newuser@example.com',
+            password: testPassword,
+            fullName: 'New User',
+            phone: '+1234567890',
+          ),
+        ).thenAnswer((_) async => Right(newUser));
 
         // Act
         final result = await mockRepository.signUp(
@@ -128,26 +133,28 @@ void main() {
 
         // Assert
         expect(result.isRight(), true);
-        result.fold(
-          (error) => fail('Expected Right but got Left: $error'),
-          (user) {
-            expect(user.id, 'new-user-id');
-            expect(user.email, 'newuser@example.com');
-            expect(user.fullName, 'New User');
-            expect(user.phone, '+1234567890');
-          },
-        );
+        result.fold((error) => fail('Expected Right but got Left: $error'), (
+          user,
+        ) {
+          expect(user.id, 'new-user-id');
+          expect(user.email, 'newuser@example.com');
+          expect(user.fullName, 'New User');
+          expect(user.phone, '+1234567890');
+        });
       });
 
       test('should return error when user already exists', () async {
         // Arrange
-        when(() => mockRepository.signUp(
-              email: 'existing@example.com',
-              password: testPassword,
-              fullName: testFullName,
-              phone: null,
-            )).thenAnswer(
-            (_) async => const Left('هذا البريد الإلكتروني مسجل بالفعل'));
+        when(
+          () => mockRepository.signUp(
+            email: 'existing@example.com',
+            password: testPassword,
+            fullName: testFullName,
+            phone: null,
+          ),
+        ).thenAnswer(
+          (_) async => const Left('هذا البريد الإلكتروني مسجل بالفعل'),
+        );
 
         // Act
         final result = await mockRepository.signUp(
@@ -166,13 +173,16 @@ void main() {
 
       test('should return error when password is too short', () async {
         // Arrange
-        when(() => mockRepository.signUp(
-              email: testEmail,
-              password: '123',
-              fullName: testFullName,
-              phone: null,
-            )).thenAnswer(
-            (_) async => const Left('كلمة المرور يجب أن تكون 6 أحرف على الأقل'));
+        when(
+          () => mockRepository.signUp(
+            email: testEmail,
+            password: '123',
+            fullName: testFullName,
+            phone: null,
+          ),
+        ).thenAnswer(
+          (_) async => const Left('كلمة المرور يجب أن تكون 6 أحرف على الأقل'),
+        );
 
         // Act
         final result = await mockRepository.signUp(
@@ -193,8 +203,9 @@ void main() {
     group('signOut', () {
       test('should return Right(null) when sign out is successful', () async {
         // Arrange
-        when(() => mockRepository.signOut())
-            .thenAnswer((_) async => const Right(null));
+        when(
+          () => mockRepository.signOut(),
+        ).thenAnswer((_) async => const Right(null));
 
         // Act
         final result = await mockRepository.signOut();
@@ -206,8 +217,9 @@ void main() {
 
       test('should return error when sign out fails', () async {
         // Arrange
-        when(() => mockRepository.signOut())
-            .thenAnswer((_) async => const Left('Network error'));
+        when(
+          () => mockRepository.signOut(),
+        ).thenAnswer((_) async => const Left('Network error'));
 
         // Act
         final result = await mockRepository.signOut();
@@ -218,25 +230,30 @@ void main() {
     });
 
     group('resetPassword', () {
-      test('should return Right(null) when reset password is successful',
-          () async {
-        // Arrange
-        when(() => mockRepository.resetPassword(testEmail))
-            .thenAnswer((_) async => const Right(null));
+      test(
+        'should return Right(null) when reset password is successful',
+        () async {
+          // Arrange
+          when(
+            () => mockRepository.resetPassword(testEmail),
+          ).thenAnswer((_) async => const Right(null));
 
-        // Act
-        final result = await mockRepository.resetPassword(testEmail);
+          // Act
+          final result = await mockRepository.resetPassword(testEmail);
 
-        // Assert
-        expect(result.isRight(), true);
-        verify(() => mockRepository.resetPassword(testEmail)).called(1);
-      });
+          // Assert
+          expect(result.isRight(), true);
+          verify(() => mockRepository.resetPassword(testEmail)).called(1);
+        },
+      );
 
       test('should return error when rate limit exceeded', () async {
         // Arrange
         when(() => mockRepository.resetPassword(testEmail)).thenAnswer(
-            (_) async =>
-                const Left('تم تجاوز عدد المحاولات المسموحة. يرجى المحاولة لاحقاً'));
+          (_) async => const Left(
+            'تم تجاوز عدد المحاولات المسموحة. يرجى المحاولة لاحقاً',
+          ),
+        );
 
         // Act
         final result = await mockRepository.resetPassword(testEmail);
@@ -253,27 +270,26 @@ void main() {
     group('getCurrentUser', () {
       test('should return UserEntity when user is logged in', () async {
         // Arrange
-        when(() => mockRepository.getCurrentUser())
-            .thenAnswer((_) async => Right(testUser));
+        when(
+          () => mockRepository.getCurrentUser(),
+        ).thenAnswer((_) async => Right(testUser));
 
         // Act
         final result = await mockRepository.getCurrentUser();
 
         // Assert
         expect(result.isRight(), true);
-        result.fold(
-          (error) => fail('Expected Right but got Left'),
-          (user) {
-            expect(user, isNotNull);
-            expect(user!.id, 'test-user-id');
-          },
-        );
+        result.fold((error) => fail('Expected Right but got Left'), (user) {
+          expect(user, isNotNull);
+          expect(user!.id, 'test-user-id');
+        });
       });
 
       test('should return null when no user is logged in', () async {
         // Arrange
-        when(() => mockRepository.getCurrentUser())
-            .thenAnswer((_) async => const Right(null));
+        when(
+          () => mockRepository.getCurrentUser(),
+        ).thenAnswer((_) async => const Right(null));
 
         // Act
         final result = await mockRepository.getCurrentUser();
@@ -314,8 +330,9 @@ void main() {
     group('OAuth methods', () {
       test('signInWithGoogle should return true when successful', () async {
         // Arrange
-        when(() => mockRepository.signInWithGoogle())
-            .thenAnswer((_) async => const Right(true));
+        when(
+          () => mockRepository.signInWithGoogle(),
+        ).thenAnswer((_) async => const Right(true));
 
         // Act
         final result = await mockRepository.signInWithGoogle();
@@ -330,8 +347,9 @@ void main() {
 
       test('signInWithFacebook should return true when successful', () async {
         // Arrange
-        when(() => mockRepository.signInWithFacebook())
-            .thenAnswer((_) async => const Right(true));
+        when(
+          () => mockRepository.signInWithFacebook(),
+        ).thenAnswer((_) async => const Right(true));
 
         // Act
         final result = await mockRepository.signInWithFacebook();
@@ -342,8 +360,9 @@ void main() {
 
       test('signInWithApple should return true when successful', () async {
         // Arrange
-        when(() => mockRepository.signInWithApple())
-            .thenAnswer((_) async => const Right(true));
+        when(
+          () => mockRepository.signInWithApple(),
+        ).thenAnswer((_) async => const Right(true));
 
         // Act
         final result = await mockRepository.signInWithApple();

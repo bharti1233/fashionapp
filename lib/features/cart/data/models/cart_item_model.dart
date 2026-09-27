@@ -19,8 +19,7 @@ class CartItemModel extends CartItemEntity {
       userId: json['user_id'] as String,
       productId: json['product_id'] as String,
       quantity: json['quantity'] as int,
-      selectedAttributes:
-          json['selected_attributes'] as Map<String, dynamic>?,
+      selectedAttributes: json['selected_attributes'] as Map<String, dynamic>?,
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'] as String)
           : null,

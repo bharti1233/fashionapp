@@ -27,40 +27,49 @@ class CartItem extends StatelessWidget {
             backgroundColor: dark ? TColors.darkerGrey : TColors.light,
           ),
         ),
-        const SizedBox(
-          width: TSizes.spaceBtwItems,
-        ),
+        const SizedBox(width: TSizes.spaceBtwItems),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const BrandTitleWithVerification(
-                  brandTitleWithVerificationModel:
-                      BrandTitleWithVerificationModel(
-                brandName: "Nike",
-              )),
+                brandTitleWithVerificationModel:
+                    BrandTitleWithVerificationModel(brandName: "Nike"),
+              ),
               Flexible(
                 child: ProductTitleText(
-                    productTitleTextModel: ProductTitleTextModel(
-                        title: "Green Nike Sports Jacket", maxLines: 1)),
+                  productTitleTextModel: ProductTitleTextModel(
+                    title: "Green Nike Sports Jacket",
+                    maxLines: 1,
+                  ),
+                ),
               ),
-              Text.rich(TextSpan(children: [
+              Text.rich(
                 TextSpan(
-                    text: "Color ",
-                    style: Theme.of(context).textTheme.bodySmall),
-                TextSpan(
-                    text: "Green ",
-                    style: Theme.of(context).textTheme.bodyLarge),
-                TextSpan(
-                    text: "Size ",
-                    style: Theme.of(context).textTheme.bodySmall),
-                TextSpan(
-                    text: "UK 08", style: Theme.of(context).textTheme.bodyLarge)
-              ])),
+                  children: [
+                    TextSpan(
+                      text: "Color ",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    TextSpan(
+                      text: "Green ",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    TextSpan(
+                      text: "Size ",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    TextSpan(
+                      text: "UK 08",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

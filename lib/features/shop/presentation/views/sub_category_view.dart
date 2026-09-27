@@ -16,8 +16,10 @@ class SubCategoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        appBarModel:
-            AppBarModel(hasArrowBack: true, title: const Text("Sports Shirts")),
+        appBarModel: AppBarModel(
+          hasArrowBack: true,
+          title: const Text("Sports Shirts"),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -32,32 +34,29 @@ class SubCategoryView extends StatelessWidget {
                     width: double.infinity,
                   ),
                 ),
-                const SizedBox(
-                  height: TSizes.spaceBtwSections,
-                ),
+                const SizedBox(height: TSizes.spaceBtwSections),
                 Column(
                   children: [
                     SectionHeading(
-                        sectionHeadingModel: SectionHeadingModel(
-                      title: "Sports Shirts",
-                    )),
-                    const SizedBox(
-                      height: TSizes.spaceBtwItems / 2,
+                      sectionHeadingModel: SectionHeadingModel(
+                        title: "Sports Shirts",
+                      ),
                     ),
+                    const SizedBox(height: TSizes.spaceBtwItems / 2),
                     SizedBox(
                       height: 128,
                       child: ListView.separated(
-                          itemCount: 5,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) =>
-                              const HorizontalProductCard(),
-                          separatorBuilder: (context, index) => const SizedBox(
-                                width: TSizes.spaceBtwItems,
-                              )),
-                    )
+                        itemCount: 5,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) =>
+                            const HorizontalProductCard(),
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(width: TSizes.spaceBtwItems),
+                      ),
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),

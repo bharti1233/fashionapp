@@ -64,24 +64,24 @@ class ProductEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        description,
-        price,
-        salePrice,
-        categoryId,
-        brandId,
-        stock,
-        images,
-        thumbnail,
-        rating,
-        reviewsCount,
-        isFeatured,
-        isActive,
-        attributes,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    name,
+    description,
+    price,
+    salePrice,
+    categoryId,
+    brandId,
+    stock,
+    images,
+    thumbnail,
+    rating,
+    reviewsCount,
+    isFeatured,
+    isActive,
+    attributes,
+    createdAt,
+    updatedAt,
+  ];
 
   ProductEntity copyWith({
     String? id,

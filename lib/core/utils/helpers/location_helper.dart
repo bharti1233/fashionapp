@@ -14,24 +14,19 @@ class LocationHelper {
   static LocationSettings getPlatformSpecificSettings() {
     if (Platform.isAndroid) {
       LoggerHelper.info("Using Android-specific location settings");
-      return AndroidSettings(
-        accuracy: LocationAccuracy.best,
-      );
+      return AndroidSettings(accuracy: LocationAccuracy.best);
     } else if (Platform.isIOS) {
       LoggerHelper.info("Using iOS-specific location settings");
-      return AppleSettings(
-        accuracy: LocationAccuracy.best,
-      );
+      return AppleSettings(accuracy: LocationAccuracy.best);
     } else {
       LoggerHelper.info("Using default location settings");
-      return const LocationSettings(
-        accuracy: LocationAccuracy.best,
-      );
+      return const LocationSettings(accuracy: LocationAccuracy.best);
     }
   }
 
   static Future<String?> getAddressFromCurrentLocation(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
     try {
       LoggerHelper.info("بدء التحقق من أذونات الموقع...");
 
@@ -48,7 +43,8 @@ class LocationHelper {
             LoggerHelper.error("تم رفض إذن الموقع.");
 
             if (status.isPermanentlyDenied) {
-              bool shouldOpenSettings = await showGeneralDialog<bool>(
+              bool shouldOpenSettings =
+                  await showGeneralDialog<bool>(
                     context: context,
                     barrierDismissible: false,
                     transitionDuration: const Duration(milliseconds: 300),
@@ -61,8 +57,11 @@ class LocationHelper {
                           ),
                           title: const Row(
                             children: [
-                              Icon(Icons.location_disabled,
-                                  color: primaryRed, size: 28),
+                              Icon(
+                                Icons.location_disabled,
+                                color: primaryRed,
+                                size: 28,
+                              ),
                               SizedBox(width: 12),
                               Expanded(
                                 child: Text(
@@ -113,7 +112,8 @@ class LocationHelper {
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
+                                        vertical: 12,
+                                      ),
                                     ),
                                     child: const Text(
                                       'إلغاء',
@@ -135,14 +135,18 @@ class LocationHelper {
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
+                                        vertical: 12,
+                                      ),
                                     ),
                                     child: const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.settings,
-                                            color: Colors.white, size: 18),
+                                        Icon(
+                                          Icons.settings,
+                                          color: Colors.white,
+                                          size: 18,
+                                        ),
                                         SizedBox(width: 8),
                                         Text(
                                           'فتح الإعدادات',
@@ -162,8 +166,12 @@ class LocationHelper {
                               ],
                             ),
                           ],
-                          actionsPadding:
-                              const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                          actionsPadding: const EdgeInsets.fromLTRB(
+                            24,
+                            0,
+                            24,
+                            24,
+                          ),
                         ),
                       );
                     },
@@ -255,7 +263,8 @@ class LocationHelper {
         Navigator.of(context).pop();
 
         LoggerHelper.debug(
-            "تم تحديد الموقع: خط العرض ${position.latitude}, خط الطول ${position.longitude}");
+          "تم تحديد الموقع: خط العرض ${position.latitude}, خط الطول ${position.longitude}",
+        );
 
         LoggerHelper.info("جارٍ تحويل الإحداثيات إلى عنوان...");
 
@@ -267,12 +276,12 @@ class LocationHelper {
         if (placemarks.isNotEmpty) {
           Placemark place = placemarks.first;
           // Create a more detailed address string
-          List<String?> addressComponents = [
-            place.locality,
-            place.administrativeArea,
-          ]
-              .where((component) => component != null && component.isNotEmpty)
-              .toList();
+          List<String?> addressComponents =
+              [place.locality, place.administrativeArea]
+                  .where(
+                    (component) => component != null && component.isNotEmpty,
+                  )
+                  .toList();
 
           String address = addressComponents
               .join(', ')

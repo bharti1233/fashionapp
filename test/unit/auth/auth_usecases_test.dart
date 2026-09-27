@@ -36,38 +36,33 @@ void main() {
 
     test('should return UserEntity when sign in is successful', () async {
       // Arrange
-      when(() => mockRepository.signIn(
-            email: testEmail,
-            password: testPassword,
-          )).thenAnswer((_) async => Right(testUser));
+      when(
+        () => mockRepository.signIn(email: testEmail, password: testPassword),
+      ).thenAnswer((_) async => Right(testUser));
 
       // Act
-      final result = await usecase(SignInParams(
-        email: testEmail,
-        password: testPassword,
-      ));
+      final result = await usecase(
+        SignInParams(email: testEmail, password: testPassword),
+      );
 
       // Assert
       expect(result, Right(testUser));
-      verify(() => mockRepository.signIn(
-            email: testEmail,
-            password: testPassword,
-          )).called(1);
+      verify(
+        () => mockRepository.signIn(email: testEmail, password: testPassword),
+      ).called(1);
     });
 
     test('should return error message when sign in fails', () async {
       // Arrange
       const errorMessage = 'Invalid credentials';
-      when(() => mockRepository.signIn(
-            email: testEmail,
-            password: testPassword,
-          )).thenAnswer((_) async => const Left(errorMessage));
+      when(
+        () => mockRepository.signIn(email: testEmail, password: testPassword),
+      ).thenAnswer((_) async => const Left(errorMessage));
 
       // Act
-      final result = await usecase(SignInParams(
-        email: testEmail,
-        password: testPassword,
-      ));
+      final result = await usecase(
+        SignInParams(email: testEmail, password: testPassword),
+      );
 
       // Assert
       expect(result, const Left(errorMessage));
@@ -94,48 +89,58 @@ void main() {
 
     test('should return UserEntity when sign up is successful', () async {
       // Arrange
-      when(() => mockRepository.signUp(
-            email: testEmail,
-            password: testPassword,
-            fullName: testFullName,
-            phone: testPhone,
-          )).thenAnswer((_) async => Right(testUser));
+      when(
+        () => mockRepository.signUp(
+          email: testEmail,
+          password: testPassword,
+          fullName: testFullName,
+          phone: testPhone,
+        ),
+      ).thenAnswer((_) async => Right(testUser));
 
       // Act
-      final result = await usecase(SignUpParams(
-        email: testEmail,
-        password: testPassword,
-        fullName: testFullName,
-        phone: testPhone,
-      ));
+      final result = await usecase(
+        SignUpParams(
+          email: testEmail,
+          password: testPassword,
+          fullName: testFullName,
+          phone: testPhone,
+        ),
+      );
 
       // Assert
       expect(result, Right(testUser));
-      verify(() => mockRepository.signUp(
-            email: testEmail,
-            password: testPassword,
-            fullName: testFullName,
-            phone: testPhone,
-          )).called(1);
+      verify(
+        () => mockRepository.signUp(
+          email: testEmail,
+          password: testPassword,
+          fullName: testFullName,
+          phone: testPhone,
+        ),
+      ).called(1);
     });
 
     test('should return error when email is already registered', () async {
       // Arrange
       const errorMessage = 'Email already registered';
-      when(() => mockRepository.signUp(
-            email: testEmail,
-            password: testPassword,
-            fullName: testFullName,
-            phone: testPhone,
-          )).thenAnswer((_) async => const Left(errorMessage));
+      when(
+        () => mockRepository.signUp(
+          email: testEmail,
+          password: testPassword,
+          fullName: testFullName,
+          phone: testPhone,
+        ),
+      ).thenAnswer((_) async => const Left(errorMessage));
 
       // Act
-      final result = await usecase(SignUpParams(
-        email: testEmail,
-        password: testPassword,
-        fullName: testFullName,
-        phone: testPhone,
-      ));
+      final result = await usecase(
+        SignUpParams(
+          email: testEmail,
+          password: testPassword,
+          fullName: testFullName,
+          phone: testPhone,
+        ),
+      );
 
       // Assert
       expect(result, const Left(errorMessage));
@@ -149,19 +154,23 @@ void main() {
         fullName: testFullName,
       );
 
-      when(() => mockRepository.signUp(
-            email: testEmail,
-            password: testPassword,
-            fullName: testFullName,
-            phone: null,
-          )).thenAnswer((_) async => Right(userWithoutPhone));
+      when(
+        () => mockRepository.signUp(
+          email: testEmail,
+          password: testPassword,
+          fullName: testFullName,
+          phone: null,
+        ),
+      ).thenAnswer((_) async => Right(userWithoutPhone));
 
       // Act
-      final result = await usecase(SignUpParams(
-        email: testEmail,
-        password: testPassword,
-        fullName: testFullName,
-      ));
+      final result = await usecase(
+        SignUpParams(
+          email: testEmail,
+          password: testPassword,
+          fullName: testFullName,
+        ),
+      );
 
       // Assert
       expect(result.isRight(), true);
@@ -181,8 +190,9 @@ void main() {
 
     test('should return void when sign out is successful', () async {
       // Arrange
-      when(() => mockRepository.signOut())
-          .thenAnswer((_) async => const Right(null));
+      when(
+        () => mockRepository.signOut(),
+      ).thenAnswer((_) async => const Right(null));
 
       // Act
       final result = await usecase(const NoParams());
@@ -195,8 +205,9 @@ void main() {
     test('should return error when sign out fails', () async {
       // Arrange
       const errorMessage = 'Sign out failed';
-      when(() => mockRepository.signOut())
-          .thenAnswer((_) async => const Left(errorMessage));
+      when(
+        () => mockRepository.signOut(),
+      ).thenAnswer((_) async => const Left(errorMessage));
 
       // Act
       final result = await usecase(const NoParams());
@@ -217,8 +228,9 @@ void main() {
 
     test('should return void when reset password is successful', () async {
       // Arrange
-      when(() => mockRepository.resetPassword(testEmail))
-          .thenAnswer((_) async => const Right(null));
+      when(
+        () => mockRepository.resetPassword(testEmail),
+      ).thenAnswer((_) async => const Right(null));
 
       // Act
       final result = await usecase(testEmail);
@@ -231,8 +243,9 @@ void main() {
     test('should return error when email is not found', () async {
       // Arrange
       const errorMessage = 'Email not found';
-      when(() => mockRepository.resetPassword(testEmail))
-          .thenAnswer((_) async => const Left(errorMessage));
+      when(
+        () => mockRepository.resetPassword(testEmail),
+      ).thenAnswer((_) async => const Left(errorMessage));
 
       // Act
       final result = await usecase(testEmail);
@@ -256,8 +269,9 @@ void main() {
         email: 'test@example.com',
         fullName: 'Test User',
       );
-      when(() => mockRepository.getCurrentUser())
-          .thenAnswer((_) async => Right(testUser));
+      when(
+        () => mockRepository.getCurrentUser(),
+      ).thenAnswer((_) async => Right(testUser));
 
       // Act
       final result = await usecase(const NoParams());
@@ -269,8 +283,9 @@ void main() {
 
     test('should return null when no user is logged in', () async {
       // Arrange
-      when(() => mockRepository.getCurrentUser())
-          .thenAnswer((_) async => const Right(null));
+      when(
+        () => mockRepository.getCurrentUser(),
+      ).thenAnswer((_) async => const Right(null));
 
       // Act
       final result = await usecase(const NoParams());
@@ -286,8 +301,9 @@ void main() {
     test('should return error when fetching user fails', () async {
       // Arrange
       const errorMessage = 'Failed to get current user';
-      when(() => mockRepository.getCurrentUser())
-          .thenAnswer((_) async => const Left(errorMessage));
+      when(
+        () => mockRepository.getCurrentUser(),
+      ).thenAnswer((_) async => const Left(errorMessage));
 
       // Act
       final result = await usecase(const NoParams());

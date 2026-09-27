@@ -13,7 +13,7 @@ class AppBarModel {
   final EdgeInsetsGeometry padding;
 
   AppBarModel({
-    this.padding= const EdgeInsets.symmetric(horizontal: TSizes.md),
+    this.padding = const EdgeInsets.symmetric(horizontal: TSizes.md),
     this.centerTitle = false,
     this.hasArrowBack = false,
     this.title,

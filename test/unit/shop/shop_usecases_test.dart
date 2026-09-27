@@ -55,43 +55,46 @@ void main() {
 
     test('should return list of products when successful', () async {
       // Arrange
-      when(() => mockRepository.getProducts(
-            page: 0,
-            limit: 20,
-            categoryId: null,
-            brandId: null,
-            isFeatured: null,
-            sortBy: null,
-            ascending: true,
-          )).thenAnswer((_) async => Right(testProducts));
+      when(
+        () => mockRepository.getProducts(
+          page: 0,
+          limit: 20,
+          categoryId: null,
+          brandId: null,
+          isFeatured: null,
+          sortBy: null,
+          ascending: true,
+        ),
+      ).thenAnswer((_) async => Right(testProducts));
 
       // Act
       final result = await usecase(GetProductsParams());
 
       // Assert
       expect(result.isRight(), true);
-      result.fold(
-        (error) => fail('Expected Right but got Left: $error'),
-        (products) {
-          expect(products.length, 2);
-          expect(products.first.id, 'product-1');
-          expect(products.first.name, 'Test Product 1');
-        },
-      );
+      result.fold((error) => fail('Expected Right but got Left: $error'), (
+        products,
+      ) {
+        expect(products.length, 2);
+        expect(products.first.id, 'product-1');
+        expect(products.first.name, 'Test Product 1');
+      });
     });
 
     test('should filter by category when categoryId is provided', () async {
       // Arrange
       final categoryProducts = [testProducts.first];
-      when(() => mockRepository.getProducts(
-            page: 0,
-            limit: 20,
-            categoryId: 'cat-1',
-            brandId: null,
-            isFeatured: null,
-            sortBy: null,
-            ascending: true,
-          )).thenAnswer((_) async => Right(categoryProducts));
+      when(
+        () => mockRepository.getProducts(
+          page: 0,
+          limit: 20,
+          categoryId: 'cat-1',
+          brandId: null,
+          isFeatured: null,
+          sortBy: null,
+          ascending: true,
+        ),
+      ).thenAnswer((_) async => Right(categoryProducts));
 
       // Act
       final result = await usecase(GetProductsParams(categoryId: 'cat-1'));
@@ -107,41 +110,42 @@ void main() {
     test('should filter featured products when isFeatured is true', () async {
       // Arrange
       final featuredProducts = [testProducts.first];
-      when(() => mockRepository.getProducts(
-            page: 0,
-            limit: 20,
-            categoryId: null,
-            brandId: null,
-            isFeatured: true,
-            sortBy: null,
-            ascending: true,
-          )).thenAnswer((_) async => Right(featuredProducts));
+      when(
+        () => mockRepository.getProducts(
+          page: 0,
+          limit: 20,
+          categoryId: null,
+          brandId: null,
+          isFeatured: true,
+          sortBy: null,
+          ascending: true,
+        ),
+      ).thenAnswer((_) async => Right(featuredProducts));
 
       // Act
       final result = await usecase(GetProductsParams(isFeatured: true));
 
       // Assert
       expect(result.isRight(), true);
-      result.fold(
-        (error) => fail('Expected Right'),
-        (products) {
-          expect(products.length, 1);
-          expect(products.first.isFeatured, true);
-        },
-      );
+      result.fold((error) => fail('Expected Right'), (products) {
+        expect(products.length, 1);
+        expect(products.first.isFeatured, true);
+      });
     });
 
     test('should return error when repository fails', () async {
       // Arrange
-      when(() => mockRepository.getProducts(
-            page: any(named: 'page'),
-            limit: any(named: 'limit'),
-            categoryId: any(named: 'categoryId'),
-            brandId: any(named: 'brandId'),
-            isFeatured: any(named: 'isFeatured'),
-            sortBy: any(named: 'sortBy'),
-            ascending: any(named: 'ascending'),
-          )).thenAnswer((_) async => const Left('Failed to fetch products'));
+      when(
+        () => mockRepository.getProducts(
+          page: any(named: 'page'),
+          limit: any(named: 'limit'),
+          categoryId: any(named: 'categoryId'),
+          brandId: any(named: 'brandId'),
+          isFeatured: any(named: 'isFeatured'),
+          sortBy: any(named: 'sortBy'),
+          ascending: any(named: 'ascending'),
+        ),
+      ).thenAnswer((_) async => const Left('Failed to fetch products'));
 
       // Act
       final result = await usecase(GetProductsParams());
@@ -156,47 +160,54 @@ void main() {
 
     test('should support pagination', () async {
       // Arrange
-      when(() => mockRepository.getProducts(
-            page: 1,
-            limit: 10,
-            categoryId: null,
-            brandId: null,
-            isFeatured: null,
-            sortBy: null,
-            ascending: true,
-          )).thenAnswer((_) async => Right(testProducts));
+      when(
+        () => mockRepository.getProducts(
+          page: 1,
+          limit: 10,
+          categoryId: null,
+          brandId: null,
+          isFeatured: null,
+          sortBy: null,
+          ascending: true,
+        ),
+      ).thenAnswer((_) async => Right(testProducts));
 
       // Act
       final result = await usecase(GetProductsParams(page: 1, limit: 10));
 
       // Assert
       expect(result.isRight(), true);
-      verify(() => mockRepository.getProducts(
-            page: 1,
-            limit: 10,
-            categoryId: null,
-            brandId: null,
-            isFeatured: null,
-            sortBy: null,
-            ascending: true,
-          )).called(1);
+      verify(
+        () => mockRepository.getProducts(
+          page: 1,
+          limit: 10,
+          categoryId: null,
+          brandId: null,
+          isFeatured: null,
+          sortBy: null,
+          ascending: true,
+        ),
+      ).called(1);
     });
 
     test('should support sorting', () async {
       // Arrange
-      when(() => mockRepository.getProducts(
-            page: 0,
-            limit: 20,
-            categoryId: null,
-            brandId: null,
-            isFeatured: null,
-            sortBy: 'price',
-            ascending: false,
-          )).thenAnswer((_) async => Right(testProducts));
+      when(
+        () => mockRepository.getProducts(
+          page: 0,
+          limit: 20,
+          categoryId: null,
+          brandId: null,
+          isFeatured: null,
+          sortBy: 'price',
+          ascending: false,
+        ),
+      ).thenAnswer((_) async => Right(testProducts));
 
       // Act
       final result = await usecase(
-          GetProductsParams(sortBy: 'price', ascending: false));
+        GetProductsParams(sortBy: 'price', ascending: false),
+      );
 
       // Assert
       expect(result.isRight(), true);
@@ -212,29 +223,28 @@ void main() {
 
     test('should return product when found', () async {
       // Arrange
-      when(() => mockRepository.getProductById('product-1'))
-          .thenAnswer((_) async => Right(testProducts.first));
+      when(
+        () => mockRepository.getProductById('product-1'),
+      ).thenAnswer((_) async => Right(testProducts.first));
 
       // Act
       final result = await usecase('product-1');
 
       // Assert
       expect(result.isRight(), true);
-      result.fold(
-        (error) => fail('Expected Right'),
-        (product) {
-          expect(product.id, 'product-1');
-          expect(product.name, 'Test Product 1');
-          expect(product.price, 99.99);
-          expect(product.salePrice, 79.99);
-        },
-      );
+      result.fold((error) => fail('Expected Right'), (product) {
+        expect(product.id, 'product-1');
+        expect(product.name, 'Test Product 1');
+        expect(product.price, 99.99);
+        expect(product.salePrice, 79.99);
+      });
     });
 
     test('should return error when product not found', () async {
       // Arrange
-      when(() => mockRepository.getProductById('non-existent'))
-          .thenAnswer((_) async => const Left('Product not found'));
+      when(
+        () => mockRepository.getProductById('non-existent'),
+      ).thenAnswer((_) async => const Left('Product not found'));
 
       // Act
       final result = await usecase('non-existent');
@@ -257,26 +267,25 @@ void main() {
 
     test('should return matching products when search is successful', () async {
       // Arrange
-      when(() => mockRepository.searchProducts('Test'))
-          .thenAnswer((_) async => Right(testProducts));
+      when(
+        () => mockRepository.searchProducts('Test'),
+      ).thenAnswer((_) async => Right(testProducts));
 
       // Act
       final result = await usecase('Test');
 
       // Assert
       expect(result.isRight(), true);
-      result.fold(
-        (error) => fail('Expected Right'),
-        (products) {
-          expect(products.length, 2);
-        },
-      );
+      result.fold((error) => fail('Expected Right'), (products) {
+        expect(products.length, 2);
+      });
     });
 
     test('should return empty list when no matches found', () async {
       // Arrange
-      when(() => mockRepository.searchProducts('NonExistent'))
-          .thenAnswer((_) async => const Right([]));
+      when(
+        () => mockRepository.searchProducts('NonExistent'),
+      ).thenAnswer((_) async => const Right([]));
 
       // Act
       final result = await usecase('NonExistent');
@@ -291,8 +300,9 @@ void main() {
 
     test('should return error when search fails', () async {
       // Arrange
-      when(() => mockRepository.searchProducts('Test'))
-          .thenAnswer((_) async => const Left('Search failed'));
+      when(
+        () => mockRepository.searchProducts('Test'),
+      ).thenAnswer((_) async => const Left('Search failed'));
 
       // Act
       final result = await usecase('Test');
@@ -382,10 +392,7 @@ void main() {
         images: [],
       );
 
-      final updated = original.copyWith(
-        name: 'Updated',
-        price: 150,
-      );
+      final updated = original.copyWith(name: 'Updated', price: 150);
 
       expect(updated.id, '1');
       expect(updated.name, 'Updated');

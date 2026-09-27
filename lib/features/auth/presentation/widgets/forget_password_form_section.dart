@@ -7,7 +7,7 @@ import 'package:t_store/features/auth/presentation/views/password_configuration/
 
 class ForgetPasswordFormSection extends StatelessWidget {
   const ForgetPasswordFormSection({super.key});
-//ForgetPasswordFormSection >> forget_password_form_section.dart
+  //ForgetPasswordFormSection >> forget_password_form_section.dart
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -15,20 +15,22 @@ class ForgetPasswordFormSection extends StatelessWidget {
         children: [
           TextFormField(
             decoration: const InputDecoration(
-                prefixIcon: Icon(Iconsax.direct_right),
-                labelText: TTexts.email),
+              prefixIcon: Icon(Iconsax.direct_right),
+              labelText: TTexts.email,
+            ),
           ),
-          const SizedBox(
-            height: TSizes.spaceBtwInputFields,
-          ),
+          const SizedBox(height: TSizes.spaceBtwInputFields),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-                onPressed: () {
-                  THelperFunctions.navigateReplacementToScreen(
-                      context, const ResetPasswordView());
-                },
-                child: const Text(TTexts.submit)),
+              onPressed: () {
+                THelperFunctions.navigateReplacementToScreen(
+                  context,
+                  const ResetPasswordView(),
+                );
+              },
+              child: const Text(TTexts.submit),
+            ),
           ),
         ],
       ),

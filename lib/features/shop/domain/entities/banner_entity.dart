@@ -37,18 +37,18 @@ class BannerEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        imageUrl,
-        title,
-        subtitle,
-        actionUrl,
-        actionType,
-        sortOrder,
-        isActive,
-        startDate,
-        endDate,
-        createdAt,
-      ];
+    id,
+    imageUrl,
+    title,
+    subtitle,
+    actionUrl,
+    actionType,
+    sortOrder,
+    isActive,
+    startDate,
+    endDate,
+    createdAt,
+  ];
 
   BannerEntity copyWith({
     String? id,

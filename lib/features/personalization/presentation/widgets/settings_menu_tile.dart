@@ -14,8 +14,10 @@ class SettingsMenuTile extends StatelessWidget {
         style: Theme.of(context).textTheme.titleMedium,
       ),
       onTap: settingsMenuTileModel.onTap,
-      subtitle: Text(settingsMenuTileModel.subtitle,
-          style: Theme.of(context).textTheme.labelMedium),
+      subtitle: Text(
+        settingsMenuTileModel.subtitle,
+        style: Theme.of(context).textTheme.labelMedium,
+      ),
       leading: Icon(
         settingsMenuTileModel.leading,
         color: TColors.primary,

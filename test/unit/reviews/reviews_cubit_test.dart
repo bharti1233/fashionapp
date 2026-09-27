@@ -96,8 +96,9 @@ void main() {
       blocTest<ReviewsCubit, ReviewsState>(
         'emits [ReviewsLoading, ReviewsLoaded] when getProductReviews succeeds',
         build: () {
-          when(() => mockGetProductReviewsUsecase(any()))
-              .thenAnswer((_) async => Right(testReviews));
+          when(
+            () => mockGetProductReviewsUsecase(any()),
+          ).thenAnswer((_) async => Right(testReviews));
           return reviewsCubit;
         },
         act: (cubit) => cubit.getProductReviews(testProductId),
@@ -113,8 +114,9 @@ void main() {
       blocTest<ReviewsCubit, ReviewsState>(
         'emits [ReviewsLoading, ReviewsError] when getProductReviews fails',
         build: () {
-          when(() => mockGetProductReviewsUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to load reviews'));
+          when(
+            () => mockGetProductReviewsUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to load reviews'));
           return reviewsCubit;
         },
         act: (cubit) => cubit.getProductReviews(testProductId),
@@ -127,8 +129,9 @@ void main() {
       blocTest<ReviewsCubit, ReviewsState>(
         'emits [ReviewsLoading, ReviewsLoaded] with empty list when no reviews',
         build: () {
-          when(() => mockGetProductReviewsUsecase(any()))
-              .thenAnswer((_) async => const Right([]));
+          when(
+            () => mockGetProductReviewsUsecase(any()),
+          ).thenAnswer((_) async => const Right([]));
           return reviewsCubit;
         },
         act: (cubit) => cubit.getProductReviews(testProductId),
@@ -143,8 +146,9 @@ void main() {
       blocTest<ReviewsCubit, ReviewsState>(
         'refresh resets pagination and loads fresh reviews',
         build: () {
-          when(() => mockGetProductReviewsUsecase(any()))
-              .thenAnswer((_) async => Right(testReviews));
+          when(
+            () => mockGetProductReviewsUsecase(any()),
+          ).thenAnswer((_) async => Right(testReviews));
           return reviewsCubit;
         },
         act: (cubit) => cubit.getProductReviews(testProductId, refresh: true),
@@ -161,10 +165,12 @@ void main() {
       blocTest<ReviewsCubit, ReviewsState>(
         'emits [ReviewAdding, ReviewAdded] then refreshes when addReview succeeds',
         build: () {
-          when(() => mockAddReviewUsecase(any()))
-              .thenAnswer((_) async => Right(newReview));
-          when(() => mockGetProductReviewsUsecase(any()))
-              .thenAnswer((_) async => Right([newReview, ...testReviews]));
+          when(
+            () => mockAddReviewUsecase(any()),
+          ).thenAnswer((_) async => Right(newReview));
+          when(
+            () => mockGetProductReviewsUsecase(any()),
+          ).thenAnswer((_) async => Right([newReview, ...testReviews]));
           return reviewsCubit;
         },
         act: (cubit) => cubit.addReview(
@@ -177,22 +183,23 @@ void main() {
           ReviewAdding(),
           ReviewAdded(newReview),
           ReviewsLoading(),
-          isA<ReviewsLoaded>()
-              .having((s) => s.reviews.length, 'reviews count', 3),
+          isA<ReviewsLoaded>().having(
+            (s) => s.reviews.length,
+            'reviews count',
+            3,
+          ),
         ],
       );
 
       blocTest<ReviewsCubit, ReviewsState>(
         'emits [ReviewAdding, ReviewsError] when addReview fails',
         build: () {
-          when(() => mockAddReviewUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to add review'));
+          when(
+            () => mockAddReviewUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to add review'));
           return reviewsCubit;
         },
-        act: (cubit) => cubit.addReview(
-          productId: testProductId,
-          rating: 5,
-        ),
+        act: (cubit) => cubit.addReview(productId: testProductId, rating: 5),
         expect: () => [
           ReviewAdding(),
           const ReviewsError('Failed to add review'),
@@ -202,10 +209,12 @@ void main() {
       blocTest<ReviewsCubit, ReviewsState>(
         'passes all parameters to usecase',
         build: () {
-          when(() => mockAddReviewUsecase(any()))
-              .thenAnswer((_) async => Right(newReview));
-          when(() => mockGetProductReviewsUsecase(any()))
-              .thenAnswer((_) async => Right([newReview]));
+          when(
+            () => mockAddReviewUsecase(any()),
+          ).thenAnswer((_) async => Right(newReview));
+          when(
+            () => mockGetProductReviewsUsecase(any()),
+          ).thenAnswer((_) async => Right([newReview]));
           return reviewsCubit;
         },
         act: (cubit) => cubit.addReview(

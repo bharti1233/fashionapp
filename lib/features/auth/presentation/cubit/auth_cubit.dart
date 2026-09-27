@@ -27,39 +27,29 @@ class AuthCubit extends Cubit<AuthState> {
 
     final result = await getCurrentUserUsecase(const NoParams());
 
-    result.fold(
-      (error) => emit(AuthUnauthenticated()),
-      (user) {
-        if (user != null) {
-          emit(AuthAuthenticated(user));
-        } else {
-          emit(AuthUnauthenticated());
-        }
-      },
-    );
+    result.fold((error) => emit(AuthUnauthenticated()), (user) {
+      if (user != null) {
+        emit(AuthAuthenticated(user));
+      } else {
+        emit(AuthUnauthenticated());
+      }
+    });
   }
 
-  Future<void> signIn({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signIn({required String email, required String password}) async {
     emit(AuthLoading());
 
-    final result = await signInUsecase(SignInParams(
-      email: email,
-      password: password,
-    ));
-
-    result.fold(
-      (error) {
-        if (error.contains('تأكيد بريدك')) {
-          emit(AuthEmailConfirmationRequired(email));
-        } else {
-          emit(AuthError(error));
-        }
-      },
-      (user) => emit(AuthAuthenticated(user)),
+    final result = await signInUsecase(
+      SignInParams(email: email, password: password),
     );
+
+    result.fold((error) {
+      if (error.contains('تأكيد بريدك')) {
+        emit(AuthEmailConfirmationRequired(email));
+      } else {
+        emit(AuthError(error));
+      }
+    }, (user) => emit(AuthAuthenticated(user)));
   }
 
   Future<void> signUp({
@@ -70,12 +60,14 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(AuthLoading());
 
-    final result = await signUpUsecase(SignUpParams(
-      email: email,
-      password: password,
-      fullName: fullName,
-      phone: phone,
-    ));
+    final result = await signUpUsecase(
+      SignUpParams(
+        email: email,
+        password: password,
+        fullName: fullName,
+        phone: phone,
+      ),
+    );
 
     result.fold(
       (error) => emit(AuthError(error)),

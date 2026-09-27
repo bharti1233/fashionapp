@@ -110,15 +110,19 @@ class OrderRepositoryImpl implements OrderRepository {
       final orderId = orderResponse['id'] as String;
 
       // Create order items
-      final orderItems = items.map((item) => {
-            'order_id': orderId,
-            'product_id': item.productId,
-            'product_name': item.productName,
-            'product_image': item.productImage,
-            'price': item.price,
-            'quantity': item.quantity,
-            'selected_attributes': item.selectedAttributes,
-          }).toList();
+      final orderItems = items
+          .map(
+            (item) => {
+              'order_id': orderId,
+              'product_id': item.productId,
+              'product_name': item.productName,
+              'product_image': item.productImage,
+              'price': item.price,
+              'quantity': item.quantity,
+              'selected_attributes': item.selectedAttributes,
+            },
+          )
+          .toList();
 
       await supabaseService.client
           .from(SupabaseTables.orderItems)

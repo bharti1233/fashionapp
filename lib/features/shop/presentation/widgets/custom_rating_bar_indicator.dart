@@ -4,20 +4,15 @@ import 'package:iconsax/iconsax.dart';
 import 'package:t_store/core/utils/constants/colors.dart';
 
 class CustomRatingBarIndicator extends StatelessWidget {
-  const CustomRatingBarIndicator({
-    super.key, required this.rating,
-  });
-final double rating;
+  const CustomRatingBarIndicator({super.key, required this.rating});
+  final double rating;
   @override
   Widget build(BuildContext context) {
     return RatingBarIndicator(
       rating: rating,
       itemSize: 20,
       unratedColor: TColors.grey,
-      itemBuilder: (_, _) => const Icon(
-        Iconsax.star1,
-        color: TColors.primary,
-      ),
+      itemBuilder: (_, _) => const Icon(Iconsax.star1, color: TColors.primary),
     );
   }
 }

@@ -4,9 +4,7 @@ import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 
 class AddToCartContainer extends StatelessWidget {
-  const AddToCartContainer({
-    super.key,
-  });
+  const AddToCartContainer({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(

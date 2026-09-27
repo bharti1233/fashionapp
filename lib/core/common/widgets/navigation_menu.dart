@@ -17,42 +17,43 @@ class NavigationMenu extends StatelessWidget {
         final selectedIndex = context.read<NavigationMenuCubit>().selectedIndex;
         final dark = THelperFunctions.isDarkMode(context);
         return Scaffold(
-            bottomNavigationBar: NavigationBar(
-              elevation: 0,
-              height: 80,
-              backgroundColor: dark ? TColors.black : Colors.white,
-              indicatorColor: dark
-                  ? TColors.white.withValues(alpha: 0.1)
-                  : TColors.black.withValues(alpha: 0.1),
-              selectedIndex: selectedIndex,
-              onDestinationSelected: (int index) {
-                context.read<NavigationMenuCubit>().changeIndex(index);
-              },
-              destinations: const [
-                // Home - Explore - Wishlist - Cart - Profile
-                NavigationDestination(
-                  icon: Icon(Iconsax.home),
-                  label: TTexts.homeView,
-                ),
-                NavigationDestination(
-                  icon: Icon(Iconsax.shop),
-                  label: TTexts.exploreView,
-                ),
-                NavigationDestination(
-                  icon: Icon(Iconsax.heart),
-                  label: TTexts.wishlistView,
-                ),
-                NavigationDestination(
-                  icon: Icon(Iconsax.shopping_cart),
-                  label: TTexts.cartView,
-                ),
-                NavigationDestination(
-                  icon: Icon(Iconsax.user),
-                  label: TTexts.profileView,
-                ),
-              ],
-            ),
-            body: context.read<NavigationMenuCubit>().getScreen());
+          bottomNavigationBar: NavigationBar(
+            elevation: 0,
+            height: 80,
+            backgroundColor: dark ? TColors.black : Colors.white,
+            indicatorColor: dark
+                ? TColors.white.withValues(alpha: 0.1)
+                : TColors.black.withValues(alpha: 0.1),
+            selectedIndex: selectedIndex,
+            onDestinationSelected: (int index) {
+              context.read<NavigationMenuCubit>().changeIndex(index);
+            },
+            destinations: const [
+              // Home - Explore - Wishlist - Cart - Profile
+              NavigationDestination(
+                icon: Icon(Iconsax.home),
+                label: TTexts.homeView,
+              ),
+              NavigationDestination(
+                icon: Icon(Iconsax.shop),
+                label: TTexts.exploreView,
+              ),
+              NavigationDestination(
+                icon: Icon(Iconsax.heart),
+                label: TTexts.wishlistView,
+              ),
+              NavigationDestination(
+                icon: Icon(Iconsax.shopping_cart),
+                label: TTexts.cartView,
+              ),
+              NavigationDestination(
+                icon: Icon(Iconsax.user),
+                label: TTexts.profileView,
+              ),
+            ],
+          ),
+          body: context.read<NavigationMenuCubit>().getScreen(),
+        );
       },
     );
   }

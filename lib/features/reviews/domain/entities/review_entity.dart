@@ -35,18 +35,18 @@ class ReviewEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        userId,
-        productId,
-        rating,
-        title,
-        comment,
-        images,
-        isVerifiedPurchase,
-        helpfulCount,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    userId,
+    productId,
+    rating,
+    title,
+    comment,
+    images,
+    isVerifiedPurchase,
+    helpfulCount,
+    createdAt,
+    updatedAt,
+  ];
 
   ReviewEntity copyWith({
     String? id,

@@ -158,10 +158,7 @@ class CartRepositoryImpl implements CartRepository {
         .asyncMap((data) async {
           // Fetch full data with products
           final result = await getCartItems();
-          return result.fold(
-            (_) => <CartItemEntity>[],
-            (items) => items,
-          );
+          return result.fold((_) => <CartItemEntity>[], (items) => items);
         });
   }
 }

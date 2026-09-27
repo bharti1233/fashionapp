@@ -50,21 +50,14 @@ class HomeViewShimmer extends StatelessWidget {
 
           // Section Heading Shimmer
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+            padding: const EdgeInsets.symmetric(
+              horizontal: TSizes.defaultSpace,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: 120,
-                  height: 20,
-                  color: Colors.white,
-                ),
-                Container(
-                  width: 80,
-                  height: 20,
-                  color: Colors.white,
-                ),
+                Container(width: 120, height: 20, color: Colors.white),
+                Container(width: 80, height: 20, color: Colors.white),
               ],
             ),
           ),
@@ -74,8 +67,9 @@ class HomeViewShimmer extends StatelessWidget {
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            padding:
-                const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+            padding: const EdgeInsets.symmetric(
+              horizontal: TSizes.defaultSpace,
+            ),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: TSizes.gridViewSpacing,
@@ -96,8 +90,9 @@ class HomeViewShimmer extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius:
-                            BorderRadius.circular(TSizes.productImageRadius),
+                        borderRadius: BorderRadius.circular(
+                          TSizes.productImageRadius,
+                        ),
                       ),
                     ),
                   ),
@@ -166,11 +161,11 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     // Load featured products on init
     context.read<ProductsCubit>().getProducts(
-          isFeatured: true,
-          sortBy: 'rating',
-          ascending: false,
-          refresh: true,
-        );
+      isFeatured: true,
+      sortBy: 'rating',
+      ascending: false,
+      refresh: true,
+    );
   }
 
   @override
@@ -219,11 +214,11 @@ class _HomeViewState extends State<HomeView> {
                             ElevatedButton(
                               onPressed: () {
                                 context.read<ProductsCubit>().getProducts(
-                                      isFeatured: true,
-                                      sortBy: 'rating',
-                                      ascending: false,
-                                      refresh: true,
-                                    );
+                                  isFeatured: true,
+                                  sortBy: 'rating',
+                                  ascending: false,
+                                  refresh: true,
+                                );
                               },
                               child: const Text('Retry'),
                             ),

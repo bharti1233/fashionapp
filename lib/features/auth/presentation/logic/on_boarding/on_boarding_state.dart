@@ -10,4 +10,3 @@ sealed class OnBoardingState extends Equatable {
 final class OnBoardingInitial extends OnBoardingState {}
 
 final class OnBoardingUpdateIndicator extends OnBoardingState {}
-

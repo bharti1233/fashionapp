@@ -91,22 +91,21 @@ void main() {
       blocTest<WishlistCubit, WishlistState>(
         'emits [WishlistLoading, WishlistLoaded] when getWishlist succeeds',
         build: () {
-          when(() => mockGetWishlistUsecase(any()))
-              .thenAnswer((_) async => Right(testWishlistItems));
+          when(
+            () => mockGetWishlistUsecase(any()),
+          ).thenAnswer((_) async => Right(testWishlistItems));
           return wishlistCubit;
         },
         act: (cubit) => cubit.getWishlist(),
-        expect: () => [
-          WishlistLoading(),
-          WishlistLoaded(testWishlistItems),
-        ],
+        expect: () => [WishlistLoading(), WishlistLoaded(testWishlistItems)],
       );
 
       blocTest<WishlistCubit, WishlistState>(
         'emits [WishlistLoading, WishlistError] when getWishlist fails',
         build: () {
-          when(() => mockGetWishlistUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to load wishlist'));
+          when(
+            () => mockGetWishlistUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to load wishlist'));
           return wishlistCubit;
         },
         act: (cubit) => cubit.getWishlist(),
@@ -119,15 +118,13 @@ void main() {
       blocTest<WishlistCubit, WishlistState>(
         'emits [WishlistLoading, WishlistLoaded] with empty list when wishlist is empty',
         build: () {
-          when(() => mockGetWishlistUsecase(any()))
-              .thenAnswer((_) async => const Right([]));
+          when(
+            () => mockGetWishlistUsecase(any()),
+          ).thenAnswer((_) async => const Right([]));
           return wishlistCubit;
         },
         act: (cubit) => cubit.getWishlist(),
-        expect: () => [
-          WishlistLoading(),
-          WishlistLoaded(const []),
-        ],
+        expect: () => [WishlistLoading(), WishlistLoaded(const [])],
       );
     });
 
@@ -135,10 +132,12 @@ void main() {
       blocTest<WishlistCubit, WishlistState>(
         'emits [WishlistItemAdded] and refreshes wishlist when addToWishlist succeeds',
         build: () {
-          when(() => mockAddToWishlistUsecase('product-1'))
-              .thenAnswer((_) async => Right(testWishlistItems.first));
-          when(() => mockGetWishlistUsecase(any()))
-              .thenAnswer((_) async => Right(testWishlistItems));
+          when(
+            () => mockAddToWishlistUsecase('product-1'),
+          ).thenAnswer((_) async => Right(testWishlistItems.first));
+          when(
+            () => mockGetWishlistUsecase(any()),
+          ).thenAnswer((_) async => Right(testWishlistItems));
           return wishlistCubit;
         },
         act: (cubit) => cubit.addToWishlist('product-1'),
@@ -152,14 +151,13 @@ void main() {
       blocTest<WishlistCubit, WishlistState>(
         'emits [WishlistError] when addToWishlist fails',
         build: () {
-          when(() => mockAddToWishlistUsecase('product-1'))
-              .thenAnswer((_) async => const Left('Failed to add to wishlist'));
+          when(
+            () => mockAddToWishlistUsecase('product-1'),
+          ).thenAnswer((_) async => const Left('Failed to add to wishlist'));
           return wishlistCubit;
         },
         act: (cubit) => cubit.addToWishlist('product-1'),
-        expect: () => [
-          const WishlistError('Failed to add to wishlist'),
-        ],
+        expect: () => [const WishlistError('Failed to add to wishlist')],
       );
     });
 
@@ -167,10 +165,12 @@ void main() {
       blocTest<WishlistCubit, WishlistState>(
         'emits [WishlistItemRemoved] and refreshes wishlist when removeFromWishlist succeeds',
         build: () {
-          when(() => mockRemoveFromWishlistUsecase('product-1'))
-              .thenAnswer((_) async => const Right(null));
-          when(() => mockGetWishlistUsecase(any()))
-              .thenAnswer((_) async => Right([testWishlistItems[1]]));
+          when(
+            () => mockRemoveFromWishlistUsecase('product-1'),
+          ).thenAnswer((_) async => const Right(null));
+          when(
+            () => mockGetWishlistUsecase(any()),
+          ).thenAnswer((_) async => Right([testWishlistItems[1]]));
           return wishlistCubit;
         },
         act: (cubit) => cubit.removeFromWishlist('product-1'),
@@ -184,14 +184,13 @@ void main() {
       blocTest<WishlistCubit, WishlistState>(
         'emits [WishlistError] when removeFromWishlist fails',
         build: () {
-          when(() => mockRemoveFromWishlistUsecase('product-1'))
-              .thenAnswer((_) async => const Left('Failed to remove'));
+          when(
+            () => mockRemoveFromWishlistUsecase('product-1'),
+          ).thenAnswer((_) async => const Left('Failed to remove'));
           return wishlistCubit;
         },
         act: (cubit) => cubit.removeFromWishlist('product-1'),
-        expect: () => [
-          const WishlistError('Failed to remove'),
-        ],
+        expect: () => [const WishlistError('Failed to remove')],
       );
     });
 
@@ -199,14 +198,18 @@ void main() {
       blocTest<WishlistCubit, WishlistState>(
         'adds item when product is not in wishlist',
         build: () {
-          when(() => mockAddToWishlistUsecase('product-3'))
-              .thenAnswer((_) async => Right(const WishlistItemEntity(
-                    id: 'wishlist-3',
-                    userId: 'user-1',
-                    productId: 'product-3',
-                  )));
-          when(() => mockGetWishlistUsecase(any()))
-              .thenAnswer((_) async => Right(testWishlistItems));
+          when(() => mockAddToWishlistUsecase('product-3')).thenAnswer(
+            (_) async => Right(
+              const WishlistItemEntity(
+                id: 'wishlist-3',
+                userId: 'user-1',
+                productId: 'product-3',
+              ),
+            ),
+          );
+          when(
+            () => mockGetWishlistUsecase(any()),
+          ).thenAnswer((_) async => Right(testWishlistItems));
           return wishlistCubit;
         },
         act: (cubit) => cubit.toggleWishlist('product-3'),
@@ -220,10 +223,12 @@ void main() {
         'removes item when product is already in wishlist',
         build: () {
           // First load wishlist to populate _productIds
-          when(() => mockGetWishlistUsecase(any()))
-              .thenAnswer((_) async => Right(testWishlistItems));
-          when(() => mockRemoveFromWishlistUsecase('product-1'))
-              .thenAnswer((_) async => const Right(null));
+          when(
+            () => mockGetWishlistUsecase(any()),
+          ).thenAnswer((_) async => Right(testWishlistItems));
+          when(
+            () => mockRemoveFromWishlistUsecase('product-1'),
+          ).thenAnswer((_) async => const Right(null));
           return wishlistCubit;
         },
         seed: () {
@@ -248,8 +253,9 @@ void main() {
       });
 
       test('returns true when product is in wishlist', () async {
-        when(() => mockGetWishlistUsecase(any()))
-            .thenAnswer((_) async => Right(testWishlistItems));
+        when(
+          () => mockGetWishlistUsecase(any()),
+        ).thenAnswer((_) async => Right(testWishlistItems));
 
         await wishlistCubit.getWishlist();
 
@@ -258,8 +264,9 @@ void main() {
       });
 
       test('returns false when product is not in wishlist', () async {
-        when(() => mockGetWishlistUsecase(any()))
-            .thenAnswer((_) async => Right(testWishlistItems));
+        when(
+          () => mockGetWishlistUsecase(any()),
+        ).thenAnswer((_) async => Right(testWishlistItems));
 
         await wishlistCubit.getWishlist();
 
@@ -273,8 +280,9 @@ void main() {
       });
 
       test('returns correct count after wishlist is loaded', () async {
-        when(() => mockGetWishlistUsecase(any()))
-            .thenAnswer((_) async => Right(testWishlistItems));
+        when(
+          () => mockGetWishlistUsecase(any()),
+        ).thenAnswer((_) async => Right(testWishlistItems));
 
         await wishlistCubit.getWishlist();
 

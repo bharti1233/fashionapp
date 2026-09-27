@@ -28,7 +28,8 @@ class TDeviceUtils {
 
   static void setFullScreen(bool enable) {
     SystemChrome.setEnabledSystemUIMode(
-        enable ? SystemUiMode.immersiveSticky : SystemUiMode.edgeToEdge);
+      enable ? SystemUiMode.immersiveSticky : SystemUiMode.edgeToEdge,
+    );
   }
 
   static double getScreenHeight(BuildContext context) {
@@ -43,7 +44,7 @@ class TDeviceUtils {
     return MediaQuery.of(context).devicePixelRatio;
   }
 
-  static double getStatusBarHeight( BuildContext context) {
+  static double getStatusBarHeight(BuildContext context) {
     return MediaQuery.of(context).padding.top;
   }
 
@@ -55,12 +56,12 @@ class TDeviceUtils {
     return kToolbarHeight;
   }
 
-  static double getKeyboardHeight( BuildContext context) {
+  static double getKeyboardHeight(BuildContext context) {
     final viewInsets = MediaQuery.of(context).viewInsets;
     return viewInsets.bottom;
   }
 
-  static Future<bool> isKeyboardVisible( BuildContext context) async {
+  static Future<bool> isKeyboardVisible(BuildContext context) async {
     final viewInsets = View.of(context).viewInsets;
     return viewInsets.bottom > 0;
   }
@@ -76,7 +77,8 @@ class TDeviceUtils {
   }
 
   static Future<void> setPreferredOrientations(
-      List<DeviceOrientation> orientations) async {
+    List<DeviceOrientation> orientations,
+  ) async {
     await SystemChrome.setPreferredOrientations(orientations);
   }
 
@@ -85,8 +87,10 @@ class TDeviceUtils {
   }
 
   static void showStatusBar() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
+    );
   }
 
   static Future<bool> hasInternetConnection() async {
@@ -114,5 +118,5 @@ class TDeviceUtils {
     }
   }
 
-// Add more device utility methods as per your specific requirements.
+  // Add more device utility methods as per your specific requirements.
 }

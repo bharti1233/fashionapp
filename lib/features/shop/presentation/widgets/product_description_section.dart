@@ -8,19 +8,18 @@ import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/features/shop/presentation/views/product_reviews_view.dart';
 
 class ProductDescriptionAndReviewsSection extends StatelessWidget {
-  const ProductDescriptionAndReviewsSection({
-    super.key,
-  });
+  const ProductDescriptionAndReviewsSection({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SectionHeading(
-            sectionHeadingModel: SectionHeadingModel(
-                title: "Description", showActionButton: false)),
-        const SizedBox(
-          height: TSizes.spaceBtwItems,
+          sectionHeadingModel: SectionHeadingModel(
+            title: "Description",
+            showActionButton: false,
+          ),
         ),
+        const SizedBox(height: TSizes.spaceBtwItems),
         const ReadMore(
           text:
               "mahmoud hamdy fathy elashwah flutter developer at myself and i major to make backword by etoo in pes 6 ",
@@ -32,19 +31,20 @@ class ProductDescriptionAndReviewsSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SectionHeading(
-                sectionHeadingModel: SectionHeadingModel(
-              title: "Reviews(199)",
-              showActionButton: false,
-            )),
+              sectionHeadingModel: SectionHeadingModel(
+                title: "Reviews(199)",
+                showActionButton: false,
+              ),
+            ),
             TextButton(
-                onPressed: () {
-                  THelperFunctions.navigateToScreen(
-                      context, const ProductReviewsView());
-                },
-                child: const Icon(
-                  Iconsax.arrow_right_3,
-                  size: 18,
-                ))
+              onPressed: () {
+                THelperFunctions.navigateToScreen(
+                  context,
+                  const ProductReviewsView(),
+                );
+              },
+              child: const Icon(Iconsax.arrow_right_3, size: 18),
+            ),
           ],
         ),
       ],

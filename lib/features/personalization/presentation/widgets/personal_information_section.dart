@@ -18,11 +18,12 @@ class PersonalInformationSection extends StatelessWidget {
     return Column(
       children: [
         SectionHeading(
-            sectionHeadingModel: SectionHeadingModel(
-                title: "Personal Information", showActionButton: false)),
-        const SizedBox(
-          height: TSizes.spaceBtwItems / 1.5,
+          sectionHeadingModel: SectionHeadingModel(
+            title: "Personal Information",
+            showActionButton: false,
+          ),
         ),
+        const SizedBox(height: TSizes.spaceBtwItems / 1.5),
         ProfileEntityTileList(profileEntityTileModelList: personalInformation),
       ],
     );

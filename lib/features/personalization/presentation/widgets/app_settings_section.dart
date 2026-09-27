@@ -8,10 +8,7 @@ import 'package:t_store/features/personalization/presentation/view_models/settin
 import 'package:t_store/features/personalization/presentation/widgets/settings_menu_tile_list.dart';
 
 class AppSettingsSection extends StatelessWidget {
-  const AppSettingsSection({
-    super.key,
-    required this.appSettingsTiles,
-  });
+  const AppSettingsSection({super.key, required this.appSettingsTiles});
   final List<SettingsMenuTileModel> appSettingsTiles;
   @override
   Widget build(BuildContext context) {
@@ -24,15 +21,15 @@ class AppSettingsSection extends StatelessWidget {
           ),
         ),
         SettingsMenuTileList(settingsMenuTiles: appSettingsTiles),
-        const SizedBox(
-          height: TSizes.spaceBtwSections,
-        ),
+        const SizedBox(height: TSizes.spaceBtwSections),
         SizedBox(
           width: double.infinity,
           child: OutlinedButton(
             onPressed: () {
               THelperFunctions.navigateReplacementToScreen(
-                  context, const LoginView());
+                context,
+                const LoginView(),
+              );
             },
             child: const Text("Logout"),
           ),

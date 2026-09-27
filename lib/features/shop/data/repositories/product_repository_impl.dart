@@ -73,7 +73,8 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<Either<String, List<ProductEntity>>> searchProducts(
-      String query) async {
+    String query,
+  ) async {
     try {
       final response = await supabaseService.client
           .from(SupabaseTables.products)
@@ -94,7 +95,8 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<Either<String, List<ProductEntity>>> getProductsByCategory(
-      String categoryId) async {
+    String categoryId,
+  ) async {
     try {
       final response = await supabaseService.client
           .from(SupabaseTables.products)
@@ -115,7 +117,8 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<Either<String, List<ProductEntity>>> getProductsByBrand(
-      String brandId) async {
+    String brandId,
+  ) async {
     try {
       final response = await supabaseService.client
           .from(SupabaseTables.products)

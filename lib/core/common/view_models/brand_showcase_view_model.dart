@@ -4,5 +4,8 @@ class BrandShowcaseModel {
   final BrandCardModel brandCardModel;
   final List<String> topThreeProductsOfBrand;
 
-  BrandShowcaseModel({required this.brandCardModel, required this.topThreeProductsOfBrand});
+  BrandShowcaseModel({
+    required this.brandCardModel,
+    required this.topThreeProductsOfBrand,
+  });
 }

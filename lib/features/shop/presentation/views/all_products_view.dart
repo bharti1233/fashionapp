@@ -11,15 +11,18 @@ class AllProductsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        appBarModel:
-            AppBarModel(title: const Text("All Products"), hasArrowBack: true),
+        appBarModel: AppBarModel(
+          title: const Text("All Products"),
+          hasArrowBack: true,
+        ),
       ),
       body: const SafeArea(
         child: SingleChildScrollView(
-            child: Padding(
-          padding: EdgeInsets.all(TSizes.defaultSpace),
-          child: SortableProducts(),
-        )),
+          child: Padding(
+            padding: EdgeInsets.all(TSizes.defaultSpace),
+            child: SortableProducts(),
+          ),
+        ),
       ),
     );
   }

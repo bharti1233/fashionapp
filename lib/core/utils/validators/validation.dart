@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class TValidator {
   static String? validateConfirmPassword(
-      String? value, TextEditingController passwordController) {
+    String? value,
+    TextEditingController passwordController,
+  ) {
     if (value != passwordController.text) {
       return 'Passwords do not match';
     }
@@ -67,5 +69,5 @@ class TValidator {
     return null;
   }
 
-// Add more custom validators as needed for your specific requirements.
+  // Add more custom validators as needed for your specific requirements.
 }

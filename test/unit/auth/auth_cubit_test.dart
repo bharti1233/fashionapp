@@ -83,43 +83,37 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthAuthenticated] when user is logged in',
         build: () {
-          when(() => mockGetCurrentUserUsecase(any()))
-              .thenAnswer((_) async => Right(testUser));
+          when(
+            () => mockGetCurrentUserUsecase(any()),
+          ).thenAnswer((_) async => Right(testUser));
           return authCubit;
         },
         act: (cubit) => cubit.checkAuthStatus(),
-        expect: () => [
-          AuthLoading(),
-          AuthAuthenticated(testUser),
-        ],
+        expect: () => [AuthLoading(), AuthAuthenticated(testUser)],
       );
 
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthUnauthenticated] when no user is logged in',
         build: () {
-          when(() => mockGetCurrentUserUsecase(any()))
-              .thenAnswer((_) async => const Right(null));
+          when(
+            () => mockGetCurrentUserUsecase(any()),
+          ).thenAnswer((_) async => const Right(null));
           return authCubit;
         },
         act: (cubit) => cubit.checkAuthStatus(),
-        expect: () => [
-          AuthLoading(),
-          AuthUnauthenticated(),
-        ],
+        expect: () => [AuthLoading(), AuthUnauthenticated()],
       );
 
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthUnauthenticated] when fetching user fails',
         build: () {
-          when(() => mockGetCurrentUserUsecase(any()))
-              .thenAnswer((_) async => const Left('Error'));
+          when(
+            () => mockGetCurrentUserUsecase(any()),
+          ).thenAnswer((_) async => const Left('Error'));
           return authCubit;
         },
         act: (cubit) => cubit.checkAuthStatus(),
-        expect: () => [
-          AuthLoading(),
-          AuthUnauthenticated(),
-        ],
+        expect: () => [AuthLoading(), AuthUnauthenticated()],
       );
     });
 
@@ -127,15 +121,13 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthAuthenticated] when sign in succeeds',
         build: () {
-          when(() => mockSignInUsecase(any()))
-              .thenAnswer((_) async => Right(testUser));
+          when(
+            () => mockSignInUsecase(any()),
+          ).thenAnswer((_) async => Right(testUser));
           return authCubit;
         },
         act: (cubit) => cubit.signIn(email: testEmail, password: testPassword),
-        expect: () => [
-          AuthLoading(),
-          AuthAuthenticated(testUser),
-        ],
+        expect: () => [AuthLoading(), AuthAuthenticated(testUser)],
         verify: (_) {
           verify(() => mockSignInUsecase(any())).called(1);
         },
@@ -144,22 +136,21 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthError] when sign in fails',
         build: () {
-          when(() => mockSignInUsecase(any()))
-              .thenAnswer((_) async => const Left('Invalid credentials'));
+          when(
+            () => mockSignInUsecase(any()),
+          ).thenAnswer((_) async => const Left('Invalid credentials'));
           return authCubit;
         },
         act: (cubit) => cubit.signIn(email: testEmail, password: testPassword),
-        expect: () => [
-          AuthLoading(),
-          const AuthError('Invalid credentials'),
-        ],
+        expect: () => [AuthLoading(), const AuthError('Invalid credentials')],
       );
 
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthEmailConfirmationRequired] when email not confirmed',
         build: () {
-          when(() => mockSignInUsecase(any())).thenAnswer(
-              (_) async => const Left('يرجى تأكيد بريدك الإلكتروني'));
+          when(
+            () => mockSignInUsecase(any()),
+          ).thenAnswer((_) async => const Left('يرجى تأكيد بريدك الإلكتروني'));
           return authCubit;
         },
         act: (cubit) => cubit.signIn(email: testEmail, password: testPassword),
@@ -174,8 +165,9 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthEmailConfirmationRequired] when sign up succeeds',
         build: () {
-          when(() => mockSignUpUsecase(any()))
-              .thenAnswer((_) async => Right(testUser));
+          when(
+            () => mockSignUpUsecase(any()),
+          ).thenAnswer((_) async => Right(testUser));
           return authCubit;
         },
         act: (cubit) => cubit.signUp(
@@ -192,8 +184,9 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthError] when sign up fails',
         build: () {
-          when(() => mockSignUpUsecase(any()))
-              .thenAnswer((_) async => const Left('Email already registered'));
+          when(
+            () => mockSignUpUsecase(any()),
+          ).thenAnswer((_) async => const Left('Email already registered'));
           return authCubit;
         },
         act: (cubit) => cubit.signUp(
@@ -210,8 +203,9 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'passes phone to usecase when provided',
         build: () {
-          when(() => mockSignUpUsecase(any()))
-              .thenAnswer((_) async => Right(testUser));
+          when(
+            () => mockSignUpUsecase(any()),
+          ).thenAnswer((_) async => Right(testUser));
           return authCubit;
         },
         act: (cubit) => cubit.signUp(
@@ -221,9 +215,9 @@ void main() {
           phone: '+1234567890',
         ),
         verify: (_) {
-          final captured = verify(() => mockSignUpUsecase(captureAny()))
-              .captured
-              .first as SignUpParams;
+          final captured =
+              verify(() => mockSignUpUsecase(captureAny())).captured.first
+                  as SignUpParams;
           expect(captured.phone, '+1234567890');
         },
       );
@@ -233,29 +227,25 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthUnauthenticated] when sign out succeeds',
         build: () {
-          when(() => mockSignOutUsecase(any()))
-              .thenAnswer((_) async => const Right(null));
+          when(
+            () => mockSignOutUsecase(any()),
+          ).thenAnswer((_) async => const Right(null));
           return authCubit;
         },
         act: (cubit) => cubit.signOut(),
-        expect: () => [
-          AuthLoading(),
-          AuthUnauthenticated(),
-        ],
+        expect: () => [AuthLoading(), AuthUnauthenticated()],
       );
 
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthError] when sign out fails',
         build: () {
-          when(() => mockSignOutUsecase(any()))
-              .thenAnswer((_) async => const Left('Sign out failed'));
+          when(
+            () => mockSignOutUsecase(any()),
+          ).thenAnswer((_) async => const Left('Sign out failed'));
           return authCubit;
         },
         act: (cubit) => cubit.signOut(),
-        expect: () => [
-          AuthLoading(),
-          const AuthError('Sign out failed'),
-        ],
+        expect: () => [AuthLoading(), const AuthError('Sign out failed')],
       );
     });
 
@@ -263,29 +253,25 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthPasswordResetSent] when reset password succeeds',
         build: () {
-          when(() => mockResetPasswordUsecase(testEmail))
-              .thenAnswer((_) async => const Right(null));
+          when(
+            () => mockResetPasswordUsecase(testEmail),
+          ).thenAnswer((_) async => const Right(null));
           return authCubit;
         },
         act: (cubit) => cubit.resetPassword(testEmail),
-        expect: () => [
-          AuthLoading(),
-          const AuthPasswordResetSent(testEmail),
-        ],
+        expect: () => [AuthLoading(), const AuthPasswordResetSent(testEmail)],
       );
 
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthError] when reset password fails',
         build: () {
-          when(() => mockResetPasswordUsecase(testEmail))
-              .thenAnswer((_) async => const Left('Email not found'));
+          when(
+            () => mockResetPasswordUsecase(testEmail),
+          ).thenAnswer((_) async => const Left('Email not found'));
           return authCubit;
         },
         act: (cubit) => cubit.resetPassword(testEmail),
-        expect: () => [
-          AuthLoading(),
-          const AuthError('Email not found'),
-        ],
+        expect: () => [AuthLoading(), const AuthError('Email not found')],
       );
     });
 

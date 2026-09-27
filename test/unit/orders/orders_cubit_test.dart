@@ -134,22 +134,21 @@ void main() {
       blocTest<OrdersCubit, OrdersState>(
         'emits [OrdersLoading, OrdersLoaded] when getOrders succeeds',
         build: () {
-          when(() => mockGetOrdersUsecase(any()))
-              .thenAnswer((_) async => Right(testOrders));
+          when(
+            () => mockGetOrdersUsecase(any()),
+          ).thenAnswer((_) async => Right(testOrders));
           return ordersCubit;
         },
         act: (cubit) => cubit.getOrders(),
-        expect: () => [
-          OrdersLoading(),
-          OrdersLoaded(testOrders),
-        ],
+        expect: () => [OrdersLoading(), OrdersLoaded(testOrders)],
       );
 
       blocTest<OrdersCubit, OrdersState>(
         'emits [OrdersLoading, OrdersError] when getOrders fails',
         build: () {
-          when(() => mockGetOrdersUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to load orders'));
+          when(
+            () => mockGetOrdersUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to load orders'));
           return ordersCubit;
         },
         act: (cubit) => cubit.getOrders(),
@@ -162,15 +161,13 @@ void main() {
       blocTest<OrdersCubit, OrdersState>(
         'emits [OrdersLoading, OrdersLoaded] with empty list when no orders',
         build: () {
-          when(() => mockGetOrdersUsecase(any()))
-              .thenAnswer((_) async => const Right([]));
+          when(
+            () => mockGetOrdersUsecase(any()),
+          ).thenAnswer((_) async => const Right([]));
           return ordersCubit;
         },
         act: (cubit) => cubit.getOrders(),
-        expect: () => [
-          OrdersLoading(),
-          const OrdersLoaded([]),
-        ],
+        expect: () => [OrdersLoading(), const OrdersLoaded([])],
       );
     });
 
@@ -178,8 +175,9 @@ void main() {
       blocTest<OrdersCubit, OrdersState>(
         'emits [OrderDetailLoading, OrderDetailLoaded] when getOrderById succeeds',
         build: () {
-          when(() => mockGetOrderByIdUsecase('order-1'))
-              .thenAnswer((_) async => Right(testOrders.first));
+          when(
+            () => mockGetOrderByIdUsecase('order-1'),
+          ).thenAnswer((_) async => Right(testOrders.first));
           return ordersCubit;
         },
         act: (cubit) => cubit.getOrderById('order-1'),
@@ -192,8 +190,9 @@ void main() {
       blocTest<OrdersCubit, OrdersState>(
         'emits [OrderDetailLoading, OrdersError] when getOrderById fails',
         build: () {
-          when(() => mockGetOrderByIdUsecase('non-existent'))
-              .thenAnswer((_) async => const Left('Order not found'));
+          when(
+            () => mockGetOrderByIdUsecase('non-existent'),
+          ).thenAnswer((_) async => const Left('Order not found'));
           return ordersCubit;
         },
         act: (cubit) => cubit.getOrderById('non-existent'),
@@ -208,8 +207,9 @@ void main() {
       blocTest<OrdersCubit, OrdersState>(
         'emits [OrderCreating, OrderCreated] when createOrder succeeds',
         build: () {
-          when(() => mockCreateOrderUsecase(any()))
-              .thenAnswer((_) async => Right(testOrders.first));
+          when(
+            () => mockCreateOrderUsecase(any()),
+          ).thenAnswer((_) async => Right(testOrders.first));
           return ordersCubit;
         },
         act: (cubit) => cubit.createOrder(
@@ -224,17 +224,15 @@ void main() {
           ],
           paymentMethod: 'cash_on_delivery',
         ),
-        expect: () => [
-          OrderCreating(),
-          OrderCreated(testOrders.first),
-        ],
+        expect: () => [OrderCreating(), OrderCreated(testOrders.first)],
       );
 
       blocTest<OrdersCubit, OrdersState>(
         'emits [OrderCreating, OrdersError] when createOrder fails',
         build: () {
-          when(() => mockCreateOrderUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to create order'));
+          when(
+            () => mockCreateOrderUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to create order'));
           return ordersCubit;
         },
         act: (cubit) => cubit.createOrder(
@@ -251,8 +249,9 @@ void main() {
       blocTest<OrdersCubit, OrdersState>(
         'passes all parameters to usecase',
         build: () {
-          when(() => mockCreateOrderUsecase(any()))
-              .thenAnswer((_) async => Right(testOrders.first));
+          when(
+            () => mockCreateOrderUsecase(any()),
+          ).thenAnswer((_) async => Right(testOrders.first));
           return ordersCubit;
         },
         act: (cubit) => cubit.createOrder(
@@ -272,9 +271,9 @@ void main() {
           discount: 10,
         ),
         verify: (_) {
-          final captured = verify(() => mockCreateOrderUsecase(captureAny()))
-              .captured
-              .first as CreateOrderParams;
+          final captured =
+              verify(() => mockCreateOrderUsecase(captureAny())).captured.first
+                  as CreateOrderParams;
           expect(captured.addressId, 'address-1');
           expect(captured.paymentMethod, 'card');
           expect(captured.couponCode, 'DISCOUNT10');
@@ -289,22 +288,21 @@ void main() {
       blocTest<OrdersCubit, OrdersState>(
         'emits [OrderCancelling, OrderCancelled] when cancelOrder succeeds',
         build: () {
-          when(() => mockCancelOrderUsecase('order-1'))
-              .thenAnswer((_) async => Right(cancelledOrder));
+          when(
+            () => mockCancelOrderUsecase('order-1'),
+          ).thenAnswer((_) async => Right(cancelledOrder));
           return ordersCubit;
         },
         act: (cubit) => cubit.cancelOrder('order-1'),
-        expect: () => [
-          OrderCancelling(),
-          OrderCancelled(cancelledOrder),
-        ],
+        expect: () => [OrderCancelling(), OrderCancelled(cancelledOrder)],
       );
 
       blocTest<OrdersCubit, OrdersState>(
         'emits [OrderCancelling, OrdersError] when cancelOrder fails',
         build: () {
-          when(() => mockCancelOrderUsecase('order-1'))
-              .thenAnswer((_) async => const Left('Cannot cancel this order'));
+          when(
+            () => mockCancelOrderUsecase('order-1'),
+          ).thenAnswer((_) async => const Left('Cannot cancel this order'));
           return ordersCubit;
         },
         act: (cubit) => cubit.cancelOrder('order-1'),
@@ -448,8 +446,10 @@ void main() {
 
   group('AddressSnapshotEntity', () {
     test('fullAddress formats correctly with state', () {
-      expect(testShippingAddress.fullAddress,
-          '123 Test Street, Test City, Test State, Test Country');
+      expect(
+        testShippingAddress.fullAddress,
+        '123 Test Street, Test City, Test State, Test Country',
+      );
     });
 
     test('fullAddress formats correctly without state', () {
@@ -460,8 +460,10 @@ void main() {
         city: 'Test City',
         country: 'Test Country',
       );
-      expect(addressWithoutState.fullAddress,
-          '123 Test Street, Test City, Test Country');
+      expect(
+        addressWithoutState.fullAddress,
+        '123 Test Street, Test City, Test Country',
+      );
     });
   });
 }

@@ -25,38 +25,29 @@ class WishlistCubit extends Cubit<WishlistState> {
 
     final result = await getWishlistUsecase(const NoParams());
 
-    result.fold(
-      (error) => emit(WishlistError(error)),
-      (items) {
-        _items = items;
-        _productIds = items.map((e) => e.productId).toSet();
-        emit(WishlistLoaded(items));
-      },
-    );
+    result.fold((error) => emit(WishlistError(error)), (items) {
+      _items = items;
+      _productIds = items.map((e) => e.productId).toSet();
+      emit(WishlistLoaded(items));
+    });
   }
 
   Future<void> addToWishlist(String productId) async {
     final result = await addToWishlistUsecase(productId);
 
-    result.fold(
-      (error) => emit(WishlistError(error)),
-      (item) {
-        emit(WishlistItemAdded(item));
-        getWishlist();
-      },
-    );
+    result.fold((error) => emit(WishlistError(error)), (item) {
+      emit(WishlistItemAdded(item));
+      getWishlist();
+    });
   }
 
   Future<void> removeFromWishlist(String productId) async {
     final result = await removeFromWishlistUsecase(productId);
 
-    result.fold(
-      (error) => emit(WishlistError(error)),
-      (_) {
-        emit(WishlistItemRemoved(productId));
-        getWishlist();
-      },
-    );
+    result.fold((error) => emit(WishlistError(error)), (_) {
+      emit(WishlistItemRemoved(productId));
+      getWishlist();
+    });
   }
 
   Future<void> toggleWishlist(String productId) async {

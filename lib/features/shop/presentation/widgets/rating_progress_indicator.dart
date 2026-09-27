@@ -22,20 +22,19 @@ class RatingProgressIndicator extends StatelessWidget {
           ),
         ),
         Expanded(
-            flex: 11,
-            child: SizedBox(
-              width: THelperFunctions.screenWidth(context) * 0.8,
-              child: LinearProgressIndicator(
-                value: progressIndicatorModel.value,
-                backgroundColor: TColors.grey,
-                minHeight: 11,
-                borderRadius: BorderRadius.circular(7),
-                valueColor: const AlwaysStoppedAnimation(TColors.primary),
-              ),
-            ))
+          flex: 11,
+          child: SizedBox(
+            width: THelperFunctions.screenWidth(context) * 0.8,
+            child: LinearProgressIndicator(
+              value: progressIndicatorModel.value,
+              backgroundColor: TColors.grey,
+              minHeight: 11,
+              borderRadius: BorderRadius.circular(7),
+              valueColor: const AlwaysStoppedAnimation(TColors.primary),
+            ),
+          ),
+        ),
       ],
     );
   }
 }
-
-

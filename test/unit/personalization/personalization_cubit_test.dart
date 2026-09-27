@@ -131,22 +131,21 @@ void main() {
       blocTest<ProfileCubit, ProfileState>(
         'emits [ProfileLoading, ProfileLoaded] when getProfile succeeds',
         build: () {
-          when(() => mockGetProfileUsecase(any()))
-              .thenAnswer((_) async => const Right(testUser));
+          when(
+            () => mockGetProfileUsecase(any()),
+          ).thenAnswer((_) async => const Right(testUser));
           return profileCubit;
         },
         act: (cubit) => cubit.getProfile(),
-        expect: () => [
-          ProfileLoading(),
-          const ProfileLoaded(testUser),
-        ],
+        expect: () => [ProfileLoading(), const ProfileLoaded(testUser)],
       );
 
       blocTest<ProfileCubit, ProfileState>(
         'emits [ProfileLoading, ProfileError] when getProfile fails',
         build: () {
-          when(() => mockGetProfileUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to load profile'));
+          when(
+            () => mockGetProfileUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to load profile'));
           return profileCubit;
         },
         act: (cubit) => cubit.getProfile(),
@@ -161,14 +160,13 @@ void main() {
       blocTest<ProfileCubit, ProfileState>(
         'emits [ProfileUpdating, ProfileUpdated, ProfileLoaded] when updateProfile succeeds',
         build: () {
-          when(() => mockUpdateProfileUsecase(any()))
-              .thenAnswer((_) async => const Right(updatedUser));
+          when(
+            () => mockUpdateProfileUsecase(any()),
+          ).thenAnswer((_) async => const Right(updatedUser));
           return profileCubit;
         },
-        act: (cubit) => cubit.updateProfile(
-          fullName: 'Updated User',
-          phone: '+0987654321',
-        ),
+        act: (cubit) =>
+            cubit.updateProfile(fullName: 'Updated User', phone: '+0987654321'),
         expect: () => [
           ProfileUpdating(),
           const ProfileUpdated(updatedUser),
@@ -179,8 +177,9 @@ void main() {
       blocTest<ProfileCubit, ProfileState>(
         'emits [ProfileUpdating, ProfileError] when updateProfile fails',
         build: () {
-          when(() => mockUpdateProfileUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to update profile'));
+          when(
+            () => mockUpdateProfileUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to update profile'));
           return profileCubit;
         },
         act: (cubit) => cubit.updateProfile(fullName: 'Test'),
@@ -193,17 +192,18 @@ void main() {
       blocTest<ProfileCubit, ProfileState>(
         'passes parameters to usecase correctly',
         build: () {
-          when(() => mockUpdateProfileUsecase(any()))
-              .thenAnswer((_) async => const Right(updatedUser));
+          when(
+            () => mockUpdateProfileUsecase(any()),
+          ).thenAnswer((_) async => const Right(updatedUser));
           return profileCubit;
         },
-        act: (cubit) => cubit.updateProfile(
-          fullName: 'New Name',
-          phone: '+1111111111',
-        ),
+        act: (cubit) =>
+            cubit.updateProfile(fullName: 'New Name', phone: '+1111111111'),
         verify: (_) {
           final captured =
-              verify(() => mockUpdateProfileUsecase(captureAny())).captured.first
+              verify(
+                    () => mockUpdateProfileUsecase(captureAny()),
+                  ).captured.first
                   as UpdateProfileParams;
           expect(captured.fullName, 'New Name');
           expect(captured.phone, '+1111111111');
@@ -245,22 +245,21 @@ void main() {
       blocTest<AddressesCubit, AddressesState>(
         'emits [AddressesLoading, AddressesLoaded] when getAddresses succeeds',
         build: () {
-          when(() => mockGetAddressesUsecase(any()))
-              .thenAnswer((_) async => Right(testAddresses));
+          when(
+            () => mockGetAddressesUsecase(any()),
+          ).thenAnswer((_) async => Right(testAddresses));
           return addressesCubit;
         },
         act: (cubit) => cubit.getAddresses(),
-        expect: () => [
-          AddressesLoading(),
-          AddressesLoaded(testAddresses),
-        ],
+        expect: () => [AddressesLoading(), AddressesLoaded(testAddresses)],
       );
 
       blocTest<AddressesCubit, AddressesState>(
         'emits [AddressesLoading, AddressesError] when getAddresses fails',
         build: () {
-          when(() => mockGetAddressesUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to load addresses'));
+          when(
+            () => mockGetAddressesUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to load addresses'));
           return addressesCubit;
         },
         act: (cubit) => cubit.getAddresses(),
@@ -273,15 +272,13 @@ void main() {
       blocTest<AddressesCubit, AddressesState>(
         'emits [AddressesLoading, AddressesLoaded] with empty list when no addresses',
         build: () {
-          when(() => mockGetAddressesUsecase(any()))
-              .thenAnswer((_) async => const Right([]));
+          when(
+            () => mockGetAddressesUsecase(any()),
+          ).thenAnswer((_) async => const Right([]));
           return addressesCubit;
         },
         act: (cubit) => cubit.getAddresses(),
-        expect: () => [
-          AddressesLoading(),
-          const AddressesLoaded([]),
-        ],
+        expect: () => [AddressesLoading(), const AddressesLoaded([])],
       );
     });
 
@@ -289,10 +286,12 @@ void main() {
       blocTest<AddressesCubit, AddressesState>(
         'emits [AddressAdding, AddressAdded] then refreshes when addAddress succeeds',
         build: () {
-          when(() => mockAddAddressUsecase(any()))
-              .thenAnswer((_) async => Right(newAddress));
-          when(() => mockGetAddressesUsecase(any()))
-              .thenAnswer((_) async => Right([...testAddresses, newAddress]));
+          when(
+            () => mockAddAddressUsecase(any()),
+          ).thenAnswer((_) async => Right(newAddress));
+          when(
+            () => mockGetAddressesUsecase(any()),
+          ).thenAnswer((_) async => Right([...testAddresses, newAddress]));
           return addressesCubit;
         },
         act: (cubit) => cubit.addAddress(
@@ -313,8 +312,9 @@ void main() {
       blocTest<AddressesCubit, AddressesState>(
         'emits [AddressAdding, AddressesError] when addAddress fails',
         build: () {
-          when(() => mockAddAddressUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to add address'));
+          when(
+            () => mockAddAddressUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to add address'));
           return addressesCubit;
         },
         act: (cubit) => cubit.addAddress(
@@ -335,11 +335,15 @@ void main() {
       blocTest<AddressesCubit, AddressesState>(
         'emits [AddressUpdating, AddressUpdated] then refreshes when updateAddress succeeds',
         build: () {
-          final updated = testAddresses.first.copyWith(fullName: 'Updated Name');
-          when(() => mockUpdateAddressUsecase(any()))
-              .thenAnswer((_) async => Right(updated));
-          when(() => mockGetAddressesUsecase(any()))
-              .thenAnswer((_) async => Right([updated, testAddresses[1]]));
+          final updated = testAddresses.first.copyWith(
+            fullName: 'Updated Name',
+          );
+          when(
+            () => mockUpdateAddressUsecase(any()),
+          ).thenAnswer((_) async => Right(updated));
+          when(
+            () => mockGetAddressesUsecase(any()),
+          ).thenAnswer((_) async => Right([updated, testAddresses[1]]));
           return addressesCubit;
         },
         act: (cubit) => cubit.updateAddress(
@@ -358,8 +362,9 @@ void main() {
       blocTest<AddressesCubit, AddressesState>(
         'emits [AddressUpdating, AddressesError] when updateAddress fails',
         build: () {
-          when(() => mockUpdateAddressUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to update address'));
+          when(
+            () => mockUpdateAddressUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to update address'));
           return addressesCubit;
         },
         act: (cubit) => cubit.updateAddress(
@@ -381,10 +386,12 @@ void main() {
       blocTest<AddressesCubit, AddressesState>(
         'emits [AddressDeleted] then refreshes when deleteAddress succeeds',
         build: () {
-          when(() => mockDeleteAddressUsecase('address-1'))
-              .thenAnswer((_) async => const Right(null));
-          when(() => mockGetAddressesUsecase(any()))
-              .thenAnswer((_) async => Right([testAddresses[1]]));
+          when(
+            () => mockDeleteAddressUsecase('address-1'),
+          ).thenAnswer((_) async => const Right(null));
+          when(
+            () => mockGetAddressesUsecase(any()),
+          ).thenAnswer((_) async => Right([testAddresses[1]]));
           return addressesCubit;
         },
         act: (cubit) => cubit.deleteAddress('address-1'),
@@ -398,14 +405,13 @@ void main() {
       blocTest<AddressesCubit, AddressesState>(
         'emits [AddressesError] when deleteAddress fails',
         build: () {
-          when(() => mockDeleteAddressUsecase('address-1'))
-              .thenAnswer((_) async => const Left('Failed to delete address'));
+          when(
+            () => mockDeleteAddressUsecase('address-1'),
+          ).thenAnswer((_) async => const Left('Failed to delete address'));
           return addressesCubit;
         },
         act: (cubit) => cubit.deleteAddress('address-1'),
-        expect: () => [
-          const AddressesError('Failed to delete address'),
-        ],
+        expect: () => [const AddressesError('Failed to delete address')],
       );
     });
   });
@@ -413,8 +419,10 @@ void main() {
   group('AddressEntity', () {
     test('fullAddress formats correctly with all fields', () {
       final address = testAddresses.first;
-      expect(address.fullAddress,
-          '123 Main Street, Apt 4B, New York, NY, USA, 10001');
+      expect(
+        address.fullAddress,
+        '123 Main Street, Apt 4B, New York, NY, USA, 10001',
+      );
     });
 
     test('fullAddress formats correctly without optional fields', () {

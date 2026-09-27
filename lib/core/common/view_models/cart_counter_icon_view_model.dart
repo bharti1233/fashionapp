@@ -8,6 +8,6 @@ class CartCounterIconModel {
   CartCounterIconModel({
     this.count = 0,
     this.onPressed,
-    this.color=TColors.white,
+    this.color = TColors.white,
   });
 }

@@ -49,20 +49,20 @@ class AddressEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        userId,
-        fullName,
-        phone,
-        addressLine1,
-        addressLine2,
-        city,
-        state,
-        postalCode,
-        country,
-        isDefault,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    userId,
+    fullName,
+    phone,
+    addressLine1,
+    addressLine2,
+    city,
+    state,
+    postalCode,
+    country,
+    isDefault,
+    createdAt,
+    updatedAt,
+  ];
 
   AddressEntity copyWith({
     String? id,

@@ -24,9 +24,7 @@ class NavigationMenuCubit extends Cubit<NavigationMenuState> {
   ];
   void changeIndex(int index) {
     selectedIndex = index;
-    emit(NavigationMenuChanged(
-      selectedIndex: selectedIndex,
-    ));
+    emit(NavigationMenuChanged(selectedIndex: selectedIndex));
   }
 
   Widget getScreen() {

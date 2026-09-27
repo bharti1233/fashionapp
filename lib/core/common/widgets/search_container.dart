@@ -6,10 +6,7 @@ import 'package:t_store/core/utils/device/device_utility.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 
 class SearchContainer extends StatelessWidget {
-  const SearchContainer({
-    super.key,
-    required this.searchContainerModel,
-  });
+  const SearchContainer({super.key, required this.searchContainerModel});
   final SearchContainerModel searchContainerModel;
   @override
   Widget build(BuildContext context) {
@@ -24,14 +21,12 @@ class SearchContainer extends StatelessWidget {
           decoration: BoxDecoration(
             color: searchContainerModel.showBackground
                 ? dark
-                    ? TColors.dark
-                    : TColors.light
+                      ? TColors.dark
+                      : TColors.light
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
             border: searchContainerModel.showBorder
-                ? Border.all(
-                    color: TColors.grey,
-                  )
+                ? Border.all(color: TColors.grey)
                 : null,
           ),
           child: Row(

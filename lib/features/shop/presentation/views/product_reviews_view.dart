@@ -13,12 +13,11 @@ class ProductReviewsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-          appBarModel: AppBarModel(
-        hasArrowBack: true,
-        title: const Text(
-          "Reviews & Ratings",
+        appBarModel: AppBarModel(
+          hasArrowBack: true,
+          title: const Text("Reviews & Ratings"),
         ),
-      )),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -29,17 +28,11 @@ class ProductReviewsView extends StatelessWidget {
                 const Text(
                   "Ratings and Reviews are verified and from people who have purchased this product.",
                 ),
-                const SizedBox(
-                  height: TSizes.spaceBtwItems,
-                ),
+                const SizedBox(height: TSizes.spaceBtwItems),
                 const ProductOverallRating(),
-                const CustomRatingBarIndicator(
-                  rating: 4.5,
-                ),
+                const CustomRatingBarIndicator(rating: 4.5),
                 Text("12,611", style: Theme.of(context).textTheme.bodySmall),
-                const SizedBox(
-                  height: TSizes.spaceBtwSections,
-                ),
+                const SizedBox(height: TSizes.spaceBtwSections),
                 const UserReviewCard(),
                 const UserReviewCard(),
                 const UserReviewCard(),

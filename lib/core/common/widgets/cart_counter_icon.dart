@@ -4,10 +4,7 @@ import 'package:t_store/core/common/view_models/cart_counter_icon_view_model.dar
 import 'package:t_store/core/utils/constants/colors.dart';
 
 class CartCounterIcon extends StatelessWidget {
-  const CartCounterIcon({
-    super.key,
-    required this.cartCounterIconModel,
-  });
+  const CartCounterIcon({super.key, required this.cartCounterIconModel});
   final CartCounterIconModel cartCounterIconModel;
   @override
   Widget build(BuildContext context) {
@@ -15,10 +12,7 @@ class CartCounterIcon extends StatelessWidget {
       children: [
         IconButton(
           onPressed: cartCounterIconModel.onPressed,
-          icon: Icon(
-            Iconsax.shopping_bag,
-            color: cartCounterIconModel.color,
-          ),
+          icon: Icon(Iconsax.shopping_bag, color: cartCounterIconModel.color),
         ),
         Positioned(
           top: 0,
@@ -33,10 +27,10 @@ class CartCounterIcon extends StatelessWidget {
             child: Center(
               child: Text(
                 cartCounterIconModel.count.toString(),
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge!
-                    .apply(color: TColors.white, fontSizeFactor: .8),
+                style: Theme.of(context).textTheme.labelLarge!.apply(
+                  color: TColors.white,
+                  fontSizeFactor: .8,
+                ),
               ),
             ),
           ),

@@ -66,7 +66,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
 
   @override
   Future<Either<String, List<CategoryEntity>>> getSubCategories(
-      String parentId) async {
+    String parentId,
+  ) async {
     try {
       final response = await supabaseService.client
           .from(SupabaseTables.categories)

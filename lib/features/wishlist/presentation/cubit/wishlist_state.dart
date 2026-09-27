@@ -17,7 +17,7 @@ class WishlistLoaded extends WishlistState {
   final Set<String> productIds;
 
   WishlistLoaded(this.items)
-      : productIds = items.map((e) => e.productId).toSet();
+    : productIds = items.map((e) => e.productId).toSet();
 
   bool isInWishlist(String productId) => productIds.contains(productId);
 

@@ -10,10 +10,7 @@ import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 
 class BannerCarouselSlider extends StatelessWidget {
-  const BannerCarouselSlider({
-    super.key,
-    required this.images,
-  });
+  const BannerCarouselSlider({super.key, required this.images});
   final List<String> images;
   @override
   Widget build(BuildContext context) {
@@ -31,9 +28,7 @@ class BannerCarouselSlider extends StatelessWidget {
               items: List.generate(
                 images.length,
                 (index) => RoundedImage(
-                  roundedImageModel: RoundedImageModel(
-                    image: images[index],
-                  ),
+                  roundedImageModel: RoundedImageModel(image: images[index]),
                 ),
               ),
             ),
@@ -41,21 +36,23 @@ class BannerCarouselSlider extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(
-                  images.length,
-                  (index) => CircularContainer(
-                        circularContainerModel: CircularContainerModel(
-                          margin: const EdgeInsets.only(right: TSizes.sm),
-                          width: 40,
-                          height: 5,
-                          color: index ==
-                                  context
-                                      .read<BannerCarouselSliderCubit>()
-                                      .selectedIndex
-                              ? TColors.primary
-                              : TColors.grey,
-                        ),
-                      )),
-            )
+                images.length,
+                (index) => CircularContainer(
+                  circularContainerModel: CircularContainerModel(
+                    margin: const EdgeInsets.only(right: TSizes.sm),
+                    width: 40,
+                    height: 5,
+                    color:
+                        index ==
+                            context
+                                .read<BannerCarouselSliderCubit>()
+                                .selectedIndex
+                        ? TColors.primary
+                        : TColors.grey,
+                  ),
+                ),
+              ),
+            ),
           ],
         );
       },

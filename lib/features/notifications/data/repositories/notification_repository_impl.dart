@@ -35,8 +35,9 @@ class NotificationRepositoryImpl implements NotificationRepository {
           .range(from, to);
 
       final notifications = (response as List)
-          .map((json) =>
-              NotificationModel.fromJson(json as Map<String, dynamic>))
+          .map(
+            (json) => NotificationModel.fromJson(json as Map<String, dynamic>),
+          )
           .toList();
 
       return Right(notifications);

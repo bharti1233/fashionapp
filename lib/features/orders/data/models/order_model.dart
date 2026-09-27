@@ -42,12 +42,13 @@ class OrderModel extends OrderEntity {
           : null,
       items: json['order_items'] != null
           ? (json['order_items'] as List)
-              .map((e) => OrderItemModel.fromJson(e as Map<String, dynamic>))
-              .toList()
+                .map((e) => OrderItemModel.fromJson(e as Map<String, dynamic>))
+                .toList()
           : [],
       shippingAddress: json['shipping_address'] != null
           ? AddressSnapshotModel.fromJson(
-              json['shipping_address'] as Map<String, dynamic>)
+              json['shipping_address'] as Map<String, dynamic>,
+            )
           : null,
     );
   }
@@ -122,8 +123,7 @@ class OrderItemModel extends OrderItemEntity {
       productImage: json['product_image'] as String?,
       price: (json['price'] as num).toDouble(),
       quantity: json['quantity'] as int,
-      selectedAttributes:
-          json['selected_attributes'] as Map<String, dynamic>?,
+      selectedAttributes: json['selected_attributes'] as Map<String, dynamic>?,
     );
   }
 

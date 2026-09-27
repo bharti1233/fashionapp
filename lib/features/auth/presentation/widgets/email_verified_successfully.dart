@@ -7,9 +7,7 @@ import 'package:t_store/core/common/widgets/success_view.dart';
 import 'package:t_store/features/auth/presentation/views/login/login_view.dart';
 
 class EmailVerifiedSuccessfully extends StatelessWidget {
-  const EmailVerifiedSuccessfully({
-    super.key,
-  });
+  const EmailVerifiedSuccessfully({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +19,9 @@ class EmailVerifiedSuccessfully extends StatelessWidget {
         buttonText: TTexts.tContinue,
         onPressed: () {
           THelperFunctions.navigateReplacementToScreen(
-              context, const LoginView());
+            context,
+            const LoginView(),
+          );
         },
       ),
     );

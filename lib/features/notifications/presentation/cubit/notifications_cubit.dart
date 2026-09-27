@@ -9,7 +9,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   StreamSubscription<NotificationEntity>? _notificationsSubscription;
 
   NotificationsCubit({required this.repository})
-      : super(NotificationsInitial());
+    : super(NotificationsInitial());
 
   List<NotificationEntity> _notifications = [];
   int _currentPage = 0;
@@ -18,14 +18,18 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   void startListening() {
     _notificationsSubscription?.cancel();
-    _notificationsSubscription = repository.notificationsStream.listen((notification) {
+    _notificationsSubscription = repository.notificationsStream.listen((
+      notification,
+    ) {
       _notifications = [notification, ..._notifications];
       _unreadCount++;
       emit(NewNotificationReceived(notification));
-      emit(NotificationsLoaded(
-        notifications: _notifications,
-        unreadCount: _unreadCount,
-      ));
+      emit(
+        NotificationsLoaded(
+          notifications: _notifications,
+          unreadCount: _unreadCount,
+        ),
+      );
     });
   }
 
@@ -44,23 +48,24 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       limit: _limit,
     );
 
-    result.fold(
-      (error) => emit(NotificationsError(error)),
-      (notifications) async {
-        _notifications = [..._notifications, ...notifications];
-        _currentPage++;
+    result.fold((error) => emit(NotificationsError(error)), (
+      notifications,
+    ) async {
+      _notifications = [..._notifications, ...notifications];
+      _currentPage++;
 
-        // Get unread count
-        final unreadResult = await repository.getUnreadCount();
-        _unreadCount = unreadResult.fold((_) => 0, (count) => count);
+      // Get unread count
+      final unreadResult = await repository.getUnreadCount();
+      _unreadCount = unreadResult.fold((_) => 0, (count) => count);
 
-        emit(NotificationsLoaded(
+      emit(
+        NotificationsLoaded(
           notifications: _notifications,
           unreadCount: _unreadCount,
           hasReachedMax: notifications.length < _limit,
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   Future<void> loadMoreNotifications() async {
@@ -80,41 +85,45 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       }
       return n;
     }).toList();
-    emit(NotificationsLoaded(
-      notifications: _notifications,
-      unreadCount: _unreadCount,
-    ));
+    emit(
+      NotificationsLoaded(
+        notifications: _notifications,
+        unreadCount: _unreadCount,
+      ),
+    );
   }
 
   Future<void> markAllAsRead() async {
     await repository.markAllAsRead();
-    _notifications = _notifications.map((n) => n.copyWith(isRead: true)).toList();
+    _notifications = _notifications
+        .map((n) => n.copyWith(isRead: true))
+        .toList();
     _unreadCount = 0;
-    emit(NotificationsLoaded(
-      notifications: _notifications,
-      unreadCount: 0,
-    ));
+    emit(NotificationsLoaded(notifications: _notifications, unreadCount: 0));
   }
 
   Future<void> deleteNotification(String notificationId) async {
     await repository.deleteNotification(notificationId);
-    final notification = _notifications.firstWhere((n) => n.id == notificationId);
+    final notification = _notifications.firstWhere(
+      (n) => n.id == notificationId,
+    );
     if (!notification.isRead) _unreadCount--;
-    _notifications = _notifications.where((n) => n.id != notificationId).toList();
-    emit(NotificationsLoaded(
-      notifications: _notifications,
-      unreadCount: _unreadCount,
-    ));
+    _notifications = _notifications
+        .where((n) => n.id != notificationId)
+        .toList();
+    emit(
+      NotificationsLoaded(
+        notifications: _notifications,
+        unreadCount: _unreadCount,
+      ),
+    );
   }
 
   Future<void> deleteAllNotifications() async {
     await repository.deleteAllNotifications();
     _notifications = [];
     _unreadCount = 0;
-    emit(NotificationsLoaded(
-      notifications: [],
-      unreadCount: 0,
-    ));
+    emit(NotificationsLoaded(notifications: [], unreadCount: 0));
   }
 
   int get unreadCount => _unreadCount;

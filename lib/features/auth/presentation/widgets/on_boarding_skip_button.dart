@@ -5,9 +5,7 @@ import 'package:t_store/core/utils/device/device_utility.dart';
 import 'package:t_store/features/auth/presentation/logic/on_boarding/on_boarding_cubit.dart';
 
 class OnBoardingSkipButton extends StatelessWidget {
-  const OnBoardingSkipButton({
-    super.key,
-  });
+  const OnBoardingSkipButton({super.key});
 
   @override
   Widget build(BuildContext context) {

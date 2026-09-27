@@ -132,21 +132,26 @@ class ReviewRepositoryImpl implements ReviewRepository {
 
   @override
   Future<Either<String, ProductReviewStats>> getProductReviewStats(
-      String productId) async {
+    String productId,
+  ) async {
     try {
       final response = await supabaseService.client
           .from(SupabaseTables.reviews)
           .select('rating')
           .eq('product_id', productId);
 
-      final ratings = (response as List).map((e) => e['rating'] as int).toList();
+      final ratings = (response as List)
+          .map((e) => e['rating'] as int)
+          .toList();
 
       if (ratings.isEmpty) {
-        return const Right(ProductReviewStats(
-          averageRating: 0,
-          totalReviews: 0,
-          ratingDistribution: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
-        ));
+        return const Right(
+          ProductReviewStats(
+            averageRating: 0,
+            totalReviews: 0,
+            ratingDistribution: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
+          ),
+        );
       }
 
       final average = ratings.reduce((a, b) => a + b) / ratings.length;
@@ -155,11 +160,13 @@ class ReviewRepositoryImpl implements ReviewRepository {
         distribution[rating] = (distribution[rating] ?? 0) + 1;
       }
 
-      return Right(ProductReviewStats(
-        averageRating: average,
-        totalReviews: ratings.length,
-        ratingDistribution: distribution,
-      ));
+      return Right(
+        ProductReviewStats(
+          averageRating: average,
+          totalReviews: ratings.length,
+          ratingDistribution: distribution,
+        ),
+      );
     } catch (e) {
       return Left(e.toString());
     }

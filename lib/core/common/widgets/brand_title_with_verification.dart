@@ -24,14 +24,12 @@ class BrandTitleWithVerification extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        const SizedBox(
-          width: TSizes.xs,
-        ),
+        const SizedBox(width: TSizes.xs),
         Icon(
           Iconsax.verify5,
           color: brandTitleWithVerificationModel.iconColor,
           size: TSizes.iconXs,
-        )
+        ),
       ],
     );
   }

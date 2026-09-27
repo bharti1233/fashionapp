@@ -8,10 +8,8 @@ import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/features/auth/presentation/logic/on_boarding/on_boarding_cubit.dart';
 
 class OnBoardingDotNavigation extends StatelessWidget {
-  const OnBoardingDotNavigation({
-    super.key,
-   });
-   @override
+  const OnBoardingDotNavigation({super.key});
+  @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
 
@@ -19,16 +17,17 @@ class OnBoardingDotNavigation extends StatelessWidget {
       bottom: TDeviceUtils.getBottomNavigationBarHeight() + 25,
       left: TSizes.defaultSpace,
       child: SmoothPageIndicator(
-          controller: context.read<OnBoardingCubit>().pageController,
-          count: 3,
-          axisDirection: Axis.horizontal,
-          onDotClicked: (index) {
+        controller: context.read<OnBoardingCubit>().pageController,
+        count: 3,
+        axisDirection: Axis.horizontal,
+        onDotClicked: (index) {
           context.read<OnBoardingCubit>().dotNavigationClicked(index);
-          },
-          effect: ExpandingDotsEffect(
-            dotHeight: 6,
-            activeDotColor: dark ? TColors.light : TColors.dark,
-          )),
+        },
+        effect: ExpandingDotsEffect(
+          dotHeight: 6,
+          activeDotColor: dark ? TColors.light : TColors.dark,
+        ),
+      ),
     );
   }
 }

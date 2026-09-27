@@ -109,43 +109,37 @@ void main() {
       blocTest<CartCubit, CartState>(
         'emits [CartLoading, CartLoaded] when getCartItems succeeds',
         build: () {
-          when(() => mockGetCartItemsUsecase(any()))
-              .thenAnswer((_) async => Right(testCartItems));
+          when(
+            () => mockGetCartItemsUsecase(any()),
+          ).thenAnswer((_) async => Right(testCartItems));
           return cartCubit;
         },
         act: (cubit) => cubit.getCartItems(),
-        expect: () => [
-          CartLoading(),
-          CartLoaded(testCartItems),
-        ],
+        expect: () => [CartLoading(), CartLoaded(testCartItems)],
       );
 
       blocTest<CartCubit, CartState>(
         'emits [CartLoading, CartError] when getCartItems fails',
         build: () {
-          when(() => mockGetCartItemsUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to load cart'));
+          when(
+            () => mockGetCartItemsUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to load cart'));
           return cartCubit;
         },
         act: (cubit) => cubit.getCartItems(),
-        expect: () => [
-          CartLoading(),
-          const CartError('Failed to load cart'),
-        ],
+        expect: () => [CartLoading(), const CartError('Failed to load cart')],
       );
 
       blocTest<CartCubit, CartState>(
         'emits [CartLoading, CartLoaded] with empty list when cart is empty',
         build: () {
-          when(() => mockGetCartItemsUsecase(any()))
-              .thenAnswer((_) async => const Right([]));
+          when(
+            () => mockGetCartItemsUsecase(any()),
+          ).thenAnswer((_) async => const Right([]));
           return cartCubit;
         },
         act: (cubit) => cubit.getCartItems(),
-        expect: () => [
-          CartLoading(),
-          const CartLoaded([]),
-        ],
+        expect: () => [CartLoading(), const CartLoaded([])],
       );
     });
 
@@ -153,10 +147,12 @@ void main() {
       blocTest<CartCubit, CartState>(
         'emits [CartItemAdded] and refreshes cart when addToCart succeeds',
         build: () {
-          when(() => mockAddToCartUsecase(any()))
-              .thenAnswer((_) async => Right(testCartItems.first));
-          when(() => mockGetCartItemsUsecase(any()))
-              .thenAnswer((_) async => Right(testCartItems));
+          when(
+            () => mockAddToCartUsecase(any()),
+          ).thenAnswer((_) async => Right(testCartItems.first));
+          when(
+            () => mockGetCartItemsUsecase(any()),
+          ).thenAnswer((_) async => Right(testCartItems));
           return cartCubit;
         },
         act: (cubit) => cubit.addToCart(productId: 'product-1', quantity: 2),
@@ -166,9 +162,9 @@ void main() {
           CartLoaded(testCartItems),
         ],
         verify: (_) {
-          final captured = verify(() => mockAddToCartUsecase(captureAny()))
-              .captured
-              .first as AddToCartParams;
+          final captured =
+              verify(() => mockAddToCartUsecase(captureAny())).captured.first
+                  as AddToCartParams;
           expect(captured.productId, 'product-1');
           expect(captured.quantity, 2);
         },
@@ -177,23 +173,24 @@ void main() {
       blocTest<CartCubit, CartState>(
         'emits [CartError] when addToCart fails',
         build: () {
-          when(() => mockAddToCartUsecase(any()))
-              .thenAnswer((_) async => const Left('Failed to add item'));
+          when(
+            () => mockAddToCartUsecase(any()),
+          ).thenAnswer((_) async => const Left('Failed to add item'));
           return cartCubit;
         },
         act: (cubit) => cubit.addToCart(productId: 'product-1'),
-        expect: () => [
-          const CartError('Failed to add item'),
-        ],
+        expect: () => [const CartError('Failed to add item')],
       );
 
       blocTest<CartCubit, CartState>(
         'passes selectedAttributes when provided',
         build: () {
-          when(() => mockAddToCartUsecase(any()))
-              .thenAnswer((_) async => Right(testCartItems.first));
-          when(() => mockGetCartItemsUsecase(any()))
-              .thenAnswer((_) async => Right(testCartItems));
+          when(
+            () => mockAddToCartUsecase(any()),
+          ).thenAnswer((_) async => Right(testCartItems.first));
+          when(
+            () => mockGetCartItemsUsecase(any()),
+          ).thenAnswer((_) async => Right(testCartItems));
           return cartCubit;
         },
         act: (cubit) => cubit.addToCart(
@@ -201,9 +198,9 @@ void main() {
           selectedAttributes: {'color': 'red', 'size': 'M'},
         ),
         verify: (_) {
-          final captured = verify(() => mockAddToCartUsecase(captureAny()))
-              .captured
-              .first as AddToCartParams;
+          final captured =
+              verify(() => mockAddToCartUsecase(captureAny())).captured.first
+                  as AddToCartParams;
           expect(captured.selectedAttributes, {'color': 'red', 'size': 'M'});
         },
       );
@@ -213,10 +210,12 @@ void main() {
       blocTest<CartCubit, CartState>(
         'emits [CartItemUpdated] and refreshes cart when update succeeds',
         build: () {
-          when(() => mockUpdateCartItemUsecase(any()))
-              .thenAnswer((_) async => Right(testCartItems.first));
-          when(() => mockGetCartItemsUsecase(any()))
-              .thenAnswer((_) async => Right(testCartItems));
+          when(
+            () => mockUpdateCartItemUsecase(any()),
+          ).thenAnswer((_) async => Right(testCartItems.first));
+          when(
+            () => mockGetCartItemsUsecase(any()),
+          ).thenAnswer((_) async => Right(testCartItems));
           return cartCubit;
         },
         act: (cubit) => cubit.updateCartItem(cartItemId: 'cart-1', quantity: 3),
@@ -230,10 +229,12 @@ void main() {
       blocTest<CartCubit, CartState>(
         'emits [CartItemRemoved] when quantity becomes 0',
         build: () {
-          when(() => mockUpdateCartItemUsecase(any())).thenAnswer(
-              (_) async => const Left('تم إزالة المنتج من السلة'));
-          when(() => mockGetCartItemsUsecase(any()))
-              .thenAnswer((_) async => const Right([]));
+          when(
+            () => mockUpdateCartItemUsecase(any()),
+          ).thenAnswer((_) async => const Left('تم إزالة المنتج من السلة'));
+          when(
+            () => mockGetCartItemsUsecase(any()),
+          ).thenAnswer((_) async => const Right([]));
           return cartCubit;
         },
         act: (cubit) => cubit.updateCartItem(cartItemId: 'cart-1', quantity: 0),
@@ -247,10 +248,12 @@ void main() {
       blocTest<CartCubit, CartState>(
         'emits [CartError] when update fails with other error',
         build: () {
-          when(() => mockUpdateCartItemUsecase(any()))
-              .thenAnswer((_) async => const Left('Update failed'));
-          when(() => mockGetCartItemsUsecase(any()))
-              .thenAnswer((_) async => Right(testCartItems));
+          when(
+            () => mockUpdateCartItemUsecase(any()),
+          ).thenAnswer((_) async => const Left('Update failed'));
+          when(
+            () => mockGetCartItemsUsecase(any()),
+          ).thenAnswer((_) async => Right(testCartItems));
           return cartCubit;
         },
         act: (cubit) => cubit.updateCartItem(cartItemId: 'cart-1', quantity: 5),
@@ -266,10 +269,12 @@ void main() {
       blocTest<CartCubit, CartState>(
         'emits [CartItemRemoved] and refreshes cart when remove succeeds',
         build: () {
-          when(() => mockRemoveFromCartUsecase('cart-1'))
-              .thenAnswer((_) async => const Right(null));
-          when(() => mockGetCartItemsUsecase(any()))
-              .thenAnswer((_) async => Right([testCartItems[1]]));
+          when(
+            () => mockRemoveFromCartUsecase('cart-1'),
+          ).thenAnswer((_) async => const Right(null));
+          when(
+            () => mockGetCartItemsUsecase(any()),
+          ).thenAnswer((_) async => Right([testCartItems[1]]));
           return cartCubit;
         },
         act: (cubit) => cubit.removeFromCart('cart-1'),
@@ -283,14 +288,13 @@ void main() {
       blocTest<CartCubit, CartState>(
         'emits [CartError] when remove fails',
         build: () {
-          when(() => mockRemoveFromCartUsecase('cart-1'))
-              .thenAnswer((_) async => const Left('Remove failed'));
+          when(
+            () => mockRemoveFromCartUsecase('cart-1'),
+          ).thenAnswer((_) async => const Left('Remove failed'));
           return cartCubit;
         },
         act: (cubit) => cubit.removeFromCart('cart-1'),
-        expect: () => [
-          const CartError('Remove failed'),
-        ],
+        expect: () => [const CartError('Remove failed')],
       );
     });
 
@@ -298,28 +302,25 @@ void main() {
       blocTest<CartCubit, CartState>(
         'emits [CartCleared, CartLoaded(empty)] when clear succeeds',
         build: () {
-          when(() => mockClearCartUsecase(any()))
-              .thenAnswer((_) async => const Right(null));
+          when(
+            () => mockClearCartUsecase(any()),
+          ).thenAnswer((_) async => const Right(null));
           return cartCubit;
         },
         act: (cubit) => cubit.clearCart(),
-        expect: () => [
-          CartCleared(),
-          const CartLoaded([]),
-        ],
+        expect: () => [CartCleared(), const CartLoaded([])],
       );
 
       blocTest<CartCubit, CartState>(
         'emits [CartError] when clear fails',
         build: () {
-          when(() => mockClearCartUsecase(any()))
-              .thenAnswer((_) async => const Left('Clear failed'));
+          when(
+            () => mockClearCartUsecase(any()),
+          ).thenAnswer((_) async => const Left('Clear failed'));
           return cartCubit;
         },
         act: (cubit) => cubit.clearCart(),
-        expect: () => [
-          const CartError('Clear failed'),
-        ],
+        expect: () => [const CartError('Clear failed')],
       );
     });
 
