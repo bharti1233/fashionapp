@@ -18,7 +18,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Either<String, UserEntity>> getProfile() async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       final response = await supabaseService.client
@@ -56,7 +56,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }) async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       final updateData = <String, dynamic>{};
@@ -64,7 +64,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       if (phone != null) updateData['phone'] = phone;
 
       if (updateData.isEmpty) {
-        return getProfile();
+        return await getProfile();
       }
 
       final response = await supabaseService.client
@@ -84,7 +84,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Either<String, String>> uploadAvatar(File imageFile) async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       final fileName = 'avatar_$_userId.${imageFile.path.split('.').last}';
@@ -121,7 +121,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Either<String, void>> deleteAvatar() async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       // Remove avatar URL from profile
