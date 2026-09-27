@@ -21,7 +21,7 @@ Phase 1 — Fashion Commerce Foundation: COMPLETE (implementation + live Supabas
 
 ## In Progress
 
-- GitHub Actions release-APK validation (autonomous loop until green).
+None — Phase 1 complete.
 
 ## Planned
 
@@ -38,7 +38,7 @@ Future: Flutter → FastAPI → Supabase/Postgres (+ Redis/ARQ + AI/VTON provide
 - `flutter analyze`: **clean — No issues found (exit 0)** locally and in CI.
 - `flutter test`: **202/202 passed (exit 0)** locally; CI runs the same suite.
 - CI (`.github/workflows/flutter.yml`): release APK + `fashion-app-release-apk` artifact; secrets `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`.
-- No local `flutter run` / APK build performed (deferred to CI per constraint).
+- **Latest CI run #3 (commit 18fe28e): SUCCESS** — format ✓, analyze ✓, tests ✓ (202/202), release APK ✓, artifact `fashion-app-release-apk` (68 MB) ✓.
 
 ## Known Issues
 

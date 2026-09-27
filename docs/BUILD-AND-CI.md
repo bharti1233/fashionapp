@@ -50,7 +50,7 @@ service_role / secret key in Flutter.
 Workflow: `.github/workflows/flutter.yml` — checkout → Flutter 3.38.4 →
 `pub get` → `.env` from example → format check → `analyze` → `test` →
 **release** APK → upload artifact `fashion-app-release-apk`
-(`build/app/outputs/flutter-apk/app-release.apk`). Fails on any step.
+(`build/app/outputs/flutter-apk/app-production-release.apk`). Fails on any step.
 
 Required repository secrets (names only; values live in GitHub):
 
