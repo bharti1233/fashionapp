@@ -29,18 +29,22 @@ class NavigationMenu extends StatelessWidget {
                 context.read<NavigationMenuCubit>().changeIndex(index);
               },
               destinations: const [
-                //home store wishlist profile
+                // Home - Explore - Wishlist - Cart - Profile
                 NavigationDestination(
                   icon: Icon(Iconsax.home),
                   label: TTexts.homeView,
                 ),
                 NavigationDestination(
                   icon: Icon(Iconsax.shop),
-                  label: TTexts.storeView,
+                  label: TTexts.exploreView,
                 ),
                 NavigationDestination(
                   icon: Icon(Iconsax.heart),
                   label: TTexts.wishlistView,
+                ),
+                NavigationDestination(
+                  icon: Icon(Iconsax.shopping_cart),
+                  label: TTexts.cartView,
                 ),
                 NavigationDestination(
                   icon: Icon(Iconsax.user),

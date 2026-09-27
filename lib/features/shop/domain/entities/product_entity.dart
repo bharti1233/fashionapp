@@ -57,9 +57,9 @@ class ProductEntity extends Equatable {
   bool get isInStock => stock > 0;
 
   String get availabilityStatus {
-    if (stock <= 0) return 'غير متوفر';
-    if (stock <= 5) return 'كمية محدودة';
-    return 'متوفر';
+    if (stock <= 0) return 'Out of stock';
+    if (stock <= 5) return 'Low stock';
+    return 'In stock';
   }
 
   @override

@@ -4,7 +4,7 @@ class TTexts {
   static const String skip = "Skip";
   static const String done = "Done";
   static const String submit = "Submit";
-  static const String appName = "T-Store";
+  static const String appName = "Fashion";
   static const String tContinue = "Continue";
   static const String viewAll = "View All";
   static const String account = "Account";
@@ -17,6 +17,7 @@ class TTexts {
   static const String ordersView = "Orders";
   static const String settingsView = "Settings";
   static const String storeView = "Store";
+  static const String exploreView = "Explore";
 
   // -- OnBoarding Texts
   static const String onBoardingTitle1 = "Choose your product";

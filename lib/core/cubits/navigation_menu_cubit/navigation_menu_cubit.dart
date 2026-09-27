@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:t_store/features/personalization/presentation/views/settings_view.dart';
+import 'package:t_store/features/shop/presentation/views/cart_view.dart';
 import 'package:t_store/features/shop/presentation/views/home_view.dart';
 import 'package:t_store/features/shop/presentation/views/store_view.dart';
 import 'package:t_store/features/shop/presentation/views/wishlist_view.dart';
@@ -18,6 +19,7 @@ class NavigationMenuCubit extends Cubit<NavigationMenuState> {
     const HomeView(),
     const StoreView(),
     const WishlistView(),
+    const CartView(),
     const SettingsView(),
   ];
   void changeIndex(int index) {
