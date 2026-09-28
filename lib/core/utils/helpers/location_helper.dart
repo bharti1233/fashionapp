@@ -32,7 +32,9 @@ class LocationHelper {
 
       var status = await Permission.location.status;
       if (!status.isGranted) {
-        LoggerHelper.warning("Location permission not granted. Requesting permission...");
+        LoggerHelper.warning(
+          "Location permission not granted. Requesting permission...",
+        );
 
         bool shouldRequestPermission =
             await THelperFunctions.showPermissionDialog(context);
@@ -322,8 +324,7 @@ class LocationHelper {
       THelperFunctions.showSnackBar(
         type: SnackBarType.error,
         context: context,
-        message:
-            e.message ?? 'Failed to determine location. Please try again.',
+        message: e.message ?? 'Failed to determine location. Please try again.',
       );
       return null;
     }
