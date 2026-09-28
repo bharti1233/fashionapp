@@ -44,7 +44,8 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     result.fold((error) {
-      if (error.contains('confirm your email') || error.contains('confirm your email')) {
+      if (error.contains('confirm your email') ||
+          error.contains('confirm your email')) {
         emit(AuthEmailConfirmationRequired(email));
       } else {
         emit(AuthError(error));

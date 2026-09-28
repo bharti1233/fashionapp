@@ -148,9 +148,9 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'emits [AuthLoading, AuthEmailConfirmationRequired] when email not confirmed',
         build: () {
-          when(
-            () => mockSignInUsecase(any()),
-          ).thenAnswer((_) async => const Left('Please confirm your email first'));
+          when(() => mockSignInUsecase(any())).thenAnswer(
+            (_) async => const Left('Please confirm your email first'),
+          );
           return authCubit;
         },
         act: (cubit) => cubit.signIn(email: testEmail, password: testPassword),

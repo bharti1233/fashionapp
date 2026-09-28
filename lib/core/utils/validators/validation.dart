@@ -70,10 +70,13 @@ class TValidator {
     // 1. 10 digits starting with 6-9 (e.g., 9876543210)
     // 2. 11 digits with leading 0 (e.g., 09876543210)
     // 3. +91 prefix (13 chars total with +91)
-    final isValid = tenDigitRegExp.hasMatch(normalizedValue) ||
-        (normalizedValue.length == 11 && normalizedValue.startsWith('0') &&
+    final isValid =
+        tenDigitRegExp.hasMatch(normalizedValue) ||
+        (normalizedValue.length == 11 &&
+            normalizedValue.startsWith('0') &&
             tenDigitRegExp.hasMatch(normalizedValue.substring(1))) ||
-        (value.startsWith('+91') && tenDigitRegExp.hasMatch(normalizedValue.substring(3)));
+        (value.startsWith('+91') &&
+            tenDigitRegExp.hasMatch(normalizedValue.substring(3)));
 
     if (!isValid) {
       return 'Enter a valid 10-digit Indian mobile number.';

@@ -83,7 +83,8 @@ class _NewAddressFormState extends State<NewAddressForm> {
               prefixIcon: Icon(Iconsax.user),
               labelText: "Full Name",
             ),
-            validator: (value) => value?.isEmpty ?? true ? 'Full name is required' : null,
+            validator: (value) =>
+                value?.isEmpty ?? true ? 'Full name is required' : null,
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
           TextFormField(
@@ -103,7 +104,8 @@ class _NewAddressFormState extends State<NewAddressForm> {
               prefixIcon: Icon(Iconsax.building_31),
               labelText: "Address Line 1",
             ),
-            validator: (value) => value?.isEmpty ?? true ? 'Address is required' : null,
+            validator: (value) =>
+                value?.isEmpty ?? true ? 'Address is required' : null,
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
           TextFormField(
@@ -123,27 +125,33 @@ class _NewAddressFormState extends State<NewAddressForm> {
                     prefixIcon: Icon(Iconsax.building),
                     labelText: "City",
                   ),
-                  validator: (value) => value?.isEmpty ?? true ? 'City is required' : null,
+                  validator: (value) =>
+                      value?.isEmpty ?? true ? 'City is required' : null,
                 ),
               ),
               const SizedBox(width: TSizes.spaceBtwInputFields),
               Expanded(
                 child: DropdownButtonFormField<String>(
-                  initialValue: _stateController.text.isNotEmpty ? _stateController.text : null,
+                  initialValue: _stateController.text.isNotEmpty
+                      ? _stateController.text
+                      : null,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Iconsax.activity),
                     labelText: "State",
                   ),
-                  items: _indianStates.map((state) => DropdownMenuItem(
-                    value: state,
-                    child: Text(state),
-                  )).toList(),
+                  items: _indianStates
+                      .map(
+                        (state) =>
+                            DropdownMenuItem(value: state, child: Text(state)),
+                      )
+                      .toList(),
                   onChanged: (value) {
                     setState(() {
                       _stateController.text = value ?? '';
                     });
                   },
-                  validator: (value) => value?.isEmpty ?? true ? 'State is required' : null,
+                  validator: (value) =>
+                      value?.isEmpty ?? true ? 'State is required' : null,
                 ),
               ),
             ],
