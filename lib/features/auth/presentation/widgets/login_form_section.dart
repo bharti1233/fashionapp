@@ -51,7 +51,7 @@ class _LoginFormSectionState extends State<LoginFormSection> {
         if (state is AuthAuthenticated) {
           THelperFunctions.showSnackBar(
             context: context,
-            message: 'مرحباً بعودتك',
+            message: 'Welcome back!',
             type: SnackBarType.success,
           );
 
@@ -81,7 +81,7 @@ class _LoginFormSectionState extends State<LoginFormSection> {
         } else if (state is AuthEmailConfirmationRequired) {
           THelperFunctions.showSnackBar(
             context: context,
-            message: 'يرجى تأكيد بريدك الإلكتروني: ${state.email}',
+            message: 'Please confirm your email: ${state.email}',
             type: SnackBarType.warning,
           );
         }

@@ -49,7 +49,7 @@ class ReviewRepositoryImpl implements ReviewRepository {
   }) async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       // Check if user already reviewed
@@ -61,7 +61,7 @@ class ReviewRepositoryImpl implements ReviewRepository {
           .maybeSingle();
 
       if (existing != null) {
-        return const Left('لقد قمت بتقييم هذا المنتج مسبقاً');
+        return const Left('You have already reviewed this product');
       }
 
       // Check if user has purchased this product

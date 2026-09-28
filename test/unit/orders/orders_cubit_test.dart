@@ -315,7 +315,7 @@ void main() {
   });
 
   group('OrderEntity', () {
-    test('statusText returns correct Arabic text for each status', () {
+    test('statusText returns correct English text for each status', () {
       const pendingOrder = OrderEntity(
         id: '1',
         userId: 'user-1',
@@ -324,7 +324,7 @@ void main() {
         total: 100,
         paymentMethod: 'cash',
       );
-      expect(pendingOrder.statusText, 'قيد الانتظار');
+      expect(pendingOrder.statusText, 'Pending');
 
       const confirmedOrder = OrderEntity(
         id: '1',
@@ -334,7 +334,7 @@ void main() {
         total: 100,
         paymentMethod: 'cash',
       );
-      expect(confirmedOrder.statusText, 'تم التأكيد');
+      expect(confirmedOrder.statusText, 'Confirmed');
 
       const processingOrder = OrderEntity(
         id: '1',
@@ -344,7 +344,7 @@ void main() {
         total: 100,
         paymentMethod: 'cash',
       );
-      expect(processingOrder.statusText, 'قيد التجهيز');
+      expect(processingOrder.statusText, 'Processing');
 
       const shippedOrder = OrderEntity(
         id: '1',
@@ -354,7 +354,7 @@ void main() {
         total: 100,
         paymentMethod: 'cash',
       );
-      expect(shippedOrder.statusText, 'تم الشحن');
+      expect(shippedOrder.statusText, 'Shipped');
 
       const deliveredOrder = OrderEntity(
         id: '1',
@@ -364,7 +364,7 @@ void main() {
         total: 100,
         paymentMethod: 'cash',
       );
-      expect(deliveredOrder.statusText, 'تم التوصيل');
+      expect(deliveredOrder.statusText, 'Delivered');
 
       const cancelledOrder = OrderEntity(
         id: '1',
@@ -374,7 +374,7 @@ void main() {
         total: 100,
         paymentMethod: 'cash',
       );
-      expect(cancelledOrder.statusText, 'ملغي');
+      expect(cancelledOrder.statusText, 'Cancelled');
 
       const refundedOrder = OrderEntity(
         id: '1',
@@ -384,7 +384,7 @@ void main() {
         total: 100,
         paymentMethod: 'cash',
       );
-      expect(refundedOrder.statusText, 'مسترجع');
+      expect(refundedOrder.statusText, 'Refunded');
     });
 
     test('canCancel returns true only for pending and confirmed orders', () {

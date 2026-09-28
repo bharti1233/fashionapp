@@ -16,7 +16,7 @@ class WishlistRepositoryImpl implements WishlistRepository {
   Future<Either<String, List<WishlistItemEntity>>> getWishlist() async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       final response = await supabaseService.client
@@ -43,7 +43,7 @@ class WishlistRepositoryImpl implements WishlistRepository {
   ) async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       // Check if already in wishlist
@@ -55,7 +55,7 @@ class WishlistRepositoryImpl implements WishlistRepository {
           .maybeSingle();
 
       if (existing != null) {
-        return Left('المنتج موجود بالفعل في المفضلة');
+        return Left('Item already in wishlist');
       }
 
       final response = await supabaseService.client
@@ -74,7 +74,7 @@ class WishlistRepositoryImpl implements WishlistRepository {
   Future<Either<String, void>> removeFromWishlist(String productId) async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       await supabaseService.client

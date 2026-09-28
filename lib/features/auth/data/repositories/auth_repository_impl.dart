@@ -55,7 +55,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       if (response.user == null) {
-        return const Left('فشل تسجيل الدخول');
+        return const Left('Login failed');
       }
 
       // Get profile
@@ -94,7 +94,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       if (response.user == null) {
-        return const Left('فشل إنشاء الحساب');
+        return const Left('Account creation failed');
       }
 
       return Right(
@@ -229,22 +229,22 @@ class AuthRepositoryImpl implements AuthRepository {
     final lowerMessage = message.toLowerCase();
 
     if (lowerMessage.contains('invalid login credentials')) {
-      return 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+      return 'Invalid email or password';
     }
     if (lowerMessage.contains('email not confirmed')) {
-      return 'يرجى تأكيد بريدك الإلكتروني أولاً';
+      return 'Please confirm your email first';
     }
     if (lowerMessage.contains('user already registered')) {
-      return 'هذا البريد الإلكتروني مسجل بالفعل';
+      return 'This email is already registered';
     }
     if (lowerMessage.contains('password')) {
-      return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+      return 'Password must be at least 6 characters';
     }
     if (lowerMessage.contains('email')) {
-      return 'يرجى إدخال بريد إلكتروني صحيح';
+      return 'Please enter a valid email address';
     }
     if (lowerMessage.contains('rate limit')) {
-      return 'تم تجاوز عدد المحاولات المسموحة. يرجى المحاولة لاحقاً';
+      return 'Too many attempts. Please try again later';
     }
 
     return message;

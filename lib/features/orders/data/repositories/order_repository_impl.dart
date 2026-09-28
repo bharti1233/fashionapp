@@ -16,7 +16,7 @@ class OrderRepositoryImpl implements OrderRepository {
   Future<Either<String, List<OrderEntity>>> getOrders() async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       final response = await supabaseService.client
@@ -62,7 +62,7 @@ class OrderRepositoryImpl implements OrderRepository {
   }) async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       // Get address for snapshot
@@ -147,7 +147,7 @@ class OrderRepositoryImpl implements OrderRepository {
 
       final status = orderCheck['status'] as String;
       if (status != 'pending' && status != 'confirmed') {
-        return const Left('لا يمكن إلغاء هذا الطلب');
+        return const Left('This order cannot be cancelled');
       }
 
       await supabaseService.client

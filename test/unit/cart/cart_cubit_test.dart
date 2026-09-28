@@ -231,7 +231,7 @@ void main() {
         build: () {
           when(
             () => mockUpdateCartItemUsecase(any()),
-          ).thenAnswer((_) async => const Left('تم إزالة المنتج من السلة'));
+          ).thenAnswer((_) async => const Left('Item removed from cart'));
           when(
             () => mockGetCartItemsUsecase(any()),
           ).thenAnswer((_) async => const Right([]));

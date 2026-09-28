@@ -7,35 +7,35 @@ class PlatformExceptionHelper {
 
     switch (exception.code) {
       case 'PERMISSION_DENIED':
-        return "تم رفض الإذن. يرجى السماح للتطبيق بالوصول.";
+        return "Permission denied. Please allow the app to access.";
       case 'PERMISSION_DENIED_NEVER_ASK':
-        return "تم رفض الإذن نهائيًا. يمكنك تفعيل الإذن من الإعدادات.";
+        return "Permission permanently denied. You can enable it in settings.";
       case 'LOCATION_SERVICES_DISABLED':
-        return "خدمات الموقع معطلة. يرجى تفعيل الموقع والمحاولة مرة أخرى.";
+        return "Location services are disabled. Please enable location and try again.";
       case 'NETWORK_ERROR':
-        return "خطأ في الشبكة. تأكد من اتصالك بالإنترنت.";
+        return "Network error. Please check your internet connection.";
       case 'IO_ERROR':
-        return "خطأ في الإدخال/الإخراج. حاول مرة أخرى لاحقًا.";
+        return "I/O error. Please try again later.";
       case 'UNAVAILABLE':
-        return "الخدمة غير متاحة حاليًا. حاول لاحقًا.";
+        return "Service unavailable. Please try again later.";
       case 'ACTIVITY_NOT_FOUND':
-        return "لا يمكن فتح التطبيق المطلوب. تأكد من وجوده.";
+        return "Cannot open the requested app. Please ensure it is installed.";
       case 'INVALID_ARGUMENT':
-        return "تم تمرير بيانات غير صحيحة. يرجى التحقق والمحاولة مرة أخرى.";
+        return "Invalid data provided. Please check and try again.";
       case 'TIMEOUT':
-        return "انتهت المهلة. يرجى المحاولة مرة أخرى.";
+        return "Operation timed out. Please try again.";
       case 'SIGN_IN_FAILED':
-        return "فشل تسجيل الدخول. تحقق من بياناتك وحاول مرة أخرى.";
+        return "Sign in failed. Please check your credentials and try again.";
       case 'USER_CANCELLED':
-        return "تم إلغاء العملية من قبل المستخدم.";
+        return "Operation cancelled by user.";
       case 'STORAGE_FULL':
-        return "الذاكرة ممتلئة. يرجى تحرير بعض المساحة والمحاولة مرة أخرى.";
+        return "Storage is full. Please free up some space and try again.";
       case 'INTERNAL_ERROR':
-        return "حدث خطأ داخلي. حاول مرة أخرى لاحقًا.";
+        return "An internal error occurred. Please try again later.";
       case 'UNKNOWN_ERROR':
-        return "خطأ غير معروف. حاول لاحقًا.";
+        return "Unknown error. Please try again later.";
       default:
-        return "حدث خطأ غير متوقع: ${exception.code}. حاول مرة أخرى.";
+        return "An unexpected error occurred: ${exception.code}. Please try again.";
     }
   }
 }

@@ -21,7 +21,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }) async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       final from = page * limit;

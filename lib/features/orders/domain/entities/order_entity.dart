@@ -52,19 +52,19 @@ class OrderEntity extends Equatable {
   String get statusText {
     switch (status) {
       case OrderStatus.pending:
-        return 'قيد الانتظار';
+        return 'Pending';
       case OrderStatus.confirmed:
-        return 'تم التأكيد';
+        return 'Confirmed';
       case OrderStatus.processing:
-        return 'قيد التجهيز';
+        return 'Processing';
       case OrderStatus.shipped:
-        return 'تم الشحن';
+        return 'Shipped';
       case OrderStatus.delivered:
-        return 'تم التوصيل';
+        return 'Delivered';
       case OrderStatus.cancelled:
-        return 'ملغي';
+        return 'Cancelled';
       case OrderStatus.refunded:
-        return 'مسترجع';
+        return 'Refunded';
     }
   }
 

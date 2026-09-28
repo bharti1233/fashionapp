@@ -150,7 +150,7 @@ void main() {
         build: () {
           when(
             () => mockSignInUsecase(any()),
-          ).thenAnswer((_) async => const Left('يرجى تأكيد بريدك الإلكتروني'));
+          ).thenAnswer((_) async => const Left('Please confirm your email first'));
           return authCubit;
         },
         act: (cubit) => cubit.signIn(email: testEmail, password: testPassword),

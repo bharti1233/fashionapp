@@ -12,11 +12,11 @@ class SharedPreferencesException implements Exception {
 class SharedPreferencesExceptionHelper {
   static String handleException(dynamic error) {
     if (error is FormatException) {
-      return "خطأ في تنسيق البيانات المخزنة";
+      return "Stored data format error";
     } else if (error is TypeError) {
-      return "خطأ في نوع البيانات المخزنة";
+      return "Stored data type error";
     } else {
-      return "حدث خطأ غير متوقع أثناء الوصول للبيانات المحلية";
+      return "An unexpected error occurred while accessing local data";
     }
   }
 }

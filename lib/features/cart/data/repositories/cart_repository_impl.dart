@@ -16,7 +16,7 @@ class CartRepositoryImpl implements CartRepository {
   Future<Either<String, List<CartItemEntity>>> getCartItems() async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       final response = await supabaseService.client
@@ -43,7 +43,7 @@ class CartRepositoryImpl implements CartRepository {
   }) async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       // Check if item already exists in cart
@@ -95,7 +95,7 @@ class CartRepositoryImpl implements CartRepository {
         return await removeFromCart(cartItemId).then(
           (result) => result.fold(
             (error) => Left(error),
-            (_) => const Left('تم إزالة المنتج من السلة'),
+            (_) => const Left('Item removed from cart'),
           ),
         );
       }
@@ -131,7 +131,7 @@ class CartRepositoryImpl implements CartRepository {
   Future<Either<String, void>> clearCart() async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       await supabaseService.client

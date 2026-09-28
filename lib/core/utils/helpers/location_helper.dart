@@ -28,11 +28,11 @@ class LocationHelper {
     BuildContext context,
   ) async {
     try {
-      LoggerHelper.info("بدء التحقق من أذونات الموقع...");
+      LoggerHelper.info("Starting location permission check...");
 
       var status = await Permission.location.status;
       if (!status.isGranted) {
-        LoggerHelper.warning("لم يتم منح إذن الموقع. جارٍ طلب الإذن...");
+        LoggerHelper.warning("Location permission not granted. Requesting permission...");
 
         bool shouldRequestPermission =
             await THelperFunctions.showPermissionDialog(context);
@@ -40,7 +40,7 @@ class LocationHelper {
         if (shouldRequestPermission) {
           status = await Permission.location.request();
           if (!status.isGranted) {
-            LoggerHelper.error("تم رفض إذن الموقع.");
+            LoggerHelper.error("Location permission denied.");
 
             if (status.isPermanentlyDenied) {
               bool shouldOpenSettings =
@@ -65,7 +65,7 @@ class LocationHelper {
                               SizedBox(width: 12),
                               Expanded(
                                 child: Text(
-                                  'إذن الموقع مطلوب',
+                                  'Location permission required',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -79,7 +79,7 @@ class LocationHelper {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Text(
-                                'لقد قمت برفض إذن الموقع بشكل دائم. يرجى تفعيله من إعدادات التطبيق للمتابعة.',
+                                'You have permanently denied location permission. Please enable it in app settings to continue.',
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   fontSize: 16,
@@ -116,7 +116,7 @@ class LocationHelper {
                                       ),
                                     ),
                                     child: const Text(
-                                      'إلغاء',
+                                      'Cancel',
                                       style: TextStyle(
                                         color: accentRedText,
                                         fontWeight: FontWeight.bold,
@@ -149,7 +149,7 @@ class LocationHelper {
                                         ),
                                         SizedBox(width: 8),
                                         Text(
-                                          'فتح الإعدادات',
+                                          'Open Settings',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
@@ -189,10 +189,10 @@ class LocationHelper {
         }
       }
 
-      LoggerHelper.info("التحقق من تفعيل خدمات الموقع...");
+      LoggerHelper.info("Checking if location services are enabled...");
 
       if (!await Geolocator.isLocationServiceEnabled()) {
-        LoggerHelper.error("خدمات الموقع معطلة.");
+        LoggerHelper.error("Location services are disabled.");
         bool shouldOpenSettings =
             await THelperFunctions.showLocationServiceDialog(context);
         if (!shouldOpenSettings ||
@@ -201,7 +201,7 @@ class LocationHelper {
         }
       }
 
-      LoggerHelper.info("جارٍ تحديد الموقع الحالي...");
+      LoggerHelper.info("Determining current location...");
 
       // Show loading indicator
       showDialog(
@@ -235,7 +235,7 @@ class LocationHelper {
                   ),
                   const SizedBox(height: 24),
                   const Text(
-                    'جارٍ تحديد موقعك...',
+                    'Locating your position...',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -263,10 +263,10 @@ class LocationHelper {
         Navigator.of(context).pop();
 
         LoggerHelper.debug(
-          "تم تحديد الموقع: خط العرض ${position.latitude}, خط الطول ${position.longitude}",
+          "Location determined: latitude ${position.latitude}, longitude ${position.longitude}",
         );
 
-        LoggerHelper.info("جارٍ تحويل الإحداثيات إلى عنوان...");
+        LoggerHelper.info("Converting coordinates to address...");
 
         List<Placemark> placemarks = await placemarkFromCoordinates(
           position.latitude,
@@ -292,9 +292,9 @@ class LocationHelper {
           THelperFunctions.showSnackBar(
             type: SnackBarType.success,
             context: context,
-            message: 'تم تحديد موقعك بنجاح',
+            message: 'Location determined successfully',
           );
-          LoggerHelper.info("تم العثور على العنوان: $address");
+          LoggerHelper.info("Address found: $address");
           return address;
         }
 
@@ -310,20 +310,20 @@ class LocationHelper {
           THelperFunctions.showSnackBar(
             type: SnackBarType.error,
             context: context,
-            message: 'حدث خطاء في تحديد الموقع. يرجى المحاولة مرة أخرى.',
+            message: 'Failed to determine location. Please try again.',
           );
         }
 
-        LoggerHelper.error("حدث خطأ غير متوقع", e);
+        LoggerHelper.error("Unexpected error occurred", e);
         return null;
       }
     } on PlatformException catch (e) {
-      LoggerHelper.error("حدث خطأ في النظام", e.message);
+      LoggerHelper.error("System error occurred", e.message);
       THelperFunctions.showSnackBar(
         type: SnackBarType.error,
         context: context,
         message:
-            e.message ?? 'حدث خطأ أثناء تحديد الموقع. يرجى المحاولة مرة أخرى.',
+            e.message ?? 'Failed to determine location. Please try again.',
       );
       return null;
     }

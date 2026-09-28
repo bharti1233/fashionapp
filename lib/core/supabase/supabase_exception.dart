@@ -53,25 +53,25 @@ class SupabaseException implements Exception {
     final lowerMessage = message.toLowerCase();
 
     if (lowerMessage.contains('invalid login credentials')) {
-      return 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+      return 'Invalid email or password';
     }
     if (lowerMessage.contains('email not confirmed')) {
-      return 'يرجى تأكيد بريدك الإلكتروني أولاً';
+      return 'Please confirm your email first';
     }
     if (lowerMessage.contains('user already registered')) {
-      return 'هذا البريد الإلكتروني مسجل بالفعل';
+      return 'This email is already registered';
     }
     if (lowerMessage.contains('password')) {
-      return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+      return 'Password must be at least 6 characters';
     }
     if (lowerMessage.contains('email')) {
-      return 'يرجى إدخال بريد إلكتروني صحيح';
+      return 'Please enter a valid email address';
     }
     if (lowerMessage.contains('rate limit')) {
-      return 'تم تجاوز عدد المحاولات المسموحة. يرجى المحاولة لاحقاً';
+      return 'Too many attempts. Please try again later';
     }
     if (lowerMessage.contains('network')) {
-      return 'خطأ في الاتصال. يرجى التحقق من الإنترنت';
+      return 'Network error. Please check your internet connection';
     }
 
     return message;
@@ -80,16 +80,16 @@ class SupabaseException implements Exception {
   /// Get user-friendly database error message
   static String _getDatabaseErrorMessage(String message, String? code) {
     if (code == '23505') {
-      return 'هذا العنصر موجود بالفعل';
+      return 'This item already exists';
     }
     if (code == '23503') {
-      return 'لا يمكن حذف هذا العنصر لأنه مرتبط ببيانات أخرى';
+      return 'Cannot delete this item as it is referenced by other data';
     }
     if (code == 'PGRST116') {
-      return 'العنصر غير موجود';
+      return 'Item not found';
     }
     if (code == '42501') {
-      return 'ليس لديك صلاحية للقيام بهذا الإجراء';
+      return 'You do not have permission to perform this action';
     }
 
     return message;
@@ -100,13 +100,13 @@ class SupabaseException implements Exception {
     final lowerMessage = message.toLowerCase();
 
     if (lowerMessage.contains('not found')) {
-      return 'الملف غير موجود';
+      return 'File not found';
     }
     if (lowerMessage.contains('too large')) {
-      return 'حجم الملف كبير جداً';
+      return 'File size too large';
     }
     if (lowerMessage.contains('invalid')) {
-      return 'نوع الملف غير مدعوم';
+      return 'File type not supported';
     }
 
     return message;

@@ -16,7 +16,7 @@ class AddressRepositoryImpl implements AddressRepository {
   Future<Either<String, List<AddressEntity>>> getAddresses() async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       final response = await supabaseService.client
@@ -65,7 +65,7 @@ class AddressRepositoryImpl implements AddressRepository {
   }) async {
     try {
       if (_userId.isEmpty) {
-        return const Left('يرجى تسجيل الدخول أولاً');
+        return const Left('Please sign in first');
       }
 
       // If this is default, unset other defaults

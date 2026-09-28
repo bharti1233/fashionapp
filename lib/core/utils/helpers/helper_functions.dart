@@ -71,7 +71,7 @@ class THelperFunctions {
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'خدمة الموقع معطلة',
+                        'Location service is disabled',
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class THelperFunctions {
                           SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              'يرجى تفعيل خدمة الموقع في إعدادات جهازك للمتابعة',
+                              'Please enable location services in your device settings to continue',
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 color: secondaryOrange,
@@ -136,7 +136,7 @@ class THelperFunctions {
                             padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
                           child: const Text(
-                            'إلغاء',
+                            'Cancel',
                             style: TextStyle(
                               color: accentRedText,
                               fontWeight: FontWeight.bold,
@@ -165,7 +165,7 @@ class THelperFunctions {
                               ),
                               SizedBox(width: 8),
                               Text(
-                                'فتح الإعدادات',
+                                'Open Settings',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -213,7 +213,7 @@ class THelperFunctions {
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'يحتاج التطبيق إلى إذن الموقع',
+                        'App needs location permission',
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -227,7 +227,7 @@ class THelperFunctions {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'يحتاج التطبيق إلى الوصول إلى موقعك لتوفير خدمة أفضل وتحديد عنوان التسليم الخاص بك',
+                      'The app needs access to your location to provide better service and determine your delivery address',
                       textAlign: TextAlign.right,
                       style: TextStyle(fontSize: 16, color: secondaryPurple),
                     ),
@@ -248,7 +248,7 @@ class THelperFunctions {
                             padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
                           child: const Text(
-                            'لا',
+                            'No',
                             style: TextStyle(
                               color: accentRedText,
                               fontWeight: FontWeight.bold,
@@ -268,7 +268,7 @@ class THelperFunctions {
                             padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
                           child: const Text(
-                            'نعم',
+                            'Yes',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

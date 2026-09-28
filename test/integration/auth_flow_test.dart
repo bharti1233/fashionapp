@@ -135,7 +135,7 @@ void main() {
         () async {
           // Arrange
           when(() => mockSignInUsecase(any())).thenAnswer(
-            (_) async => const Left('يرجى تأكيد بريدك الإلكتروني أولاً'),
+            (_) async => const Left('Please confirm your email first'),
           );
 
           // Act

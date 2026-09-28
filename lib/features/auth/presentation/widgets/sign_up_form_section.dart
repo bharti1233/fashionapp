@@ -63,7 +63,7 @@ class _SignUpFormSectionState extends State<SignUpFormSection> {
         if (state is AuthEmailConfirmationRequired) {
           THelperFunctions.showSnackBar(
             context: context,
-            message: 'تم إرسال رابط التأكيد إلى ${state.email}',
+            message: 'Confirmation link sent to ${state.email}',
             type: SnackBarType.success,
           );
 

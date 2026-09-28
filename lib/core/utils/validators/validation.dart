@@ -59,11 +59,24 @@ class TValidator {
       return 'Phone number is required.';
     }
 
-    // Regular expression for phone number validation (assuming a 10-digit US phone number format)
-    final phoneRegExp = RegExp(r'^\d{11}$');
+    // Remove any non-digit characters for validation
+    final normalizedValue = value.replaceAll(RegExp(r'\D'), '');
 
-    if (!phoneRegExp.hasMatch(value)) {
-      return 'Invalid phone number format (11 digits required).';
+    // Indian mobile number: 10 digits, starting with 6-9
+    // Also accept +91 prefix or 0 prefix
+    final tenDigitRegExp = RegExp(r'^[6-9]\d{9}$');
+
+    // Check various valid Indian formats:
+    // 1. 10 digits starting with 6-9 (e.g., 9876543210)
+    // 2. 11 digits with leading 0 (e.g., 09876543210)
+    // 3. +91 prefix (13 chars total with +91)
+    final isValid = tenDigitRegExp.hasMatch(normalizedValue) ||
+        (normalizedValue.length == 11 && normalizedValue.startsWith('0') &&
+            tenDigitRegExp.hasMatch(normalizedValue.substring(1))) ||
+        (value.startsWith('+91') && tenDigitRegExp.hasMatch(normalizedValue.substring(3)));
+
+    if (!isValid) {
+      return 'Enter a valid 10-digit Indian mobile number.';
     }
 
     return null;

@@ -4,21 +4,21 @@ class DioExceptionHelper {
   static String handleDioError(DioException dioException) {
     switch (dioException.type) {
       case DioExceptionType.connectionTimeout:
-        return "انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.";
+        return "Connection timed out. Please check your internet connection.";
       case DioExceptionType.sendTimeout:
-        return "استغرق إرسال الطلب وقتًا طويلًا. تحقق من الإنترنت.";
+        return "Request timed out. Please check your internet connection.";
       case DioExceptionType.receiveTimeout:
-        return "الخادم استغرق وقتًا طويلًا للرد. حاول لاحقًا.";
+        return "Server took too long to respond. Please try again later.";
       case DioExceptionType.badResponse:
         return _handleBadResponse(dioException.response);
       case DioExceptionType.cancel:
-        return "تم إلغاء الطلب. حاول مرة أخرى.";
+        return "Request cancelled. Please try again.";
       case DioExceptionType.unknown:
         return dioException.message!.contains("SocketException")
-            ? "يبدو أنك غير متصل بالإنترنت. تحقق من الاتصال."
-            : "حدث خطأ غير متوقع. حاول مرة أخرى.";
+            ? "No internet connection. Please check your connection."
+            : "An unexpected error occurred. Please try again.";
       default:
-        return "حدث خطأ غير متوقع. حاول مرة أخرى.";
+        return "An unexpected error occurred. Please try again.";
     }
   }
 
@@ -26,21 +26,21 @@ class DioExceptionHelper {
     if (response != null) {
       switch (response.statusCode) {
         case 400:
-          return "طلب غير صحيح. تحقق من المدخلات.";
+          return "Bad request. Please check your input.";
         case 401:
-          return "غير مصرح. تأكد من بيانات الدخول.";
+          return "Unauthorized. Please check your credentials.";
         case 403:
-          return "تم رفض الوصول.";
+          return "Access denied.";
         case 404:
-          return "المورد غير موجود.";
+          return "Resource not found.";
         case 500:
-          return "خطأ في الخادم. حاول لاحقًا.";
+          return "Server error. Please try again later.";
         case 503:
-          return "الخدمة غير متاحة. حاول لاحقًا.";
+          return "Service unavailable. Please try again later.";
         default:
-          return "خطأ غير متوقع: ${response.statusCode}. حاول مرة أخرى.";
+          return "Unexpected error: ${response.statusCode}. Please try again.";
       }
     }
-    return "حدث خطأ غير متوقع من الخادم. حاول لاحقًا.";
+    return "An unexpected error occurred from the server. Please try again later.";
   }
 }

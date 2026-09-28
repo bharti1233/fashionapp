@@ -65,7 +65,7 @@ class CartCubit extends Cubit<CartState> {
 
     result.fold(
       (error) {
-        if (error == 'تم إزالة المنتج من السلة') {
+        if (error == 'Item removed from cart') {
           emit(CartItemRemoved(cartItemId));
         } else {
           emit(CartError(error));
