@@ -1,7 +1,7 @@
 # Phase Roadmap (CURRENT)
 
 - Phase 0 — Repository & Architecture Audit — Status: COMPLETE (+ foundation addendum `PHASE-0/FOUNDATION-DECISION.md`)
-- Phase 1 — Fashion Commerce Foundation — Status: COMPLETE (implementation; CI pending push)
+- Phase 1 — Fashion Commerce Foundation — Status: COMPLETE (implementation; CI green; release APK built)
 - Phase 2 — Personal Wardrobe — Status: PLANNED
 - Phase 3 — Outfit Builder — Status: PLANNED
 - Phase 4 — AI Stylist — Status: PLANNED
