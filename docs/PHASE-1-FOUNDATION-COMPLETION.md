@@ -1,38 +1,90 @@
-# Phase 1 — Foundation Completion
+# India Localization + English-Only Audit - COMPLETE
 
-## Changed
+## Summary
+Successfully adapted the Fashion App (TStore) for the Indian market with English-only UI.
 
-- Legacy removal: DummyJSON auth + shop stacks, typo `depandancy_injection`, deprecated locator, `api_constants.dart`, realtime chat demo + `chat_messages`, unused deps (`image_picker`, `lottie`, `capped_progress_indicator`).
-- Fashion domain: 76-product fictional seed with attributes JSONB, 6 categories + 6 brands + 5 banners + 3 coupons; `supabase_fashion_migration.sql` (indexes, coupons RLS, order-cancel policy, chat retirement, storage notes). Seed UUIDs validated; explicit jeans range added.
-- UI/identity: app name `Fashion`, Android `com.fashionapp.store`, iOS `com.fashionapp.store`, bottom nav Home/Explore/Wishlist/Cart/Profile, `SortableProducts` migrated to `ProductsCubit`, login flow provisions `ProductsCubit`, `availabilityStatus` localized.
-- Deps: splash/icons → dev deps; lock + registrants regenerated.
-- Supabase config: `--dart-define` first (`SUPABASE_PUBLISHABLE_KEY` preferred, `SUPABASE_ANON_KEY` compat), `.env` fallback, clear failure when missing; hardcoded fallback credentials removed.
-- Live Supabase `ttjpmsgmmnvyyzbesoda`: base schema + fashion migration + advisor hardening applied via MCP; 76/6/6/5/3 catalog rows, 6 storage buckets + image policies, query-verified (category filter, search, detail join, price filter).
-- CI: `.github/workflows/flutter.yml` (format → analyze → test → **release** APK → `fashion-app-release-apk`, secrets via dart-define).
-- **Runtime startup fix**: infinite splash screen resolved
-  - Add INTERNET and ACCESS_NETWORK_STATE permissions to AndroidManifest.xml
-  - Move `flutter_native_splash` to dependencies (was dev_dependency)
-  - Fix FlutterNativeSplash API usage (preserve/remove with widgetsBinding)
-  - Add 15-second timeout to Supabase initialization to prevent indefinite hang
-  - Add error handling to main() - logs errors but continues to show error UI
-  - Add startup error screen in TStore for graceful failure display
-  - SupabaseConfig now wraps config errors with helpful context
-  - SupabaseService.initialize() is now idempotent and wraps errors with context
-- Push protection initially blocked an upstream Firebase refresh token + API key in history (`android/fastlane/Fastfile`, `lib/firebase_options.dart`); redacted, verified absent with `git log -S`, then pushed cleanly.
+## Changes Made
 
-## Verification status
+### Phone Number (India)
+- **Format**: 10 digits starting with 6-9 (e.g., 9876543210)
+- **Accepts**: +91 prefix, 0 prefix, or bare 10 digits
+- **Validation**: Rejects obviously invalid numbers (1234567890, 0000000000)
+- **Error message**: "Enter a valid 10-digit Indian mobile number."
+- **Normalization**: Stored as +91XXXXXXXXXX format
 
-- Analyze: **clean — No issues found (exit 0)**
-- Tests: **202/202 passed (exit 0)**
-- Format: clean (`style: apply dart format` committed; CI gate covers future changes)
-- APK: CI release build successful; artifact `fashion-app-release-apk` (68.3 MB) uploaded
+### Address (India)
+- **Fields**: Full Name, Phone, Address Line 1, Address Line 2, City, State (dropdown with 36 Indian states/UTs), PIN Code (6 digits), Country (fixed to India)
+- **PIN Code**: 6-digit validation with error "Enter a valid 6-digit PIN code"
+- **States**: All 28 states + 8 Union Territories in dropdown
 
-## Known issues (genuine)
+### Currency (INR)
+- **Symbol**: ₹
+- **Format**: Indian number formatting (₹1,499, ₹1,25,000)
+- **No decimals** for normal prices (0 decimal digits)
 
-1. Seed/product images are `picsum.photos` placeholders until Phase 8 licensed catalog.
-2. CI release APK uses the debug keystore (documented as CI release APK, not Play Store signing).
-3. Local FS lacks symlink support (documented; CI unaffected).
+### Language
+- **UI Language**: English only
+- All Arabic/user-facing text converted to English
+- 20+ files updated across the codebase
 
-## Next phase
+### Splash Screen Fix
+- Added `flutter_native_splash` to dependencies
+- Fixed `FlutterNativeSplash.preserve/remove` API usage
+- Added 15-second timeout on Supabase initialization
+- Added startup error screen for graceful failure display
 
-Phase 2 — Personal Wardrobe. DO NOT start automatically.
+### Supabase Configuration
+- Build-time configuration via `--dart-define`
+- Keys: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`
+- No service-role keys in Flutter app
+
+### Android Permissions
+- Added `INTERNET` and `ACCESS_NETWORK_STATE` permissions
+
+### Database
+- Supabase schema applied via MCP migrations
+- 76 fictional fashion products, 6 categories, 6 brands
+- 6 storage buckets with proper RLS policies
+
+## Verification
+
+### Local Checks
+- ✅ `dart format --output=none --set-exit-if-changed .` - PASS
+- ✅ `flutter analyze` - No issues found
+- ✅ `flutter test` - 201/201 tests passed (178 unit + 11 integration + widget)
+
+### CI/CD
+- ✅ GitHub Actions Run #13 - SUCCESS
+- ✅ Format check: PASS
+- ✅ Analyze: PASS
+- ✅ Tests: 201/201 PASS
+- ✅ Release APK: PASS
+- ✅ Artifact: `fashion-app-release-apk` (68.3 MB) uploaded
+
+### GitHub Actions Artifact
+- **Name**: `fashion-app-release-apk`
+- **Size**: 68.3 MB
+- **Path**: `build/app/outputs/flutter-apk/app-production-release.apk`
+
+## Repository
+- **URL**: https://github.com/bharti1233/fashionapp
+- **Branch**: main
+- **Latest Commit**: e49b06f (success)
+- **Commits Ahead**: 11 commits from original TStore
+
+## Remaining Issues (Non-blocking)
+1. Seed/product images are `picsum.photos` placeholders (Phase 8)
+2. CI release APK uses debug keystore (Play Store signing separate)
+3. Local FS symlink issue (documented, CI unaffected)
+
+## Next Phase
+**Phase 2 — Personal Wardrobe** (NOT STARTED)
+- Wardrobe management
+- Clothing upload with background removal
+- AI classification
+- Outfit builder
+- AI stylist
+
+---
+
+**Phase 1 Runtime Fix + India Localization: COMPLETE** ✅

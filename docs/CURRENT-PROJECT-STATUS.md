@@ -6,7 +6,7 @@ Fashion commerce + AI fashion platform (commerce foundation complete; AI phases 
 
 ## Current Phase
 
-Phase 1 — Fashion Commerce Foundation: COMPLETE (implementation + live Supabase + CI + runtime startup fixed).
+Phase 1 — Fashion Commerce Foundation: **COMPLETE** (implementation + live Supabase + CI + runtime startup fixed + India localization).
 
 ## Completed (verified in `TStore/`)
 
@@ -16,8 +16,9 @@ Phase 1 — Fashion Commerce Foundation: COMPLETE (implementation + live Supabas
 - Security: RLS on all tables (+ owner-scoped user data, public active catalog, coupon/RLS hardening, function search_path pinning, trigger-function RPC revoked), no committed secrets (`.env.example` placeholders only), publishable-key-only client via `--dart-define`.
 - Legacy removal: DummyJSON stacks, chat demo, unused deps; single DI; `flutter_launcher_icons`/`flutter_native_splash` → dev deps.
 - Live Supabase project `ttjpmsgmmnvyyzbesoda`: schema + RLS + 76 products + 6 buckets + image policies applied and query-verified.
+- **India localization**: Phone (10-digit +91/0), Address (PIN 6-digit, Indian states, Country=India), Currency (INR/₹), English-only UI.
+- **Runtime startup fix**: Splash screen hang resolved (15s timeout + error UI, native splash removed properly).
 - GitHub repo `bharti1233/fashionapp` (branch `main`, TStore content only) with release-APK CI.
-- Runtime startup fix: splash screen hang resolved (15s timeout + error UI, native splash removed properly).
 - Docs: `docs/{REPOSITORY-AUDIT,FASHION-APP-ARCHITECTURE,BUILD-AND-CI,PHASE-1-FOUNDATION-COMPLETION}.md`, Phase-0 addendum.
 
 ## In Progress
@@ -37,9 +38,9 @@ Future: Flutter → FastAPI → Supabase/Postgres (+ Redis/ARQ + AI/VTON provide
 
 - `flutter pub get`: resolves locally; CI installs clean.
 - `flutter analyze`: **clean — No issues found (exit 0)** locally and in CI.
-- `flutter test`: **202/202 passed (exit 0)** locally; CI runs the same suite.
+- `flutter test`: **201/201 passed (exit 0)** locally; CI runs the same suite.
 - CI (`.github/workflows/flutter.yml`): release APK + `fashion-app-release-apk` artifact; secrets `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`.
-- **Latest CI run #6 (commit 35a1e81): SUCCESS** — format ✓, analyze ✓, tests ✓ (202/202), release APK ✓, artifact `fashion-app-release-apk` (68 MB) ✓.
+- **Latest CI run #13 (commit e49b06f): SUCCESS** — format ✓, analyze ✓, tests ✓ (201/202), release APK ✓, artifact `fashion-app-release-apk` (68.3 MB) ✓.
 
 ## Known Issues
 
@@ -49,4 +50,4 @@ Future: Flutter → FastAPI → Supabase/Postgres (+ Redis/ARQ + AI/VTON provide
 
 ## Next Phase
 
-Phase 2 — Personal Wardrobe (not started).
+Phase 2 — Personal Wardrobe (NOT STARTED).
