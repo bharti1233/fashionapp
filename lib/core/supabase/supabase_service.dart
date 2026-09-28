@@ -15,17 +15,27 @@ class SupabaseService {
 
   /// Initialize Supabase - Call this in main()
   static Future<void> initialize() async {
-    await Supabase.initialize(
-      url: SupabaseConfig.supabaseUrl,
-      anonKey: SupabaseConfig.supabaseAnonKey,
-      authOptions: const FlutterAuthClientOptions(
-        authFlowType: AuthFlowType.pkce,
-      ),
-      realtimeClientOptions: const RealtimeClientOptions(
-        logLevel: RealtimeLogLevel.info,
-      ),
-    );
-    _client = Supabase.instance.client;
+    // Prevent double initialization
+    if (_client != null) return;
+
+    try {
+      await Supabase.initialize(
+        url: SupabaseConfig.supabaseUrl,
+        anonKey: SupabaseConfig.supabaseAnonKey,
+        authOptions: const FlutterAuthClientOptions(
+          authFlowType: AuthFlowType.pkce,
+        ),
+        realtimeClientOptions: const RealtimeClientOptions(
+          logLevel: RealtimeLogLevel.info,
+        ),
+      );
+      _client = Supabase.instance.client;
+    } on StateError catch (e) {
+      // Re-throw configuration errors with context
+      throw StateError('Supabase configuration error: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to initialize Supabase: $e');
+    }
   }
 
   /// Get Supabase Client

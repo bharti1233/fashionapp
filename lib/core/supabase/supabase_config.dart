@@ -37,12 +37,28 @@ class SupabaseConfig {
   }
 
   /// Supabase Project URL
-  static String get supabaseUrl => _resolve([_urlKey], [_urlKey]);
+  static String get supabaseUrl {
+    try {
+      return _resolve([_urlKey], [_urlKey]);
+    } on StateError catch (e) {
+      // Re-throw with more context
+      throw StateError(
+        'SUPABASE_URL not configured. ${e.message}',
+      );
+    }
+  }
 
   /// Supabase publishable (anon) key — safe to expose in the client.
   /// Protected server-side by RLS; never use a service_role key here.
-  static String get supabaseAnonKey =>
-      _resolve([_publishableKey, _anonKey], [_publishableKey, _anonKey]);
+  static String get supabaseAnonKey {
+    try {
+      return _resolve([_publishableKey, _anonKey], [_publishableKey, _anonKey]);
+    } on StateError catch (e) {
+      throw StateError(
+        'SUPABASE_PUBLISHABLE_KEY (or SUPABASE_ANON_KEY) not configured. ${e.message}',
+      );
+    }
+  }
 
   // Storage bucket names
   static const String productImagesBucket = 'product-images';

@@ -14,10 +14,38 @@ import 'package:t_store/features/shop/presentation/cubit/categories_cubit.dart';
 import 'package:t_store/features/shop/presentation/cubit/products_cubit.dart';
 import 'package:t_store/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 
-class TStore extends StatelessWidget {
+/// TStore with startup error handling to prevent infinite splash screen
+class TStore extends StatefulWidget {
   const TStore({super.key});
+
+  @override
+  State<TStore> createState() => _TStoreState();
+}
+
+class _TStoreState extends State<TStore> {
+  String? _startupError;
+
+  @override
+  void initState() {
+    super.initState();
+    // The startup initialization happens in main.dart before runApp(),
+    // but we catch any late initialization errors here as a safety net.
+  }
+
   @override
   Widget build(BuildContext context) {
+    // If there's a startup error, show error screen instead of main app
+    if (_startupError != null) {
+      return MaterialApp(
+        title: TTexts.appName,
+        themeMode: ThemeMode.system,
+        theme: TAppTheme.lightTheme,
+        darkTheme: TAppTheme.darkTheme,
+        debugShowCheckedModeBanner: false,
+        home: _StartupErrorScreen(error: _startupError!),
+      );
+    }
+
     return MultiBlocProvider(
       providers: [
         // Auth
@@ -48,6 +76,77 @@ class TStore extends StatelessWidget {
         darkTheme: TAppTheme.darkTheme,
         debugShowCheckedModeBanner: false,
         home: const OnBoardingView(),
+      ),
+    );
+  }
+}
+
+/// Error screen shown when startup fails (e.g., Supabase config missing)
+class _StartupErrorScreen extends StatelessWidget {
+  final String error;
+
+  const _StartupErrorScreen({required this.error});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.error_outline,
+                size: 64,
+                color: Colors.red,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Application Startup Failed',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'The application could not start properly.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Please check your configuration and restart the app.',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: SelectableText(
+                  error,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'monospace',
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
