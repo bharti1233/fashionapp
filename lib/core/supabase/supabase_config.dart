@@ -42,9 +42,7 @@ class SupabaseConfig {
       return _resolve([_urlKey], [_urlKey]);
     } on StateError catch (e) {
       // Re-throw with more context
-      throw StateError(
-        'SUPABASE_URL not configured. ${e.message}',
-      );
+      throw StateError('SUPABASE_URL not configured. ${e.message}');
     }
   }
 
