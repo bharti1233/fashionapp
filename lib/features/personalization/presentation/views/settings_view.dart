@@ -3,6 +3,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:t_store/core/common/widgets/primary_header_container.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logs_screen.dart';
 import 'package:t_store/features/personalization/presentation/view_models/settings_menu_tile_model.dart';
 import 'package:t_store/features/personalization/presentation/views/user_addresses_view.dart';
 import 'package:t_store/features/personalization/presentation/widgets/account_settings_section.dart';
@@ -42,6 +45,20 @@ class SettingsView extends StatelessWidget {
         subtitle: "Set Image Quality To High Quality",
         leading: Iconsax.image,
         trailing: Switch(value: true, onChanged: (value) {}),
+      ),
+      SettingsMenuTileModel(
+        onTap: () {
+          AppLogger.instance.info(
+            message: 'User opened App Logs',
+            category: LogCategory.system,
+            screen: 'Settings',
+            operation: 'openAppLogs',
+          );
+          THelperFunctions.navigateToScreen(context, const AppLogsScreen());
+        },
+        title: "App Logs",
+        subtitle: "View Application Error Logs",
+        leading: Iconsax.document_text,
       ),
     ];
     final List<SettingsMenuTileModel> accountSettingsTiles = [

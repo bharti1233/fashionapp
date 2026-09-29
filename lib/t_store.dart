@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:t_store/core/cubits/banner_carousel_slider_cubit_cubit/banner_carousel_slider_cubit.dart';
 import 'package:t_store/core/dependency_injection/service_locator.dart';
 import 'package:t_store/core/utils/constants/text_strings.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 import 'package:t_store/core/utils/theme/theme.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:t_store/features/auth/presentation/logic/on_boarding/on_boarding_cubit.dart';
@@ -30,6 +31,16 @@ class _TStoreState extends State<TStore> {
     super.initState();
     // The startup initialization happens in main.dart before runApp(),
     // but we catch any late initialization errors here as a safety net.
+    _checkPreviousSession();
+  }
+
+  /// Check if previous session ended unexpectedly
+  Future<void> _checkPreviousSession() async {
+    try {
+      await AppLogger.instance.logPreviousSessionCrashIfNeeded();
+    } catch (e) {
+      // Silently handle - this is just a diagnostic check
+    }
   }
 
   @override
