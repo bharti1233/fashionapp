@@ -200,7 +200,7 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
     return Wrap(
       spacing: 8,
       children: LogLevel.values.map((level) {
-        final isSelected = levels?.contains(level) ?? false;
+        final isSelected = levels != null && levels.contains(level);
         return FilterChip(
           label: Text(level.name.toUpperCase()),
           selected: isSelected,
@@ -225,14 +225,12 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
     return Wrap(
       spacing: 8,
       children: LogCategory.values.map((category) {
-        final isSelected = categories?.contains(category) ?? false;
+        final isSelected = categories != null && categories.contains(category);
         return FilterChip(
           label: Text(category.name.toUpperCase()),
           selected: isSelected,
           onSelected: (selected) {
-            final current = Set<LogCategory>.from(
-              categories ?? <LogCategory>{},
-            );
+            final current = Set<LogCategory>.from(categories ?? <LogCategory>{});
             if (selected) {
               current.add(category);
             } else {
