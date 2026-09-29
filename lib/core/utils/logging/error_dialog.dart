@@ -9,11 +9,7 @@ class ErrorDialog extends StatelessWidget {
   final AppLogEntry entry;
   final VoidCallback? onClose;
 
-  const ErrorDialog({
-    super.key,
-    required this.entry,
-    this.onClose,
-  });
+  const ErrorDialog({super.key, required this.entry, this.onClose});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +81,8 @@ class _TechnicalDetailsSection extends StatefulWidget {
   const _TechnicalDetailsSection({required this.entry});
 
   @override
-  State<_TechnicalDetailsSection> createState() => _TechnicalDetailsSectionState();
+  State<_TechnicalDetailsSection> createState() =>
+      _TechnicalDetailsSectionState();
 }
 
 class _TechnicalDetailsSectionState extends State<_TechnicalDetailsSection> {
@@ -100,10 +97,7 @@ class _TechnicalDetailsSectionState extends State<_TechnicalDetailsSection> {
           onTap: () => setState(() => _expanded = !_expanded),
           child: Row(
             children: [
-              Icon(
-                _expanded ? Icons.expand_less : Icons.expand_more,
-                size: 20,
-              ),
+              Icon(_expanded ? Icons.expand_less : Icons.expand_more, size: 20),
               const SizedBox(width: 8),
               const Text(
                 'Show technical details',
@@ -141,10 +135,7 @@ class _TechnicalDetailsSectionState extends State<_TechnicalDetailsSection> {
               ),
               child: SelectableText(
                 widget.entry.stackTrace!,
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontFamily: 'monospace',
-                ),
+                style: const TextStyle(fontSize: 10, fontFamily: 'monospace'),
               ),
             ),
           ],
@@ -171,12 +162,7 @@ class _TechnicalDetailsSectionState extends State<_TechnicalDetailsSection> {
               ),
             ),
           ),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(fontSize: 12),
-            ),
-          ),
+          Expanded(child: Text(value, style: const TextStyle(fontSize: 12))),
         ],
       ),
     );
