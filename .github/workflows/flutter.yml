@@ -29,6 +29,25 @@ jobs:
         # Real credentials are never committed (see docs/BUILD-AND-CI.md).
         run: cp .env.example .env
 
+      - name: Validate Supabase configuration
+        # Fail early with a clear message instead of producing an APK that
+        # hangs/fails on-device. Only emptiness is checked here — values are
+        # NEVER printed (see step below for the YES-only confirmation).
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ]; then
+            echo "SUPABASE_URL is missing. Set it in repository Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          if [ -z "$SUPABASE_PUBLISHABLE_KEY" ]; then
+            echo "SUPABASE_PUBLISHABLE_KEY is missing. Set it in repository Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          echo "SUPABASE_URL configured: YES"
+          echo "SUPABASE_PUBLISHABLE_KEY configured: YES"
+
       - name: Check formatting
         run: dart format --output=none --set-exit-if-changed .
 
@@ -40,14 +59,19 @@ jobs:
 
       - name: Build Android APK (release)
         # Supabase config comes from repository secrets via build-time
-        # defines. Secrets are never printed, logged, or committed.
+        # defines. Secrets are mapped through env (never printed, logged,
+        # or committed) and validated non-empty by the earlier step, so a
+        # release APK can never again be built without configuration.
         # The production flavor is required (see android/app/build.gradle).
         # The APK is signed with the debug keystore (CI release APK);
         # Play Store production signing is a separate setup.
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: >
           flutter build apk --release --flavor production -t lib/main_production.dart
-          --dart-define=SUPABASE_URL="${{ secrets.SUPABASE_URL }}"
-          --dart-define=SUPABASE_PUBLISHABLE_KEY="${{ secrets.SUPABASE_PUBLISHABLE_KEY }}"
+          --dart-define="SUPABASE_URL=$SUPABASE_URL"
+          --dart-define="SUPABASE_PUBLISHABLE_KEY=$SUPABASE_PUBLISHABLE_KEY"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
