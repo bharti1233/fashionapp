@@ -270,8 +270,9 @@ class LogFilter {
 
   bool matches(AppLogEntry entry) {
     if (levels.isNotEmpty && !levels.contains(entry.level)) return false;
-    if (categories.isNotEmpty && !categories.contains(entry.category))
+    if (categories.isNotEmpty && !categories.contains(entry.category)) {
       return false;
+    }
     if (searchQuery != null && searchQuery!.isNotEmpty) {
       final query = searchQuery!.toLowerCase();
       if (!entry.message.toLowerCase().contains(query) &&
