@@ -230,7 +230,9 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
           label: Text(category.name.toUpperCase()),
           selected: isSelected,
           onSelected: (selected) {
-            final current = Set<LogCategory>.from(categories ?? <LogCategory>{});
+            final current = Set<LogCategory>.from(
+              categories ?? <LogCategory>{},
+            );
             if (selected) {
               current.add(category);
             } else {
