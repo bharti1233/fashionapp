@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:t_store/core/dependency_injection/service_locator.dart';
@@ -59,7 +60,7 @@ void main() async {
       stackTrace: stackTrace,
     );
     // Show error UI instead of hanging on splash
-    runApp(const _StartupErrorScreen(error: 'Supabase initialization failed'));
+    _showStartupError('Supabase initialization failed: $e');
     return;
   }
 
@@ -81,7 +82,7 @@ void main() async {
       error: e,
       stackTrace: stackTrace,
     );
-    runApp(const _StartupErrorScreen(error: 'Service initialization failed'));
+    _showStartupError('Service initialization failed: $e');
     return;
   }
 
@@ -99,10 +100,30 @@ void main() async {
     operation: 'appReady',
   );
 
-  // Remove native splash screen
-  FlutterNativeSplash.remove();
+  // Remove native splash screen. Guarded so a failure here can never
+  // skip runApp() and strand the user on the splash logo.
+  try {
+    FlutterNativeSplash.remove();
+  } catch (_) {
+    // Splash already removed or unavailable — continue to the app.
+  }
 
   runApp(const TStore());
+}
+
+/// Remove the native splash (if still present) and show the startup error UI.
+///
+/// The splash MUST be removed on every failure path: FlutterNativeSplash
+/// was preserved at startup, so showing the error screen WITHOUT removing
+/// the splash leaves the error UI hidden underneath the logo forever —
+/// which is exactly the "stuck on splash" symptom.
+void _showStartupError(String error) {
+  try {
+    FlutterNativeSplash.remove();
+  } catch (_) {
+    // Splash already removed or unavailable — error screen must still show.
+  }
+  runApp(_StartupErrorScreen(error: error));
 }
 
 /// Setup global error handlers for uncaught errors
@@ -134,11 +155,51 @@ void _setupGlobalErrorHandlers() {
   };
 }
 
-/// Error screen shown when startup fails
+/// Error screen shown when startup fails.
+/// Never leaves the user on the splash: callers must route through
+/// [_showStartupError] so the native splash is removed first.
 class _StartupErrorScreen extends StatelessWidget {
   final String error;
 
   const _StartupErrorScreen({required this.error});
+
+  void _showLogsDialog(BuildContext context) {
+    final logsText = AppLogger.instance.exportLogsAsText();
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Application Logs'),
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 320,
+            child: SingleChildScrollView(
+              child: SelectableText(
+                logsText.isEmpty ? 'No logs recorded yet.' : logsText,
+                style: const TextStyle(fontSize: 11, fontFamily: 'monospace'),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('CLOSE'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: logsText));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Logs copied to clipboard')),
+                );
+              },
+              icon: const Icon(Icons.copy, size: 18),
+              label: const Text('COPY LOG'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -194,16 +255,7 @@ class _StartupErrorScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 16),
                     OutlinedButton.icon(
-                      onPressed: () {
-                        // Navigate to app logs - for now just show snackbar
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Logs are available in Settings > App Logs',
-                            ),
-                          ),
-                        );
-                      },
+                      onPressed: () => _showLogsDialog(context),
                       icon: const Icon(Icons.description),
                       label: const Text('VIEW ERROR LOG'),
                     ),
