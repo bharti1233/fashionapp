@@ -42,14 +42,14 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
     });
   }
 
-  void _onLevelFilterChanged(Set<LogLevel>? levels) {
+  void _onLevelFilterChanged(Set<LogLevel> levels) {
     setState(() {
       _filter = _filter.copyWith(levels: levels);
       _logs = AppLogger.instance.getLogs(filter: _filter);
     });
   }
 
-  void _onCategoryFilterChanged(Set<LogCategory>? categories) {
+  void _onCategoryFilterChanged(Set<LogCategory> categories) {
     setState(() {
       _filter = _filter.copyWith(categories: categories);
       _logs = AppLogger.instance.getLogs(filter: _filter);
@@ -200,18 +200,18 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
     return Wrap(
       spacing: 8,
       children: LogLevel.values.map((level) {
-        final isSelected = levels != null && levels.contains(level);
+        final isSelected = levels.contains(level);
         return FilterChip(
           label: Text(level.name.toUpperCase()),
           selected: isSelected,
           onSelected: (selected) {
-            final current = Set<LogLevel>.from(levels ?? <LogLevel>{});
+            final current = Set<LogLevel>.from(levels);
             if (selected) {
               current.add(level);
             } else {
               current.remove(level);
             }
-            _onLevelFilterChanged(current.isEmpty ? null : current);
+            _onLevelFilterChanged(current);
           },
           selectedColor: Color(level.levelColor).withValues(alpha: 0.3),
           checkmarkColor: Color(level.levelColor),
@@ -225,20 +225,18 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
     return Wrap(
       spacing: 8,
       children: LogCategory.values.map((category) {
-        final isSelected = categories != null && categories.contains(category);
+        final isSelected = categories.contains(category);
         return FilterChip(
           label: Text(category.name.toUpperCase()),
           selected: isSelected,
           onSelected: (selected) {
-            final current = Set<LogCategory>.from(
-              categories ?? <LogCategory>{},
-            );
+            final current = Set<LogCategory>.from(categories);
             if (selected) {
               current.add(category);
             } else {
               current.remove(category);
             }
-            _onCategoryFilterChanged(current.isEmpty ? null : current);
+            _onCategoryFilterChanged(current);
           },
         );
       }).toList(),
