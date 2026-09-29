@@ -199,7 +199,9 @@ class _StartupErrorScreen extends StatelessWidget {
                         // Navigate to app logs - for now just show snackbar
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Logs are available in Settings > App Logs'),
+                            content: Text(
+                              'Logs are available in Settings > App Logs',
+                            ),
                           ),
                         );
                       },

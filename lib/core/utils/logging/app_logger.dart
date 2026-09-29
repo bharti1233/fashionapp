@@ -44,7 +44,9 @@ class AppLogger {
         _inMemoryLogs.clear();
         for (final item in decoded) {
           try {
-            _inMemoryLogs.add(AppLogEntry.fromJson(item as Map<String, dynamic>));
+            _inMemoryLogs.add(
+              AppLogEntry.fromJson(item as Map<String, dynamic>),
+            );
           } catch (_) {
             // Skip corrupted entries
           }
@@ -242,7 +244,9 @@ class AppLogger {
       if (sensitiveKeys.any((sk) => key.contains(sk))) {
         redacted[entry.key] = '[REDACTED]';
       } else if (entry.value is Map<String, dynamic>) {
-        redacted[entry.key] = _redactSensitiveData(entry.value as Map<String, dynamic>);
+        redacted[entry.key] = _redactSensitiveData(
+          entry.value as Map<String, dynamic>,
+        );
       } else {
         redacted[entry.key] = entry.value;
       }
@@ -374,7 +378,10 @@ class AppLogger {
   /// Record startup marker for crash detection
   Future<void> recordStartup() async {
     try {
-      await _prefs?.setString(_startupMarkerKey, DateTime.now().toIso8601String());
+      await _prefs?.setString(
+        _startupMarkerKey,
+        DateTime.now().toIso8601String(),
+      );
     } catch (e) {
       debugPrint('Failed to record startup: $e');
     }
@@ -471,7 +478,13 @@ class AppLogger {
     buffer.writeln(_getFlutterVersion());
     buffer.writeln();
     buffer.writeln('Environment:');
-    buffer.writeln(kReleaseMode ? 'release' : kProfileMode ? 'profile' : 'debug');
+    buffer.writeln(
+      kReleaseMode
+          ? 'release'
+          : kProfileMode
+          ? 'profile'
+          : 'debug',
+    );
     buffer.writeln();
     buffer.writeln('==================================================');
     buffer.writeln('END ERROR REPORT');

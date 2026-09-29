@@ -82,9 +82,9 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
       await AppLogger.instance.clearLogs();
       _loadLogs();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logs cleared.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Logs cleared.')));
       }
     }
   }
@@ -102,9 +102,7 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
 
   void _viewLogDetail(AppLogEntry entry) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => LogDetailScreen(entry: entry),
-      ),
+      MaterialPageRoute(builder: (context) => LogDetailScreen(entry: entry)),
     );
   }
 
@@ -232,7 +230,9 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
           label: Text(category.name.toUpperCase()),
           selected: isSelected,
           onSelected: (selected) {
-            final current = Set<LogCategory>.from(categories ?? <LogCategory>{});
+            final current = Set<LogCategory>.from(
+              categories ?? <LogCategory>{},
+            );
             if (selected) {
               current.add(category);
             } else {
@@ -353,10 +353,7 @@ class LogDetailScreen extends StatelessWidget {
                 ),
                 child: SelectableText(
                   entry.stackTrace!,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontFamily: 'monospace',
-                  ),
+                  style: const TextStyle(fontSize: 11, fontFamily: 'monospace'),
                 ),
               ),
             ],
@@ -380,10 +377,7 @@ class LogDetailScreen extends StatelessWidget {
                 ),
                 child: SelectableText(
                   entry.context.toString(),
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontFamily: 'monospace',
-                  ),
+                  style: const TextStyle(fontSize: 11, fontFamily: 'monospace'),
                 ),
               ),
             ],
@@ -420,10 +414,7 @@ class LogDetailScreen extends StatelessWidget {
               ),
               Text(
                 entry.categoryDisplay,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 14,
-                ),
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
               ),
             ],
           ),
@@ -452,10 +443,7 @@ class LogDetailScreen extends StatelessWidget {
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: SelectableText(
-            value,
-            style: const TextStyle(fontSize: 14),
-          ),
+          child: SelectableText(value, style: const TextStyle(fontSize: 14)),
         ),
       ],
     );
@@ -502,12 +490,7 @@ class LogDetailScreen extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(fontSize: 12),
-            ),
-          ),
+          Expanded(child: Text(value, style: const TextStyle(fontSize: 12))),
         ],
       ),
     );

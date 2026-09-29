@@ -1,13 +1,7 @@
 import 'package:intl/intl.dart';
 
 /// Log levels in order of severity
-enum LogLevel {
-  debug,
-  info,
-  warning,
-  error,
-  fatal,
-}
+enum LogLevel { debug, info, warning, error, fatal }
 
 /// Extension to provide color for log levels
 extension LogLevelColor on LogLevel {
@@ -116,7 +110,9 @@ class AppLogEntry {
   static String _generateId() {
     final now = DateTime.now();
     final timestamp = now.millisecondsSinceEpoch.toString();
-    final random = (DateTime.now().microsecondsSinceEpoch % 10000).toString().padLeft(4, '0');
+    final random = (DateTime.now().microsecondsSinceEpoch % 10000)
+        .toString()
+        .padLeft(4, '0');
     return '${timestamp}_$random';
   }
 
@@ -146,7 +142,9 @@ class AppLogEntry {
       id: json['id'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
       level: LogLevel.values.firstWhere((e) => e.name == json['level']),
-      category: LogCategory.values.firstWhere((e) => e.name == json['category']),
+      category: LogCategory.values.firstWhere(
+        (e) => e.name == json['category'],
+      ),
       message: json['message'] as String,
       errorType: json['errorType'] as String?,
       stackTrace: json['stackTrace'] as String?,
@@ -176,7 +174,7 @@ class AppLogEntry {
   String get shortTimestamp {
     final now = DateTime.now();
     final diff = now.difference(timestamp);
-    
+
     if (diff.inDays > 0) {
       return DateFormat('MMM d').format(timestamp);
     } else if (diff.inHours > 0) {
@@ -272,7 +270,8 @@ class LogFilter {
 
   bool matches(AppLogEntry entry) {
     if (levels.isNotEmpty && !levels.contains(entry.level)) return false;
-    if (categories.isNotEmpty && !categories.contains(entry.category)) return false;
+    if (categories.isNotEmpty && !categories.contains(entry.category))
+      return false;
     if (searchQuery != null && searchQuery!.isNotEmpty) {
       final query = searchQuery!.toLowerCase();
       if (!entry.message.toLowerCase().contains(query) &&
