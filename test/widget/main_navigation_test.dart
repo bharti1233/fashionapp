@@ -19,11 +19,9 @@ import 'package:t_store/features/shop/presentation/cubit/products_cubit.dart';
 
 class MockGetProductsUsecase extends Mock implements GetProductsUsecase {}
 
-class MockGetProductByIdUsecase extends Mock
-    implements GetProductByIdUsecase {}
+class MockGetProductByIdUsecase extends Mock implements GetProductByIdUsecase {}
 
-class MockSearchProductsUsecase extends Mock
-    implements SearchProductsUsecase {}
+class MockSearchProductsUsecase extends Mock implements SearchProductsUsecase {}
 
 class MockGetCategoriesUsecase extends Mock implements GetCategoriesUsecase {}
 
@@ -85,9 +83,7 @@ void main() {
     );
   }
 
-  testWidgets('post-login route builds NavigationMenu without errors', (
-    tester,
-  ) async {
+  testWidgets('post-login route builds without errors', (tester) async {
     await tester.pumpWidget(frame());
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
