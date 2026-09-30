@@ -10,12 +10,20 @@ import 'package:t_store/features/auth/domain/entities/user_entity.dart';
 import 'package:t_store/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
 
 class MockSignInUsecase extends Mock implements SignInUsecase {}
+
+class MockSignInWithGoogleUsecase extends Mock
+    implements SignInWithGoogleUsecase {}
+
+class MockSignInWithFacebookUsecase extends Mock
+    implements SignInWithFacebookUsecase {}
 
 class MockSignUpUsecase extends Mock implements SignUpUsecase {}
 
@@ -26,6 +34,8 @@ class MockResetPasswordUsecase extends Mock implements ResetPasswordUsecase {}
 class MockGetCurrentUserUsecase extends Mock implements GetCurrentUserUsecase {}
 
 class FakeSignUpParams extends Fake implements SignUpParams {}
+
+class FakeNoParams extends Fake implements NoParams {}
 
 /// Regression test for the reported runtime failure:
 ///
@@ -41,12 +51,15 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(FakeSignUpParams());
+    registerFallbackValue(FakeNoParams());
   });
 
   setUp(() {
     mockSignUpUsecase = MockSignUpUsecase();
     authCubit = AuthCubit(
       signInUsecase: MockSignInUsecase(),
+      signInWithGoogleUsecase: MockSignInWithGoogleUsecase(),
+      signInWithFacebookUsecase: MockSignInWithFacebookUsecase(),
       signUpUsecase: mockSignUpUsecase,
       signOutUsecase: MockSignOutUsecase(),
       resetPasswordUsecase: MockResetPasswordUsecase(),
@@ -122,6 +135,43 @@ void main() {
         expect(report, contains('CREATE_ACCOUNT_FAILURE'));
       },
     );
+  });
+
+  group('OAuth sign-in failure logging', () {
+    test('Google failure is logged, streamed, and emits AuthError', () async {
+      final mockGoogle = MockSignInWithGoogleUsecase();
+      when(
+        () => mockGoogle(any()),
+      ).thenAnswer((_) async => const Left('OAuth login failed'));
+      final cubit = AuthCubit(
+        signInUsecase: MockSignInUsecase(),
+        signInWithGoogleUsecase: mockGoogle,
+        signInWithFacebookUsecase: MockSignInWithFacebookUsecase(),
+        signUpUsecase: MockSignUpUsecase(),
+        signOutUsecase: MockSignOutUsecase(),
+        resetPasswordUsecase: MockResetPasswordUsecase(),
+        getCurrentUserUsecase: MockGetCurrentUserUsecase(),
+      );
+
+      final streamExpectation = expectLater(
+        AppLogger.instance.logStream,
+        emitsThrough(
+          isA<AppLogEntry>()
+              .having((e) => e.level, 'level', LogLevel.error)
+              .having((e) => e.category, 'category', LogCategory.authentication)
+              .having((e) => e.operation, 'operation', 'signInWithGoogle'),
+        ),
+      );
+
+      await cubit.signInWithGoogle();
+      await streamExpectation;
+      expect(cubit.state, isA<AuthError>());
+      expect(
+        AppLogger.instance.searchLogs('GOOGLE_SIGN_IN_OPERATION_FAILURE'),
+        isNotEmpty,
+      );
+      await cubit.close();
+    });
   });
 
   group('logSupabaseOperation guard', () {

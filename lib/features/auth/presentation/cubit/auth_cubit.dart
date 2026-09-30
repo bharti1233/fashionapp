@@ -3,6 +3,8 @@ import 'package:t_store/core/usecases/usecase.dart';
 import 'package:t_store/core/utils/logging/app_log_entry.dart';
 import 'package:t_store/core/utils/logging/app_logger.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
@@ -11,6 +13,8 @@ import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final SignInUsecase signInUsecase;
+  final SignInWithGoogleUsecase signInWithGoogleUsecase;
+  final SignInWithFacebookUsecase signInWithFacebookUsecase;
   final SignUpUsecase signUpUsecase;
   final SignOutUsecase signOutUsecase;
   final ResetPasswordUsecase resetPasswordUsecase;
@@ -18,6 +22,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit({
     required this.signInUsecase,
+    required this.signInWithGoogleUsecase,
+    required this.signInWithFacebookUsecase,
     required this.signUpUsecase,
     required this.signOutUsecase,
     required this.resetPasswordUsecase,
@@ -109,6 +115,59 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthEmailConfirmationRequired(email));
       },
     );
+  }
+
+  /// Google OAuth sign-in. The provider opens in a browser and returns
+  /// through the app deep link; success lands in [checkAuthStatus].
+  Future<void> signInWithGoogle() async {
+    emit(AuthLoading());
+
+    AppLogger.instance.info(
+      message: 'Google sign-in operation started',
+      category: LogCategory.authentication,
+      event: 'GOOGLE_SIGN_IN_START',
+      screen: 'AuthCubit',
+      operation: 'signInWithGoogle',
+    );
+
+    final result = await signInWithGoogleUsecase(const NoParams());
+
+    result.fold((error) {
+      AppLogger.instance.error(
+        message: 'Google sign-in operation failed: $error',
+        category: LogCategory.authentication,
+        event: 'GOOGLE_SIGN_IN_OPERATION_FAILURE',
+        screen: 'AuthCubit',
+        operation: 'signInWithGoogle',
+      );
+      emit(AuthError(error));
+    }, (_) => checkAuthStatus());
+  }
+
+  /// Facebook OAuth sign-in. Same deep-link return path as Google.
+  Future<void> signInWithFacebook() async {
+    emit(AuthLoading());
+
+    AppLogger.instance.info(
+      message: 'Facebook sign-in operation started',
+      category: LogCategory.authentication,
+      event: 'FACEBOOK_SIGN_IN_START',
+      screen: 'AuthCubit',
+      operation: 'signInWithFacebook',
+    );
+
+    final result = await signInWithFacebookUsecase(const NoParams());
+
+    result.fold((error) {
+      AppLogger.instance.error(
+        message: 'Facebook sign-in operation failed: $error',
+        category: LogCategory.authentication,
+        event: 'FACEBOOK_SIGN_IN_OPERATION_FAILURE',
+        screen: 'AuthCubit',
+        operation: 'signInWithFacebook',
+      );
+      emit(AuthError(error));
+    }, (_) => checkAuthStatus());
   }
 
   Future<void> signOut() async {

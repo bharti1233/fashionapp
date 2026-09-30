@@ -5,6 +5,8 @@ import 'package:t_store/core/supabase/supabase_service.dart';
 import 'package:t_store/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:t_store/features/auth/domain/repositories/auth_repository.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
@@ -106,6 +108,8 @@ Future<void> setupServiceLocator() async {
 
   // Use Cases
   sl.registerLazySingleton(() => SignInUsecase(sl()));
+  sl.registerLazySingleton(() => SignInWithGoogleUsecase(sl()));
+  sl.registerLazySingleton(() => SignInWithFacebookUsecase(sl()));
   sl.registerLazySingleton(() => SignUpUsecase(sl()));
   sl.registerLazySingleton(() => SignOutUsecase(sl()));
   sl.registerLazySingleton(() => ResetPasswordUsecase(sl()));
@@ -115,6 +119,8 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory(
     () => AuthCubit(
       signInUsecase: sl(),
+      signInWithGoogleUsecase: sl(),
+      signInWithFacebookUsecase: sl(),
       signUpUsecase: sl(),
       signOutUsecase: sl(),
       resetPasswordUsecase: sl(),

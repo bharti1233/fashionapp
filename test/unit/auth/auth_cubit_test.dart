@@ -5,6 +5,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:t_store/core/usecases/usecase.dart';
 import 'package:t_store/features/auth/domain/entities/user_entity.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
@@ -14,6 +16,12 @@ import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
 
 // Mocks
 class MockSignInUsecase extends Mock implements SignInUsecase {}
+
+class MockSignInWithGoogleUsecase extends Mock
+    implements SignInWithGoogleUsecase {}
+
+class MockSignInWithFacebookUsecase extends Mock
+    implements SignInWithFacebookUsecase {}
 
 class MockSignUpUsecase extends Mock implements SignUpUsecase {}
 
@@ -53,6 +61,8 @@ void main() {
 
     authCubit = AuthCubit(
       signInUsecase: mockSignInUsecase,
+      signInWithGoogleUsecase: MockSignInWithGoogleUsecase(),
+      signInWithFacebookUsecase: MockSignInWithFacebookUsecase(),
       signUpUsecase: mockSignUpUsecase,
       signOutUsecase: mockSignOutUsecase,
       resetPasswordUsecase: mockResetPasswordUsecase,
