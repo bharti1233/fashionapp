@@ -85,7 +85,7 @@ class _CartViewState extends State<CartView> {
                   const SizedBox(height: TSizes.spaceBtwSections),
                   Text(
                     'Subtotal (${state.itemCount} items): '
-                    '${TFormatter.formatPrice(total)}',
+                    TFormatter.formatPrice(total),
                     textAlign: TextAlign.end,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),

@@ -27,7 +27,7 @@ class BillingAmountSection extends StatelessWidget {
           children: [
             Text('Subtotal', style: Theme.of(context).textTheme.bodyMedium),
             Text(
-              '${TFormatter.formatPrice(subtotal)}',
+              TFormatter.formatPrice(subtotal),
               style: Theme.of(context).textTheme.labelLarge,
             ),
           ],
@@ -40,7 +40,7 @@ class BillingAmountSection extends StatelessWidget {
             Text(
               shippingCost == 0
                   ? 'Free'
-                  : '${TFormatter.formatPrice(shippingCost)}',
+                  : TFormatter.formatPrice(shippingCost),
               style: Theme.of(context).textTheme.labelLarge,
             ),
           ],
@@ -69,7 +69,7 @@ class BillingAmountSection extends StatelessWidget {
           children: [
             Text('Order Total', style: Theme.of(context).textTheme.bodyMedium),
             Text(
-              '${TFormatter.formatPrice(total)}',
+              TFormatter.formatPrice(total),
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],

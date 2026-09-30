@@ -100,7 +100,7 @@ class OrderListItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                             Text(
-                              '${TFormatter.formatPrice(order.total)}',
+                              TFormatter.formatPrice(order.total),
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                           ],
