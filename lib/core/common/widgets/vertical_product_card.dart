@@ -29,7 +29,10 @@ class VerticalProductCard extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
     return GestureDetector(
       onTap: () {
-        THelperFunctions.navigateToScreen(context, const ProductDetailsView());
+        THelperFunctions.navigateToScreen(
+          context,
+          ProductDetailsView(product: product),
+        );
       },
       child: Container(
         width: 180,

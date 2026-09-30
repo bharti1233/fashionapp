@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:t_store/core/common/view_models/category_tab_view_model.dart';
 import 'package:t_store/core/common/view_models/grid_layout_view_model.dart';
 import 'package:t_store/core/common/view_models/section_heading_view_model.dart';
-import 'package:t_store/core/common/widgets/brand_showcase.dart';
 import 'package:t_store/core/common/widgets/section_heading.dart';
 import 'package:t_store/core/common/widgets/vertical_product_card.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/features/auth/presentation/widgets/grid_layout.dart';
-import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 
+/// One store category tab: a "You Might Like" grid of REAL backend
+/// products for the category. Shows an honest empty state when the
+/// category has no (image-bearing) products instead of fabricating cards.
 class CategoryTab extends StatelessWidget {
   const CategoryTab({super.key, required this.categoryTabModel});
 
@@ -16,53 +17,48 @@ class CategoryTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A card cannot render without an image: only image-bearing rows
+    // reach the grid. The count shown is always the real visible count.
+    final products = categoryTabModel.products
+        .where((p) => p.images.isNotEmpty)
+        .toList();
+
     return Padding(
       padding: const EdgeInsets.all(TSizes.defaultSpace),
       child: SingleChildScrollView(
         child: Column(
           children: [
-            // Check if brandShowcaseModel exists before using it
-            BrandShowcase(categoryTabModel.brandShowcaseModel),
-            const SizedBox(height: TSizes.spaceBtwItems),
             SectionHeading(
               sectionHeadingModel: SectionHeadingModel(
-                title: "You Might Like",
+                title: 'You Might Like',
                 showActionButton: true,
                 actionButtonOnPressed: () {},
               ),
             ),
             const SizedBox(height: TSizes.spaceBtwItems),
-            GridLayout(
-              gridLayoutModel: GridLayoutModel(
-                // Ensure products list is not null and handle bounds
-                itemCount: (categoryTabModel.products.length) > 50
-                    ? categoryTabModel.products.length - 50
-                    : categoryTabModel.products.length,
-                itemBuilder: (context, index) {
-                  // Ensure index is within bounds
-                  if (index >= 0 && index < categoryTabModel.products.length) {
-                    return VerticalProductCard(
-                      product: ProductEntity(
-                        id: index.toString(),
-                        name: "Product $index",
-                        price: 100,
-                        images: const ["https://picsum.photos/200"],
-                        categoryId: "category-$index",
-                        description: "Description $index",
-                        rating: 4.5,
-                        stock: 5,
-                        thumbnail: "https://picsum.photos/200",
-                        brandName: "Brand $index",
-                        categoryName: "Category $index",
-                      ),
-                    );
-                  }
-                  // Return an empty container if index is out of bounds
-                  return Container();
-                },
-                mainAxisExtent: 280,
+            if (products.isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: TSizes.spaceBtwSections,
+                ),
+                child: Text(
+                  'No products in this category yet.',
+                  style: TextStyle(color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+              )
+            else
+              GridLayout(
+                gridLayoutModel: GridLayoutModel(
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    return VerticalProductCard(product: products[index]);
+                  },
+                  // Taller than the legacy 280 extent so real two-line
+                  // product titles never overflow the card.
+                  mainAxisExtent: 300,
+                ),
               ),
-            ),
             const SizedBox(height: TSizes.spaceBtwSections),
           ],
         ),

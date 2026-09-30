@@ -1,47 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:t_store/core/common/view_models/circular_container_view_model.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:t_store/core/common/view_models/section_heading_view_model.dart';
-import 'package:t_store/core/common/widgets/circular_container.dart';
 import 'package:t_store/core/common/widgets/section_heading.dart';
-import 'package:t_store/core/utils/constants/colors.dart';
-import 'package:t_store/core/utils/constants/image_strings.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
-import 'package:t_store/core/utils/helpers/helper_functions.dart';
 
+/// Payment method selection. Cash on Delivery is the only available
+/// method: there is no payment SDK integrated, so online payment is
+/// explicitly marked unavailable instead of faking a success.
 class BillingPaymentSection extends StatelessWidget {
-  const BillingPaymentSection({super.key});
+  final String selectedMethod;
+  final ValueChanged<String>? onMethodSelected;
+
+  const BillingPaymentSection({
+    super.key,
+    this.selectedMethod = 'Cash on Delivery',
+    this.onMethodSelected,
+  });
+
+  static const String cashOnDelivery = 'Cash on Delivery';
 
   @override
   Widget build(BuildContext context) {
-    final dark = THelperFunctions.isDarkMode(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeading(
           sectionHeadingModel: SectionHeadingModel(
-            title: "Payment Method",
+            title: 'Payment Method',
             actionButtonOnPressed: () {},
-            showActionButton: true,
-            actionButtonTitle: "Change",
+            showActionButton: false,
           ),
         ),
         const SizedBox(height: TSizes.spaceBtwItems / 2),
-        Row(
-          children: [
-            CircularContainer(
-              circularContainerModel: CircularContainerModel(
-                width: 60,
-                height: 35,
-                color: dark ? TColors.light : TColors.white,
-                padding: const EdgeInsets.all(TSizes.sm),
-                child: const Image(
-                  image: AssetImage(TImages.paypal),
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            const SizedBox(width: TSizes.spaceBtwItems / 2),
-            Text("Paypal", style: Theme.of(context).textTheme.bodyLarge),
-          ],
+        RadioListTile<String>(
+          value: cashOnDelivery,
+          groupValue: selectedMethod,
+          onChanged: (value) => onMethodSelected?.call(value ?? cashOnDelivery),
+          title: const Text('Cash on Delivery'),
+          subtitle: const Text('Pay when your order arrives'),
+          secondary: const Icon(Iconsax.money),
+          contentPadding: EdgeInsets.zero,
+          dense: true,
+        ),
+        const SizedBox(height: TSizes.spaceBtwItems / 2),
+        const Text(
+          'Online payment (UPI, cards) is not integrated yet.',
+          style: TextStyle(fontSize: 12, color: Colors.grey),
         ),
       ],
     );

@@ -10,6 +10,8 @@ import 'package:t_store/features/auth/domain/usecases/sign_in_with_google_usecas
 import 'package:t_store/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/resend_confirmation_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/update_password_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
 
@@ -38,6 +40,11 @@ import 'package:t_store/features/shop/data/repositories/banner_repository_impl.d
 import 'package:t_store/features/shop/domain/repositories/banner_repository.dart';
 import 'package:t_store/features/shop/domain/usecases/get_banners_usecase.dart';
 import 'package:t_store/features/shop/presentation/cubit/banners_cubit.dart';
+
+// Coupons
+import 'package:t_store/features/shop/data/repositories/coupon_repository_impl.dart';
+import 'package:t_store/features/shop/domain/repositories/coupon_repository.dart';
+import 'package:t_store/features/shop/domain/usecases/validate_coupon_usecase.dart';
 
 // Cart
 import 'package:t_store/features/cart/data/repositories/cart_repository_impl.dart';
@@ -113,6 +120,8 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => SignUpUsecase(sl()));
   sl.registerLazySingleton(() => SignOutUsecase(sl()));
   sl.registerLazySingleton(() => ResetPasswordUsecase(sl()));
+  sl.registerLazySingleton(() => ResendConfirmationUsecase(sl()));
+  sl.registerLazySingleton(() => UpdatePasswordUsecase(sl()));
   sl.registerLazySingleton(() => GetCurrentUserUsecase(sl()));
 
   // Cubit
@@ -124,6 +133,8 @@ Future<void> setupServiceLocator() async {
       signUpUsecase: sl(),
       signOutUsecase: sl(),
       resetPasswordUsecase: sl(),
+      resendConfirmationUsecase: sl(),
+      updatePasswordUsecase: sl(),
       getCurrentUserUsecase: sl(),
     ),
   );
@@ -183,6 +194,12 @@ Future<void> setupServiceLocator() async {
 
   // Cubit
   sl.registerFactory(() => BannersCubit(getBannersUsecase: sl()));
+
+  // ==================== Coupons ====================
+  sl.registerLazySingleton<CouponRepository>(
+    () => CouponRepositoryImpl(supabaseService: sl()),
+  );
+  sl.registerLazySingleton(() => ValidateCouponUsecase(sl()));
 
   // ==================== Cart ====================
   // Repository

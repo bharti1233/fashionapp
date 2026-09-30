@@ -8,6 +8,8 @@ import 'package:t_store/features/auth/domain/usecases/sign_in_with_google_usecas
 import 'package:t_store/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/resend_confirmation_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/update_password_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
 
@@ -18,6 +20,8 @@ class AuthCubit extends Cubit<AuthState> {
   final SignUpUsecase signUpUsecase;
   final SignOutUsecase signOutUsecase;
   final ResetPasswordUsecase resetPasswordUsecase;
+  final ResendConfirmationUsecase resendConfirmationUsecase;
+  final UpdatePasswordUsecase updatePasswordUsecase;
   final GetCurrentUserUsecase getCurrentUserUsecase;
 
   AuthCubit({
@@ -27,6 +31,8 @@ class AuthCubit extends Cubit<AuthState> {
     required this.signUpUsecase,
     required this.signOutUsecase,
     required this.resetPasswordUsecase,
+    required this.resendConfirmationUsecase,
+    required this.updatePasswordUsecase,
     required this.getCurrentUserUsecase,
   }) : super(AuthInitial());
 
@@ -202,6 +208,73 @@ class AuthCubit extends Cubit<AuthState> {
       );
       emit(AuthError(error));
     }, (_) => emit(AuthPasswordResetSent(email)));
+  }
+
+  /// Resends the signup confirmation email. Never logs the email body or
+  /// any credential — only the operation outcome.
+  Future<void> resendConfirmation(String email) async {
+    AppLogger.instance.info(
+      message: 'Resend confirmation started',
+      category: LogCategory.authentication,
+      event: 'RESEND_CONFIRMATION_START',
+      screen: 'AuthCubit',
+      operation: 'resendConfirmation',
+    );
+
+    final result = await resendConfirmationUsecase(email);
+
+    result.fold(
+      (error) {
+        AppLogger.instance.error(
+          message: 'Resend confirmation failed: $error',
+          category: LogCategory.authentication,
+          event: 'RESEND_CONFIRMATION_FAILURE',
+          screen: 'AuthCubit',
+          operation: 'resendConfirmation',
+        );
+        emit(AuthError(error));
+      },
+      (_) {
+        AppLogger.instance.info(
+          message: 'Resend confirmation succeeded',
+          category: LogCategory.authentication,
+          event: 'RESEND_CONFIRMATION_SUCCESS',
+          screen: 'AuthCubit',
+          operation: 'resendConfirmation',
+        );
+        emit(AuthConfirmationResent(email));
+      },
+    );
+  }
+
+  /// Updates the password. The new password value is never logged.
+  Future<void> updatePassword(String newPassword) async {
+    emit(AuthLoading());
+
+    final result = await updatePasswordUsecase(newPassword);
+
+    result.fold(
+      (error) {
+        AppLogger.instance.error(
+          message: 'Password update failed',
+          category: LogCategory.authentication,
+          event: 'UPDATE_PASSWORD_FAILURE',
+          screen: 'AuthCubit',
+          operation: 'updatePassword',
+        );
+        emit(AuthError(error));
+      },
+      (_) {
+        AppLogger.instance.info(
+          message: 'Password updated successfully',
+          category: LogCategory.authentication,
+          event: 'UPDATE_PASSWORD_SUCCESS',
+          screen: 'AuthCubit',
+          operation: 'updatePassword',
+        );
+        emit(AuthPasswordUpdated());
+      },
+    );
   }
 
   void clearError() {

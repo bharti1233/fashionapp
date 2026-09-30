@@ -9,6 +9,11 @@ import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:t_store/features/auth/presentation/logic/on_boarding/on_boarding_cubit.dart';
 import 'package:t_store/features/auth/presentation/views/on_boarding/on_boarding_view.dart';
 import 'package:t_store/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:t_store/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:t_store/features/orders/presentation/cubit/orders_cubit.dart';
+import 'package:t_store/features/personalization/presentation/cubit/addresses_cubit.dart';
+import 'package:t_store/features/personalization/presentation/cubit/profile_cubit.dart';
+import 'package:t_store/features/reviews/presentation/cubit/reviews_cubit.dart';
 import 'package:t_store/features/shop/presentation/cubit/banners_cubit.dart';
 import 'package:t_store/features/shop/presentation/cubit/brands_cubit.dart';
 import 'package:t_store/features/shop/presentation/cubit/categories_cubit.dart';
@@ -71,6 +76,19 @@ class _TStoreState extends State<TStore> {
         // Cart & Wishlist
         BlocProvider<CartCubit>(create: (_) => sl<CartCubit>()),
         BlocProvider<WishlistCubit>(create: (_) => sl<WishlistCubit>()),
+
+        // Orders
+        BlocProvider<OrdersCubit>(create: (_) => sl<OrdersCubit>()),
+
+        // Personalization
+        BlocProvider<AddressesCubit>(create: (_) => sl<AddressesCubit>()),
+        BlocProvider<ProfileCubit>(create: (_) => sl<ProfileCubit>()),
+
+        // Reviews & Notifications
+        BlocProvider<ReviewsCubit>(create: (_) => sl<ReviewsCubit>()),
+        BlocProvider<NotificationsCubit>(
+          create: (_) => sl<NotificationsCubit>(),
+        ),
 
         // OnBoarding
         BlocProvider<OnBoardingCubit>(create: (_) => OnBoardingCubit()),

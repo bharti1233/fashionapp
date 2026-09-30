@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:t_store/core/common/widgets/navigation_menu.dart';
-import 'package:t_store/core/cubits/navigation_menu_cubit/navigation_menu_cubit.dart';
 import 'package:t_store/core/enums/status.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/core/utils/constants/text_strings.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
-import 'package:t_store/core/dependency_injection/service_locator.dart';
+import 'package:t_store/core/utils/helpers/main_navigation.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
 import 'package:t_store/features/auth/presentation/views/password_configuration/forget_password_view.dart';
 import 'package:t_store/features/auth/presentation/views/signup/sign_up_view.dart';
-import 'package:t_store/features/shop/presentation/cubit/products_cubit.dart';
+import 'package:t_store/features/auth/presentation/views/signup/verify_email_view.dart';
 
 class LoginFormSection extends StatefulWidget {
   const LoginFormSection({super.key});
@@ -57,20 +55,7 @@ class _LoginFormSectionState extends State<LoginFormSection> {
 
           THelperFunctions.navigateReplacementToScreen(
             context,
-            MultiBlocProvider(
-              providers: [
-                BlocProvider(create: (context) => sl<NavigationMenuCubit>()),
-                BlocProvider.value(
-                  value: sl<ProductsCubit>()
-                    ..getProducts(
-                      sortBy: 'rating',
-                      ascending: false,
-                      refresh: true,
-                    ),
-                ),
-              ],
-              child: const NavigationMenu(),
-            ),
+            buildMainNavigation(),
           );
         } else if (state is AuthError) {
           THelperFunctions.showSnackBar(
@@ -79,10 +64,9 @@ class _LoginFormSectionState extends State<LoginFormSection> {
             type: SnackBarType.error,
           );
         } else if (state is AuthEmailConfirmationRequired) {
-          THelperFunctions.showSnackBar(
-            context: context,
-            message: 'Please confirm your email: ${state.email}',
-            type: SnackBarType.warning,
+          THelperFunctions.navigateReplacementToScreen(
+            context,
+            VerifyEmailView(email: state.email),
           );
         }
       },

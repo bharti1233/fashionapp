@@ -9,6 +9,8 @@ import 'package:t_store/core/utils/logging/operation_logger.dart';
 import 'package:t_store/features/auth/domain/entities/user_entity.dart';
 import 'package:t_store/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/resend_confirmation_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/update_password_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
@@ -30,6 +32,11 @@ class MockSignUpUsecase extends Mock implements SignUpUsecase {}
 class MockSignOutUsecase extends Mock implements SignOutUsecase {}
 
 class MockResetPasswordUsecase extends Mock implements ResetPasswordUsecase {}
+
+class MockResendConfirmationUsecase extends Mock
+    implements ResendConfirmationUsecase {}
+
+class MockUpdatePasswordUsecase extends Mock implements UpdatePasswordUsecase {}
 
 class MockGetCurrentUserUsecase extends Mock implements GetCurrentUserUsecase {}
 
@@ -63,6 +70,8 @@ void main() {
       signUpUsecase: mockSignUpUsecase,
       signOutUsecase: MockSignOutUsecase(),
       resetPasswordUsecase: MockResetPasswordUsecase(),
+      resendConfirmationUsecase: MockResendConfirmationUsecase(),
+      updatePasswordUsecase: MockUpdatePasswordUsecase(),
       getCurrentUserUsecase: MockGetCurrentUserUsecase(),
     );
   });
@@ -150,6 +159,8 @@ void main() {
         signUpUsecase: MockSignUpUsecase(),
         signOutUsecase: MockSignOutUsecase(),
         resetPasswordUsecase: MockResetPasswordUsecase(),
+        resendConfirmationUsecase: MockResendConfirmationUsecase(),
+        updatePasswordUsecase: MockUpdatePasswordUsecase(),
         getCurrentUserUsecase: MockGetCurrentUserUsecase(),
       );
 
@@ -170,6 +181,43 @@ void main() {
         AppLogger.instance.searchLogs('GOOGLE_SIGN_IN_OPERATION_FAILURE'),
         isNotEmpty,
       );
+      await cubit.close();
+    });
+  });
+
+  group('logSupabaseOperation guard', () {
+    test('password resend and update flows log outcomes', () async {
+      final mockResend = MockResendConfirmationUsecase();
+      final mockUpdate = MockUpdatePasswordUsecase();
+      when(() => mockResend(any())).thenAnswer((_) async => const Right(null));
+      when(() => mockUpdate(any())).thenAnswer((_) async => const Right(null));
+      final cubit = AuthCubit(
+        signInUsecase: MockSignInUsecase(),
+        signInWithGoogleUsecase: MockSignInWithGoogleUsecase(),
+        signInWithFacebookUsecase: MockSignInWithFacebookUsecase(),
+        signUpUsecase: MockSignUpUsecase(),
+        signOutUsecase: MockSignOutUsecase(),
+        resetPasswordUsecase: MockResetPasswordUsecase(),
+        resendConfirmationUsecase: mockResend,
+        updatePasswordUsecase: mockUpdate,
+        getCurrentUserUsecase: MockGetCurrentUserUsecase(),
+      );
+
+      await cubit.resendConfirmation('a@b.com');
+      expect(cubit.state, isA<AuthConfirmationResent>());
+      expect(
+        AppLogger.instance.searchLogs('RESEND_CONFIRMATION_SUCCESS'),
+        isNotEmpty,
+      );
+
+      await cubit.updatePassword('new-secret-123');
+      expect(cubit.state, isA<AuthPasswordUpdated>());
+      expect(
+        AppLogger.instance.searchLogs('UPDATE_PASSWORD_SUCCESS'),
+        isNotEmpty,
+      );
+      // The password value itself must never reach the logs.
+      expect(AppLogger.instance.searchLogs('new-secret-123'), isEmpty);
       await cubit.close();
     });
   });

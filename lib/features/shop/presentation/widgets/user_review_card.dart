@@ -1,85 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:t_store/core/common/view_models/circular_container_view_model.dart';
-import 'package:t_store/core/common/widgets/circular_container.dart';
+import 'package:intl/intl.dart';
+import 'package:t_store/features/shop/presentation/widgets/custom_rating_bar_indicator.dart';
 import 'package:t_store/core/common/widgets/read_more.dart';
-import 'package:t_store/core/utils/constants/colors.dart';
-import 'package:t_store/core/utils/constants/image_strings.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
-import 'package:t_store/features/shop/presentation/widgets/custom_rating_bar_indicator.dart';
+import 'package:t_store/features/reviews/domain/entities/review_entity.dart';
 
+/// One real customer review from Supabase. No placeholder names, dates,
+/// or lorem text.
 class UserReviewCard extends StatelessWidget {
-  const UserReviewCard({super.key});
+  final ReviewEntity review;
+
+  const UserReviewCard({super.key, required this.review});
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    final date = review.createdAt != null
+        ? DateFormat('dd MMM, yyyy').format(review.createdAt!)
+        : '';
+    final title = (review.title ?? '').isNotEmpty
+        ? review.title!
+        : (review.comment ?? '');
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                const CircleAvatar(
-                  backgroundImage: AssetImage(TImages.userProfileImage2),
+                CircleAvatar(
+                  backgroundColor: dark ? Colors.grey[800] : Colors.grey[300],
+                  child: Text(
+                    _initial(review.userName),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const SizedBox(width: TSizes.spaceBtwItems),
-                Text(
-                  "Mahmoud Hamdy",
-                  style: Theme.of(context).textTheme.titleLarge,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        review.userName?.isNotEmpty == true
+                            ? review.userName!
+                            : 'Verified buyer',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      if (review.isVerifiedPurchase)
+                        Text(
+                          'Verified purchase',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.labelSmall?.copyWith(color: Colors.green),
+                        ),
+                    ],
+                  ),
                 ),
               ],
             ),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
           ],
         ),
-        const SizedBox(width: TSizes.spaceBtwItems),
+        const SizedBox(height: TSizes.spaceBtwItems / 2),
         Row(
           children: [
-            const CustomRatingBarIndicator(rating: 4.5),
+            CustomRatingBarIndicator(rating: review.rating.toDouble()),
             const SizedBox(width: TSizes.spaceBtwItems),
-            Text("01 Aug, 2022", style: Theme.of(context).textTheme.bodyMedium),
+            if (date.isNotEmpty)
+              Text(date, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
-        const SizedBox(height: TSizes.spaceBtwItems),
-        const ReadMore(
-          text:
-              "mahmoud hamdy fathy elashwah fluttei major to make backword by etoo in pes 6 ",
-        ),
-        const SizedBox(height: TSizes.spaceBtwItems),
-        CircularContainer(
-          circularContainerModel: CircularContainerModel(
-            color: dark ? TColors.darkerGrey : TColors.grey,
-            child: Padding(
-              padding: const EdgeInsets.all(TSizes.md),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "T_Store ",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      Text(
-                        "02 Aug, 2022",
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwItems),
-                  const ReadMore(
-                    text:
-                        "mahmoud hamdy fathy elashwah flutter developer at myself and i major to make backword by etoo in pes 6 ",
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        if (title.isNotEmpty) ...[
+          const SizedBox(height: TSizes.spaceBtwItems),
+          ReadMore(text: title),
+        ],
         const SizedBox(height: TSizes.spaceBtwSections),
       ],
     );
+  }
+
+  String _initial(String? name) {
+    if (name == null || name.isEmpty) return '•';
+    return name[0].toUpperCase();
   }
 }

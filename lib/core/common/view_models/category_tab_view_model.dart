@@ -1,14 +1,10 @@
-import 'package:t_store/core/common/view_models/brand_showcase_view_model.dart';
+import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 
+/// Data for one store category tab. All values come from the backend —
+/// products are real Supabase rows filtered by category, never fabricated.
 class CategoryTabModel {
-  final BrandShowcaseModel brandShowcaseModel;
-
-  final List<String> products;
+  final List<ProductEntity> products;
   final String categoryTitle;
 
-  CategoryTabModel({
-    required this.brandShowcaseModel,
-    required this.products,
-    required this.categoryTitle,
-  });
+  CategoryTabModel({required this.products, required this.categoryTitle});
 }

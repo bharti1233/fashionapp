@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:t_store/core/common/view_models/brand_title_with_verification_view_model.dart';
-import 'package:t_store/core/common/view_models/circular_container_view_model.dart';
 import 'package:t_store/core/common/view_models/circular_icon_view_model.dart';
+import 'package:t_store/core/common/view_models/circular_container_view_model.dart';
 import 'package:t_store/core/common/view_models/product_price_text_view_model.dart';
 import 'package:t_store/core/common/view_models/product_title_text_view_model.dart';
 import 'package:t_store/core/common/view_models/rounded_image_view_model.dart';
-import 'package:t_store/core/common/widgets/add_to_cart_container.dart';
 import 'package:t_store/core/common/widgets/brand_title_with_verification.dart';
+import 'package:t_store/core/common/view_models/brand_title_with_verification_view_model.dart';
 import 'package:t_store/core/common/widgets/circular_container.dart';
 import 'package:t_store/core/common/widgets/circular_icon.dart';
 import 'package:t_store/core/common/widgets/product_price_text.dart';
@@ -15,20 +15,37 @@ import 'package:t_store/core/common/widgets/product_title_text.dart';
 import 'package:t_store/core/common/widgets/rounded_image.dart';
 import 'package:t_store/core/common/widgets/sale_tag.dart';
 import 'package:t_store/core/utils/constants/colors.dart';
-import 'package:t_store/core/utils/constants/image_strings.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
+import 'package:t_store/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:t_store/features/cart/presentation/cubit/cart_state.dart';
+import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 import 'package:t_store/features/shop/presentation/views/product_details_view.dart';
+import 'package:t_store/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 
+/// Horizontal product card for a REAL backend [product].
+/// Tap opens real details; heart toggles the real wishlist; + adds one
+/// unit to the real cart.
 class HorizontalProductCard extends StatelessWidget {
-  const HorizontalProductCard({super.key});
+  final ProductEntity product;
+
+  const HorizontalProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    final image = product.images.isNotEmpty
+        ? product.images.first
+        : product.thumbnail ?? '';
+    final discount = product.salePrice != null && product.price > 0
+        ? ((product.price - product.salePrice!) / product.price * 100).round()
+        : 0;
     return GestureDetector(
       onTap: () {
-        THelperFunctions.navigateToScreen(context, const ProductDetailsView());
+        THelperFunctions.navigateToScreen(
+          context,
+          ProductDetailsView(product: product),
+        );
       },
       child: Container(
         width: 310,
@@ -55,21 +72,31 @@ class HorizontalProductCard extends StatelessWidget {
                         roundedImageModel: RoundedImageModel(
                           applyImageRadius: true,
                           backgroundColor: dark ? TColors.dark : TColors.light,
-                          image: TImages.productImage11,
+                          image: image,
+                          isNetworkImage: image.isNotEmpty,
                         ),
                       ),
                     ),
-                    const Positioned(
-                      top: 12,
-                      child: SaleTag(discountPercentage: 20),
-                    ),
+                    if (discount > 0)
+                      Positioned(
+                        top: 12,
+                        child: SaleTag(discountPercentage: discount.toDouble()),
+                      ),
                     Positioned(
                       top: 0,
                       right: 0,
                       child: CircularIcon(
                         circularIconModel: CircularIconModel(
-                          icon: Iconsax.heart5,
+                          icon:
+                              context.watch<WishlistCubit>().isInWishlist(
+                                product.id,
+                              )
+                              ? Iconsax.heart5
+                              : Iconsax.heart,
                           color: Colors.red,
+                          onPressed: () => context
+                              .read<WishlistCubit>()
+                              .toggleWishlist(product.id),
                         ),
                       ),
                     ),
@@ -88,17 +115,18 @@ class HorizontalProductCard extends StatelessWidget {
                       children: [
                         ProductTitleText(
                           productTitleTextModel: ProductTitleTextModel(
-                            title: "Green Nike hood t-shirt for men",
+                            title: product.name,
                             smallSize: true,
                           ),
                         ),
                         const SizedBox(height: TSizes.spaceBtwItems / 2),
-                        const BrandTitleWithVerification(
-                          brandTitleWithVerificationModel:
-                              BrandTitleWithVerificationModel(
-                                brandName: "Nike",
-                              ),
-                        ),
+                        if ((product.brandName ?? '').isNotEmpty)
+                          BrandTitleWithVerification(
+                            brandTitleWithVerificationModel:
+                                BrandTitleWithVerificationModel(
+                                  brandName: product.brandName!,
+                                ),
+                          ),
                       ],
                     ),
                     const Spacer(),
@@ -108,12 +136,26 @@ class HorizontalProductCard extends StatelessWidget {
                         Flexible(
                           child: ProductPriceText(
                             productPriceTextModel: ProductPriceTextModel(
-                              price: "100.00",
+                              price: product.effectivePrice.toStringAsFixed(2),
                               smallSize: true,
                             ),
                           ),
                         ),
-                        const AddToCartContainer(),
+                        Builder(
+                          builder: (iconContext) {
+                            return IconButton(
+                              onPressed: () => iconContext
+                                  .read<CartCubit>()
+                                  .addToCart(productId: product.id),
+                              icon: const Icon(Iconsax.add),
+                              color: TColors.white,
+                              style: IconButton.styleFrom(
+                                backgroundColor: TColors.primary,
+                              ),
+                              tooltip: 'Add to cart',
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ],

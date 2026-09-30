@@ -10,6 +10,8 @@ import 'package:t_store/features/auth/domain/usecases/sign_in_with_google_usecas
 import 'package:t_store/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/resend_confirmation_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/update_password_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
@@ -28,6 +30,11 @@ class MockSignUpUsecase extends Mock implements SignUpUsecase {}
 class MockSignOutUsecase extends Mock implements SignOutUsecase {}
 
 class MockResetPasswordUsecase extends Mock implements ResetPasswordUsecase {}
+
+class MockResendConfirmationUsecase extends Mock
+    implements ResendConfirmationUsecase {}
+
+class MockUpdatePasswordUsecase extends Mock implements UpdatePasswordUsecase {}
 
 class MockGetCurrentUserUsecase extends Mock implements GetCurrentUserUsecase {}
 
@@ -66,6 +73,8 @@ void main() {
       signUpUsecase: mockSignUpUsecase,
       signOutUsecase: mockSignOutUsecase,
       resetPasswordUsecase: mockResetPasswordUsecase,
+      resendConfirmationUsecase: MockResendConfirmationUsecase(),
+      updatePasswordUsecase: MockUpdatePasswordUsecase(),
       getCurrentUserUsecase: mockGetCurrentUserUsecase,
     );
   });

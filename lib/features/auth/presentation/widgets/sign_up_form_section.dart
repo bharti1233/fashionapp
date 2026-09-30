@@ -8,7 +8,7 @@ import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/core/utils/validators/validation.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
-import 'package:t_store/features/auth/presentation/views/login/login_view.dart';
+import 'package:t_store/features/auth/presentation/views/signup/verify_email_view.dart';
 
 import 'terms_and_privacy_agreement.dart';
 
@@ -69,7 +69,7 @@ class _SignUpFormSectionState extends State<SignUpFormSection> {
 
           THelperFunctions.navigateReplacementToScreen(
             context,
-            const LoginView(),
+            VerifyEmailView(email: state.email),
           );
         } else if (state is AuthError) {
           THelperFunctions.showSnackBar(

@@ -9,6 +9,7 @@ import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/features/auth/presentation/widgets/grid_layout.dart';
+import 'package:t_store/features/shop/presentation/cubit/categories_cubit.dart';
 import 'package:t_store/features/shop/presentation/cubit/products_cubit.dart';
 import 'package:t_store/features/shop/presentation/cubit/products_state.dart';
 import 'package:t_store/features/shop/presentation/views/all_products_view.dart';
@@ -166,6 +167,8 @@ class _HomeViewState extends State<HomeView> {
       ascending: false,
       refresh: true,
     );
+    // Categories back the home category rail.
+    context.read<CategoriesCubit>().getCategories();
   }
 
   @override

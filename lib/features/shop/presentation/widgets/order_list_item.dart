@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:t_store/core/common/view_models/circular_container_view_model.dart';
 import 'package:t_store/core/common/widgets/circular_container.dart';
 import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
+import 'package:t_store/features/orders/domain/entities/order_entity.dart';
 
+/// One real order row. All values come from [OrderEntity] (Supabase).
+/// Cancel is only offered when [OrderEntity.canCancel] allows it.
 class OrderListItem extends StatelessWidget {
-  const OrderListItem({super.key});
+  final OrderEntity order;
+  final VoidCallback? onCancel;
+
+  const OrderListItem({super.key, required this.order, this.onCancel});
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    final created = order.createdAt != null
+        ? DateFormat('dd MMM, yyyy').format(order.createdAt!)
+        : '—';
     return CircularContainer(
       circularContainerModel: CircularContainerModel(
         showBorder: true,
@@ -30,24 +40,21 @@ class OrderListItem extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Prossessing",
+                        order.statusText,
                         style: Theme.of(context).textTheme.bodyLarge!.apply(
                           color: TColors.primary,
                           fontWeightDelta: 1,
                         ),
                       ),
                       Text(
-                        "07 Mar, 2022",
+                        created,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Iconsax.arrow_right_34),
-                  iconSize: TSizes.iconSm,
-                ),
+                if (order.canCancel && onCancel != null)
+                  TextButton(onPressed: onCancel, child: const Text('Cancel')),
               ],
             ),
             const SizedBox(height: TSizes.spaceBtwItems),
@@ -64,11 +71,11 @@ class OrderListItem extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              "Order",
+                              'Order',
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                             Text(
-                              "#123456",
+                              '#${order.id.length > 8 ? order.id.substring(0, 8) : order.id}',
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                           ],
@@ -88,11 +95,11 @@ class OrderListItem extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              "Shipping Date",
+                              'Total',
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                             Text(
-                              "07 Mar, 2022",
+                              '₹${order.total.toStringAsFixed(2)}',
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                           ],

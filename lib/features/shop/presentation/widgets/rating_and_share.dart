@@ -2,8 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 
+/// Real rating summary for a product.
 class RatingAndShare extends StatelessWidget {
-  const RatingAndShare({super.key});
+  final double rating;
+  final int reviewsCount;
+
+  const RatingAndShare({
+    super.key,
+    required this.rating,
+    required this.reviewsCount,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -17,10 +26,10 @@ class RatingAndShare extends StatelessWidget {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: "5.0 ",
+                    text: '${rating.toStringAsFixed(1)} ',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                  const TextSpan(text: "(23)"),
+                  TextSpan(text: '($reviewsCount)'),
                 ],
               ),
             ),
