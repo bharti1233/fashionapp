@@ -136,4 +136,14 @@ class SupabaseConfig {
   static const String bannerImagesBucket = 'banner-images';
   static const String avatarsBucket = 'avatars';
   static const String reviewImagesBucket = 'review-images';
+
+  /// Canonical mobile redirect for Supabase Auth emails and OAuth.
+  ///
+  /// Passed as `emailRedirectTo` on sign-up so confirmation links return
+  /// to the app instead of the dashboard Site URL (which may be
+  /// localhost). This exact value MUST be allowlisted in the Supabase
+  /// dashboard under Authentication → URL Configuration → Redirect URLs,
+  /// and the Android manifest must handle the scheme (see
+  /// android/app/src/main/AndroidManifest.xml). Contains no secrets.
+  static const String authRedirectTo = 'io.supabase.tstore://login-callback/';
 }

@@ -15,6 +15,7 @@ class SignUpUsecase implements UseCase<UserEntity, SignUpParams> {
       password: params.password,
       fullName: params.fullName,
       phone: params.phone,
+      emailRedirectTo: params.emailRedirectTo,
     );
   }
 }
@@ -25,10 +26,15 @@ class SignUpParams {
   final String fullName;
   final String? phone;
 
+  /// Where the confirmation email links back to. Production callers pass
+  /// the canonical app deep link — never localhost.
+  final String? emailRedirectTo;
+
   SignUpParams({
     required this.email,
     required this.password,
     required this.fullName,
     this.phone,
+    this.emailRedirectTo,
   });
 }

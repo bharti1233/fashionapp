@@ -46,6 +46,7 @@ class _LoginFormSectionState extends State<LoginFormSection> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
+        if (!context.mounted) return;
         if (state is AuthAuthenticated) {
           THelperFunctions.showSnackBar(
             context: context,

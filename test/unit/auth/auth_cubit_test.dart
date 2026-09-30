@@ -12,6 +12,7 @@ import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/resend_confirmation_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/update_password_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/watch_auth_state_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
@@ -35,6 +36,9 @@ class MockResendConfirmationUsecase extends Mock
     implements ResendConfirmationUsecase {}
 
 class MockUpdatePasswordUsecase extends Mock implements UpdatePasswordUsecase {}
+
+class MockWatchAuthStateUsecase extends Mock
+    implements WatchAuthStateUsecase {}
 
 class MockGetCurrentUserUsecase extends Mock implements GetCurrentUserUsecase {}
 
@@ -75,6 +79,7 @@ void main() {
       resetPasswordUsecase: mockResetPasswordUsecase,
       resendConfirmationUsecase: MockResendConfirmationUsecase(),
       updatePasswordUsecase: MockUpdatePasswordUsecase(),
+      watchAuthStateUsecase: MockWatchAuthStateUsecase(),
       getCurrentUserUsecase: mockGetCurrentUserUsecase,
     );
   });

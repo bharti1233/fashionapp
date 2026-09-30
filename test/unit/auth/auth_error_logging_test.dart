@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,10 +8,12 @@ import 'package:t_store/core/usecases/usecase.dart';
 import 'package:t_store/core/utils/logging/app_log_entry.dart';
 import 'package:t_store/core/utils/logging/app_logger.dart';
 import 'package:t_store/core/utils/logging/operation_logger.dart';
+import 'package:t_store/features/auth/domain/entities/user_entity.dart';
 import 'package:t_store/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/resend_confirmation_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/update_password_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/watch_auth_state_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
@@ -36,6 +40,9 @@ class MockResendConfirmationUsecase extends Mock
     implements ResendConfirmationUsecase {}
 
 class MockUpdatePasswordUsecase extends Mock implements UpdatePasswordUsecase {}
+
+class MockWatchAuthStateUsecase extends Mock
+    implements WatchAuthStateUsecase {}
 
 class MockGetCurrentUserUsecase extends Mock implements GetCurrentUserUsecase {}
 
@@ -71,6 +78,7 @@ void main() {
       resetPasswordUsecase: MockResetPasswordUsecase(),
       resendConfirmationUsecase: MockResendConfirmationUsecase(),
       updatePasswordUsecase: MockUpdatePasswordUsecase(),
+      watchAuthStateUsecase: MockWatchAuthStateUsecase(),
       getCurrentUserUsecase: MockGetCurrentUserUsecase(),
     );
   });
@@ -160,6 +168,7 @@ void main() {
         resetPasswordUsecase: MockResetPasswordUsecase(),
         resendConfirmationUsecase: MockResendConfirmationUsecase(),
         updatePasswordUsecase: MockUpdatePasswordUsecase(),
+      watchAuthStateUsecase: MockWatchAuthStateUsecase(),
         getCurrentUserUsecase: MockGetCurrentUserUsecase(),
       );
 
@@ -199,6 +208,7 @@ void main() {
         resetPasswordUsecase: MockResetPasswordUsecase(),
         resendConfirmationUsecase: mockResend,
         updatePasswordUsecase: mockUpdate,
+        watchAuthStateUsecase: MockWatchAuthStateUsecase(),
         getCurrentUserUsecase: MockGetCurrentUserUsecase(),
       );
 
@@ -217,6 +227,52 @@ void main() {
       );
       // The password value itself must never reach the logs.
       expect(AppLogger.instance.searchLogs('new-secret-123'), isEmpty);
+      await cubit.close();
+    });
+  });
+
+  group('logSupabaseOperation guard', () {
+    test('live auth-state stream drives session transitions once', () async {
+      final mockWatch = MockWatchAuthStateUsecase();
+      final controller = StreamController<UserEntity?>();
+      when(
+        () => mockWatch(any()),
+      ).thenAnswer((_) async => Right(controller.stream));
+      final cubit = AuthCubit(
+        signInUsecase: MockSignInUsecase(),
+        signInWithGoogleUsecase: MockSignInWithGoogleUsecase(),
+        signInWithFacebookUsecase: MockSignInWithFacebookUsecase(),
+        signUpUsecase: MockSignUpUsecase(),
+        signOutUsecase: MockSignOutUsecase(),
+        resetPasswordUsecase: MockResetPasswordUsecase(),
+        resendConfirmationUsecase: MockResendConfirmationUsecase(),
+        updatePasswordUsecase: MockUpdatePasswordUsecase(),
+        watchAuthStateUsecase: mockWatch,
+        getCurrentUserUsecase: MockGetCurrentUserUsecase(),
+      );
+
+      final emitted = <AuthState>[];
+      final subscription = cubit.stream.listen(emitted.add);
+      await cubit.listenToAuthState();
+
+      const sessionUser = UserEntity(id: 'live-1', email: 'live@x.com');
+      controller.add(sessionUser);
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      // Same user again: duplicate must be skipped, no second emission.
+      controller.add(sessionUser);
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      controller.add(null);
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      expect(
+        emitted.whereType<AuthAuthenticated>(),
+        hasLength(1),
+        reason: 'same-user duplicates must not re-emit',
+      );
+      expect(emitted.last, isA<AuthUnauthenticated>());
+
+      await subscription.cancel();
+      await controller.close();
       await cubit.close();
     });
   });

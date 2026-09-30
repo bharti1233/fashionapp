@@ -12,6 +12,7 @@ import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/resend_confirmation_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/update_password_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/watch_auth_state_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
 
@@ -122,6 +123,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => ResetPasswordUsecase(sl()));
   sl.registerLazySingleton(() => ResendConfirmationUsecase(sl()));
   sl.registerLazySingleton(() => UpdatePasswordUsecase(sl()));
+  sl.registerLazySingleton(() => WatchAuthStateUsecase(sl()));
   sl.registerLazySingleton(() => GetCurrentUserUsecase(sl()));
 
   // Cubit
@@ -135,6 +137,7 @@ Future<void> setupServiceLocator() async {
       resetPasswordUsecase: sl(),
       resendConfirmationUsecase: sl(),
       updatePasswordUsecase: sl(),
+      watchAuthStateUsecase: sl(),
       getCurrentUserUsecase: sl(),
     ),
   );

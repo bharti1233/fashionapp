@@ -37,11 +37,14 @@ class _OnBoardingViewState extends State<OnBoardingView> {
         screen: 'OnBoardingView',
         operation: 'checkAuthStatus',
       );
-      context.read<AuthCubit>().checkAuthStatus();
+      final authCubit = context.read<AuthCubit>();
+      authCubit.listenToAuthState();
+      authCubit.checkAuthStatus();
     });
   }
 
   void _onAuthState(BuildContext context, AuthState state) {
+    if (!mounted) return;
     if (state is AuthAuthenticated) {
       AppLogger.instance.info(
         message: 'Existing session restored for ${state.user.email}',

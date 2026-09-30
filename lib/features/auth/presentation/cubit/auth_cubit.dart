@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:t_store/core/supabase/supabase_config.dart';
 import 'package:t_store/core/usecases/usecase.dart';
 import 'package:t_store/core/utils/logging/app_log_entry.dart';
 import 'package:t_store/core/utils/logging/app_logger.dart';
+import 'package:t_store/features/auth/domain/entities/user_entity.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
@@ -10,6 +14,7 @@ import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/resend_confirmation_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/update_password_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/watch_auth_state_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
 
@@ -22,6 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
   final ResetPasswordUsecase resetPasswordUsecase;
   final ResendConfirmationUsecase resendConfirmationUsecase;
   final UpdatePasswordUsecase updatePasswordUsecase;
+  final WatchAuthStateUsecase watchAuthStateUsecase;
   final GetCurrentUserUsecase getCurrentUserUsecase;
 
   AuthCubit({
@@ -33,8 +39,89 @@ class AuthCubit extends Cubit<AuthState> {
     required this.resetPasswordUsecase,
     required this.resendConfirmationUsecase,
     required this.updatePasswordUsecase,
+    required this.watchAuthStateUsecase,
     required this.getCurrentUserUsecase,
   }) : super(AuthInitial());
+
+  StreamSubscription<UserEntity?>? _authSubscription;
+  bool _listeningToAuthState = false;
+
+  /// Subscribes to live Supabase auth-state changes (sign-in/out, token
+  /// refresh, session expiry) so the app reacts without polling.
+  ///
+  /// Only genuine TRANSITIONS are emitted: if the state already reflects
+  /// the event (e.g. an explicit sign-in just emitted [AuthAuthenticated]
+  /// for the same user), the duplicate is skipped. Safe to call multiple
+  /// times; the subscription is cancelled in [close].
+  Future<void> listenToAuthState() async {
+    if (_listeningToAuthState) return;
+    _listeningToAuthState = true;
+
+    final result = await watchAuthStateUsecase(const NoParams());
+    result.fold(
+      (error) {
+        AppLogger.instance.error(
+          message: 'Auth state subscription failed: $error',
+          category: LogCategory.authentication,
+          event: 'AUTH_STATE_SUBSCRIBE_FAILURE',
+          screen: 'AuthCubit',
+          operation: 'listenToAuthState',
+        );
+      },
+      (stream) {
+        _authSubscription = stream.listen(
+          (user) {
+            if (isClosed) return;
+            final current = state;
+            if (user != null) {
+              if (current is AuthAuthenticated &&
+                  current.user.id == user.id) {
+                return;
+              }
+              AppLogger.instance.info(
+                message: 'Auth state changed: user signed in',
+                category: LogCategory.authentication,
+                event: 'AUTH_STATE_SIGNED_IN',
+                screen: 'AuthCubit',
+                operation: 'listenToAuthState',
+              );
+              emit(AuthAuthenticated(user));
+            } else {
+              if (current is AuthUnauthenticated ||
+                  current is AuthInitial) {
+                return;
+              }
+              AppLogger.instance.info(
+                message: 'Auth state changed: user signed out',
+                category: LogCategory.authentication,
+                event: 'AUTH_STATE_SIGNED_OUT',
+                screen: 'AuthCubit',
+                operation: 'listenToAuthState',
+              );
+              emit(AuthUnauthenticated());
+            }
+          },
+          onError: (Object error, StackTrace stackTrace) {
+            AppLogger.instance.error(
+              message: 'Auth state stream error',
+              category: LogCategory.authentication,
+              event: 'AUTH_STATE_STREAM_FAILURE',
+              screen: 'AuthCubit',
+              operation: 'listenToAuthState',
+              error: error,
+              stackTrace: stackTrace,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _authSubscription?.cancel();
+    return super.close();
+  }
 
   Future<void> checkAuthStatus() async {
     emit(AuthLoading());
@@ -88,6 +175,10 @@ class AuthCubit extends Cubit<AuthState> {
       event: 'CREATE_ACCOUNT_START',
       screen: 'AuthCubit',
       operation: 'signUp',
+      context: const {
+        // The redirect target itself (no secrets, no tokens).
+        'emailRedirectTo': SupabaseConfig.authRedirectTo,
+      },
     );
 
     final result = await signUpUsecase(
@@ -96,6 +187,7 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
         fullName: fullName,
         phone: phone,
+        emailRedirectTo: SupabaseConfig.authRedirectTo,
       ),
     );
 

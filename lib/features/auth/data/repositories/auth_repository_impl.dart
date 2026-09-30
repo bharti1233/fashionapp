@@ -121,11 +121,13 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
     required String fullName,
     String? phone,
+    String? emailRedirectTo,
   }) async {
     try {
       final response = await supabaseService.signUp(
         email: email,
         password: password,
+        emailRedirectTo: emailRedirectTo,
         data: {'full_name': fullName, 'phone': phone},
       );
 
@@ -424,6 +426,14 @@ class AuthRepositoryImpl implements AuthRepository {
     }
     if (lowerMessage.contains('rate limit')) {
       return 'Too many attempts. Please try again later';
+    }
+    if (lowerMessage.contains('provider is not enabled') ||
+        lowerMessage.contains('unsupported provider') ||
+        lowerMessage.contains('validation_failed')) {
+      // Server-side provider configuration issue: honest, actionable,
+      // and never a fake success. The technical detail is logged.
+      return 'This sign-in method is not available yet. '
+          'Please use email sign-in.';
     }
 
     return message;

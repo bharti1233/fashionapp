@@ -64,11 +64,16 @@ class SupabaseService {
 
   // ============== AUTH METHODS ==============
 
-  /// Sign up with email and password
+  /// Sign up with email and password.
+  ///
+  /// [emailRedirectTo] controls where the confirmation email links back
+  /// to. For production mobile it MUST be the canonical app deep link
+  /// ([SupabaseConfig.authRedirectTo]) — never localhost.
   Future<AuthResponse> signUp({
     required String email,
     required String password,
     Map<String, dynamic>? data,
+    String? emailRedirectTo,
   }) {
     return logSupabaseOperation<AuthResponse>(
       category: LogCategory.authentication,
@@ -77,8 +82,12 @@ class SupabaseService {
       startEvent: 'SUPABASE_SIGN_UP_START',
       successEvent: 'SUPABASE_SIGN_UP_SUCCESS',
       failureEvent: 'SUPABASE_SIGN_UP_FAILURE',
-      action: () =>
-          client.auth.signUp(email: email, password: password, data: data),
+      action: () => client.auth.signUp(
+        email: email,
+        password: password,
+        emailRedirectTo: emailRedirectTo,
+        data: data,
+      ),
     );
   }
 
@@ -107,7 +116,7 @@ class SupabaseService {
       screen: 'SupabaseService',
       action: () => client.auth.signInWithOAuth(
         OAuthProvider.google,
-        redirectTo: 'io.supabase.tstore://login-callback/',
+        redirectTo: SupabaseConfig.authRedirectTo,
       ),
     );
   }
@@ -120,7 +129,7 @@ class SupabaseService {
       screen: 'SupabaseService',
       action: () => client.auth.signInWithOAuth(
         OAuthProvider.facebook,
-        redirectTo: 'io.supabase.tstore://login-callback/',
+        redirectTo: SupabaseConfig.authRedirectTo,
       ),
     );
   }
@@ -133,7 +142,7 @@ class SupabaseService {
       screen: 'SupabaseService',
       action: () => client.auth.signInWithOAuth(
         OAuthProvider.apple,
-        redirectTo: 'io.supabase.tstore://login-callback/',
+        redirectTo: SupabaseConfig.authRedirectTo,
       ),
     );
   }
