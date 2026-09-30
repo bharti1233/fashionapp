@@ -4,6 +4,9 @@ import 'package:t_store/core/utils/formatters/formatter.dart';
 
 /// Real order amounts computed from the cart and validated coupon.
 /// Shipping is free (₹0.00) — shown honestly, never invented.
+///
+/// Text styles are hoisted into short locals so the layout stays
+/// formatter-stable: no chained splits.
 class BillingAmountSection extends StatelessWidget {
   final double subtotal;
   final double shippingCost;
@@ -20,28 +23,30 @@ class BillingAmountSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final label = Theme.of(context).textTheme.bodyMedium;
+    final value = Theme.of(context).textTheme.labelLarge;
+    final totalStyle = Theme.of(context).textTheme.titleMedium;
+    final base = Theme.of(context).textTheme.labelLarge;
+    final discountStyle = base?.copyWith(color: Colors.green);
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Subtotal', style: Theme.of(context).textTheme.bodyMedium),
-            Text(
-              TFormatter.formatPrice(subtotal),
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
+            Text('Subtotal', style: label),
+            Text(TFormatter.formatPrice(subtotal), style: value),
           ],
         ),
         const SizedBox(height: TSizes.spaceBtwItems / 2),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Shipping Fee', style: Theme.of(context).textTheme.bodyMedium),
+            Text('Shipping Fee', style: label),
             Text(
               shippingCost == 0
                   ? 'Free'
                   : TFormatter.formatPrice(shippingCost),
-              style: Theme.of(context).textTheme.labelLarge,
+              style: value,
             ),
           ],
         ),
@@ -50,15 +55,10 @@ class BillingAmountSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Coupon Discount',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              Text('Coupon Discount', style: label),
               Text(
                 '-${TFormatter.formatPrice(discount)}',
-                style: Theme.of(
-                  context,
-                ).textTheme.labelLarge?.copyWith(color: Colors.green),
+                style: discountStyle,
               ),
             ],
           ),
@@ -67,11 +67,8 @@ class BillingAmountSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Order Total', style: Theme.of(context).textTheme.bodyMedium),
-            Text(
-              TFormatter.formatPrice(total),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text('Order Total', style: label),
+            Text(TFormatter.formatPrice(total), style: totalStyle),
           ],
         ),
       ],
