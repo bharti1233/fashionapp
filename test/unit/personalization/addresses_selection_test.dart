@@ -20,6 +20,10 @@ class MockDeleteAddressUsecase extends Mock implements DeleteAddressUsecase {}
 
 class FakeNoParams extends Fake implements NoParams {}
 
+class FakeAddAddressParams extends Fake implements AddAddressParams {}
+
+class FakeUpdateAddressParams extends Fake implements UpdateAddressParams {}
+
 /// Address selection + update-identity contracts:
 ///
 /// - checkout uses the default address, falling back to the first one;
@@ -48,6 +52,8 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(FakeNoParams());
+    registerFallbackValue(FakeAddAddressParams());
+    registerFallbackValue(FakeUpdateAddressParams());
   });
 
   group('AddressesLoaded.defaultAddress', () {
@@ -87,6 +93,8 @@ void main() {
 
       final captured = verify(() => mockUpdate(captureAny())).captured.single;
       expect(captured.id, 'a-1');
+      // updateAddress chains getAddresses(): let the reload emit first.
+      await Future<void>.delayed(const Duration(milliseconds: 50));
       await cubit.close();
     });
   });
@@ -114,6 +122,8 @@ void main() {
 
       verify(() => mockAdd(any())).called(1);
       verify(() => mockGet(any())).called(1);
+      // addAddress chains getAddresses(): let the reload emit first.
+      await Future<void>.delayed(const Duration(milliseconds: 50));
       await cubit.close();
     });
   });

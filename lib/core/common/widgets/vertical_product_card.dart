@@ -59,7 +59,9 @@ class VerticalProductCard extends StatelessWidget {
             CircularContainer(
               circularContainerModel: CircularContainerModel(
                 padding: const EdgeInsets.all(TSizes.sm),
-                height: 180,
+                // 168 (not 180): keeps two-line titles + price row inside
+                // the grid extent instead of overflowing it.
+                height: 168,
                 color: dark ? TColors.dark : TColors.light,
                 child: Stack(
                   children: [
@@ -111,64 +113,67 @@ class VerticalProductCard extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: TSizes.sm),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ProductTitleText(
-                    productTitleTextModel: ProductTitleTextModel(
-                      title: product.name,
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(left: TSizes.sm),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ProductTitleText(
+                      productTitleTextModel: ProductTitleTextModel(
+                        title: product.name,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwItems / 2),
-                  BrandTitleWithVerification(
-                    brandTitleWithVerificationModel:
-                        BrandTitleWithVerificationModel(
-                          brandName: product.brandName ?? '',
-                        ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: ProductPriceText(
-                          productPriceTextModel: ProductPriceTextModel(
-                            price: TFormatter.formatAmount(
-                              product.effectivePrice,
-                            ),
-                            maxLines: 1,
-                            smallSize: true,
+                    const SizedBox(height: TSizes.spaceBtwItems / 2),
+                    BrandTitleWithVerification(
+                      brandTitleWithVerificationModel:
+                          BrandTitleWithVerificationModel(
+                            brandName: product.brandName ?? '',
                           ),
-                        ),
-                      ),
-                      BlocListener<CartCubit, CartState>(
-                        listener: (context, state) {
-                          if (state is CartItemAdded) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Added to cart'),
-                                duration: Duration(seconds: 1),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ProductPriceText(
+                            productPriceTextModel: ProductPriceTextModel(
+                              price: TFormatter.formatAmount(
+                                product.effectivePrice,
                               ),
-                            );
-                          }
-                        },
-                        child: IconButton(
-                          iconSize: TSizes.iconMd,
-                          color: TColors.white,
-                          style: IconButton.styleFrom(
-                            backgroundColor: TColors.primary,
-                          ),
-                          tooltip: 'Add to cart',
-                          icon: const Icon(Iconsax.add),
-                          onPressed: () => context.read<CartCubit>().addToCart(
-                            productId: product.id,
+                              maxLines: 1,
+                              smallSize: true,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        BlocListener<CartCubit, CartState>(
+                          listener: (context, state) {
+                            if (state is CartItemAdded) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Added to cart'),
+                                  duration: Duration(seconds: 1),
+                                ),
+                              );
+                            }
+                          },
+                          child: IconButton(
+                            iconSize: TSizes.iconMd,
+                            color: TColors.white,
+                            style: IconButton.styleFrom(
+                              backgroundColor: TColors.primary,
+                            ),
+                            tooltip: 'Add to cart',
+                            icon: const Icon(Iconsax.add),
+                            onPressed: () => context
+                                .read<CartCubit>()
+                                .addToCart(productId: product.id),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

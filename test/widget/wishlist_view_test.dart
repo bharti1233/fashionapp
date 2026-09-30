@@ -5,6 +5,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:t_store/core/cubits/navigation_menu_cubit/navigation_menu_cubit.dart';
 import 'package:t_store/core/usecases/usecase.dart';
+import 'package:t_store/features/cart/domain/usecases/add_to_cart_usecase.dart';
+import 'package:t_store/features/cart/domain/usecases/clear_cart_usecase.dart';
+import 'package:t_store/features/cart/domain/usecases/get_cart_items_usecase.dart';
+import 'package:t_store/features/cart/domain/usecases/remove_from_cart_usecase.dart';
+import 'package:t_store/features/cart/domain/usecases/update_cart_item_usecase.dart';
+import 'package:t_store/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 import 'package:t_store/features/shop/presentation/views/wishlist_view.dart';
 import 'package:t_store/features/wishlist/domain/entities/wishlist_item_entity.dart';
@@ -19,6 +25,16 @@ class MockAddToWishlistUsecase extends Mock implements AddToWishlistUsecase {}
 
 class MockRemoveFromWishlistUsecase extends Mock
     implements RemoveFromWishlistUsecase {}
+
+class MockGetCartItemsUsecase extends Mock implements GetCartItemsUsecase {}
+
+class MockAddToCartUsecase extends Mock implements AddToCartUsecase {}
+
+class MockUpdateCartItemUsecase extends Mock implements UpdateCartItemUsecase {}
+
+class MockRemoveFromCartUsecase extends Mock implements RemoveFromCartUsecase {}
+
+class MockClearCartUsecase extends Mock implements ClearCartUsecase {}
 
 class FakeNoParams extends Fake implements NoParams {}
 
@@ -51,11 +67,19 @@ void main() {
   }
 
   Widget frame(WishlistCubit cubit) {
+    final cartCubit = CartCubit(
+      getCartItemsUsecase: MockGetCartItemsUsecase(),
+      addToCartUsecase: MockAddToCartUsecase(),
+      updateCartItemUsecase: MockUpdateCartItemUsecase(),
+      removeFromCartUsecase: MockRemoveFromCartUsecase(),
+      clearCartUsecase: MockClearCartUsecase(),
+    );
     return MaterialApp(
       home: MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => NavigationMenuCubit()),
           BlocProvider.value(value: cubit),
+          BlocProvider.value(value: cartCubit),
         ],
         child: const WishlistView(),
       ),
