@@ -36,7 +36,7 @@ class ValidateCouponUsecase
       if (params.subtotal < coupon.minOrderAmount) {
         return Left(
           'This coupon needs a minimum order of '
-          TFormatter.formatPrice(coupon.minOrderAmount),
+          '${TFormatter.formatPrice(coupon.minOrderAmount)}',
         );
       }
       final double raw;
