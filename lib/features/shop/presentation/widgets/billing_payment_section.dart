@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:t_store/core/common/view_models/section_heading_view_model.dart';
 import 'package:t_store/core/common/widgets/section_heading.dart';
+import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 
 /// Payment method selection. Cash on Delivery is the only available
@@ -39,13 +40,20 @@ class BillingPaymentSection extends StatelessWidget {
         RadioGroup<String>(
           groupValue: selectedMethod,
           onChanged: _onMethodChanged,
-          child: RadioListTile<String>(
-            value: cashOnDelivery,
-            title: const Text('Cash on Delivery'),
-            subtitle: const Text('Pay when your order arrives'),
-            secondary: const Icon(Iconsax.money),
-            contentPadding: EdgeInsets.zero,
-            dense: true,
+          child: Container(
+            decoration: BoxDecoration(
+              color: TColors.primary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: TColors.primary.withValues(alpha: 0.4)),
+            ),
+            child: RadioListTile<String>(
+              value: cashOnDelivery,
+              title: const Text('Cash on Delivery'),
+              subtitle: const Text('Pay when your order arrives'),
+              secondary: const Icon(Iconsax.money),
+              contentPadding: EdgeInsets.zero,
+              dense: true,
+            ),
           ),
         ),
         const SizedBox(height: TSizes.spaceBtwItems / 2),

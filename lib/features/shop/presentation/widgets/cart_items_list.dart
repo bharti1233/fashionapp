@@ -10,6 +10,7 @@ import 'package:t_store/core/common/widgets/rounded_image.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:t_store/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:t_store/core/utils/formatters/formatter.dart';
 
 /// Real cart line items from [CartItemEntity] (Supabase-backed).
 /// Quantity controls and remove act on [CartCubit] for real.
@@ -63,7 +64,7 @@ class CartItemsList extends StatelessWidget {
                   const SizedBox(height: 4),
                   ProductPriceText(
                     productPriceTextModel: ProductPriceTextModel(
-                      price: item.totalPrice.toStringAsFixed(2),
+                      price: TFormatter.formatAmount(item.totalPrice),
                       smallSize: true,
                     ),
                   ),

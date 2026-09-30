@@ -16,12 +16,14 @@ honestly gated, no fake behavior · PLANNED = future work, no code.
 | Cart | REAL | `cart_view.dart` → `CartCubit` | Real lines, quantities, subtotal/total in ₹ |
 | Checkout / orders | REAL (COD only) | `checkout_view.dart` → `OrdersCubit` | Real pending orders; coupon validated live; online payment NOT IMPLEMENTED (stated in UI) |
 | Orders / history / cancel | REAL | `orders_view.dart` → `OrdersCubit` | Cancel where backend allows; empty state |
-| Addresses / profile | REAL | `user_addresses_view.dart`, `profile_view.dart` | Real rows; honest empty states; delete-account honestly gated |
-| Reviews / ratings | REAL | `product_reviews_view.dart` → `ReviewsCubit` | Real list/count/average; submit form NOT IMPLEMENTED |
-| Coupons | REAL | `validate_coupon_usecase.dart` → live `coupons` | Active-only public read; expiry/min/cap rules enforced |
-| Notifications | NOT IMPLEMENTED | `features/notifications` (backend only) | No UI; backend retained, nothing fabricated |
+| Addresses / profile | REAL | `user_addresses_view.dart`, `profile_view.dart` | Real rows; select/default flow; honest empty states; delete-account honestly gated |
+| Reviews / ratings | REAL (list) | `product_reviews_view.dart` → `ReviewsCubit` | Real list/count/average; submit form NOT IMPLEMENTED |
+| Coupons | REAL | `coupons_view.dart` + live `coupons` | Active-only public read; expiry/min/cap rules enforced |
+| Notifications | REAL | `notifications_view.dart` → `NotificationsCubit` | Inbox, mark-read, honest empty state |
+| Settings | REAL | `settings_view.dart` | Removed: Upload Data, Geolocation, Safe Mode, HD Image, Bank Account; kept: App Logs, Addresses, Cart, Orders, Coupons, Notifications, Privacy notice, Logout |
+| Pricing | REAL (INR) | `TFormatter.formatPrice/formatAmount` | ₹X,XXX.XX everywhere; rounded "% OFF" badges, hidden at 0 |
+| Product images | SEED DATA | Live `products.thumbnail` | Fictional picsum-seed catalog (deferred merchant catalog) |
 | Auth / onboarding / session | REAL | `features/auth`, `on_boarding_view.dart` | Register/login/logout/restore/verify/forgot/reset all wired; Google/Facebook need dashboard provider enablement |
-| Product images | SEED DATA | Live `products.thumbnail` | Fictional picsum-seed catalog; Storage buckets exist for merchant assets |
 | Support chat | REMOVED | (deleted) | Not in target product |
 | Wardrobe / outfit / stylist | PLANNED | Phase 2–4 | Extension points documented, no code |
 | Photo / live try-on / mirror | PLANNED | Phase 5–7 | No AI/VTON deps in app |

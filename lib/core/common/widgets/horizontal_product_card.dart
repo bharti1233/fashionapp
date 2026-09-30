@@ -21,6 +21,7 @@ import 'package:t_store/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 import 'package:t_store/features/shop/presentation/views/product_details_view.dart';
 import 'package:t_store/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:t_store/core/utils/formatters/formatter.dart';
 
 /// Horizontal product card for a REAL backend [product].
 /// Tap opens real details; heart toggles the real wishlist; + adds one
@@ -135,7 +136,9 @@ class HorizontalProductCard extends StatelessWidget {
                         Flexible(
                           child: ProductPriceText(
                             productPriceTextModel: ProductPriceTextModel(
-                              price: product.effectivePrice.toStringAsFixed(2),
+                              price: TFormatter.formatAmount(
+                                product.effectivePrice,
+                              ),
                               smallSize: true,
                             ),
                           ),

@@ -38,4 +38,31 @@ class CouponRepositoryImpl implements CouponRepository {
       return Left(e.toString());
     }
   }
+
+  @override
+  Future<Either<String, List<CouponEntity>>> getActiveCoupons() async {
+    try {
+      final response = await supabaseService.client
+          .from(SupabaseTables.coupons)
+          .select()
+          .eq('is_active', true)
+          .order('created_at', ascending: false);
+
+      final coupons = (response as List)
+          .map((json) => CouponModel.fromJson(json as Map<String, dynamic>))
+          .toList();
+      return Right(coupons);
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Active coupons lookup failed',
+        category: LogCategory.products,
+        event: 'COUPONS_LIST_FAILURE',
+        screen: 'CouponRepository',
+        operation: 'getActiveCoupons',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      return Left(e.toString());
+    }
+  }
 }

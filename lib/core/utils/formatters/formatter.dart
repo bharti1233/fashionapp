@@ -16,6 +16,27 @@ class TFormatter {
     ).format(amount);
   }
 
+  /// India-first customer price: ₹X,XXX.XX with Indian digit grouping
+  /// and exactly two decimals. Use for every customer-facing price.
+  static String formatPrice(double amount) {
+    return NumberFormat.currency(
+      locale: 'en_IN',
+      symbol: '₹',
+      decimalDigits: 2,
+    ).format(amount);
+  }
+
+  /// Grouped amount WITHOUT currency symbol, for widgets that prepend
+  /// their own symbol (e.g. ProductPriceText with currencySymbol "₹").
+  /// Prevents doubled symbols like "₹₹1,000.00".
+  static String formatAmount(double amount) {
+    return NumberFormat.currency(
+      locale: 'en_IN',
+      symbol: '',
+      decimalDigits: 2,
+    ).format(amount).trim();
+  }
+
   static String formatPhoneNumber(String phoneNumber) {
     // Format Indian phone number: +91 98765 43210
     final digitsOnly = phoneNumber.replaceAll(RegExp(r'\D'), '');

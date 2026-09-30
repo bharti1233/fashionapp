@@ -11,6 +11,7 @@ import 'package:t_store/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:t_store/features/cart/presentation/cubit/cart_state.dart';
 import 'package:t_store/features/shop/presentation/views/checkout_view.dart';
 import 'package:t_store/features/shop/presentation/widgets/cart_items_list.dart';
+import 'package:t_store/core/utils/formatters/formatter.dart';
 
 /// Cart screen backed by Supabase through [CartCubit].
 ///
@@ -84,7 +85,7 @@ class _CartViewState extends State<CartView> {
                   const SizedBox(height: TSizes.spaceBtwSections),
                   Text(
                     'Subtotal (${state.itemCount} items): '
-                    '₹${total.toStringAsFixed(2)}',
+                    '${TFormatter.formatPrice(total)}',
                     textAlign: TextAlign.end,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
@@ -96,7 +97,7 @@ class _CartViewState extends State<CartView> {
                         const CheckoutView(),
                       );
                     },
-                    child: Text('Checkout ₹${total.toStringAsFixed(2)}'),
+                    child: Text('Checkout ${TFormatter.formatPrice(total)}'),
                   ),
                 ],
               ),

@@ -145,10 +145,13 @@ class _StoreViewState extends State<StoreView> {
                     child: NestedScrollView(
                       headerSliverBuilder: (context, innerBoxIsScrolled) {
                         return [
+                          // Tab bar only: toolbarHeight 0 removes the empty
+                          // strip an AppBar would otherwise reserve above it.
                           SliverAppBar(
                             pinned: true,
                             floating: true,
                             automaticallyImplyLeading: false,
+                            toolbarHeight: 0,
                             backgroundColor: Theme.of(
                               context,
                             ).scaffoldBackgroundColor,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:t_store/core/common/view_models/brand_title_with_verification_view_model.dart';
 import 'package:t_store/core/common/view_models/circular_container_view_model.dart';
@@ -6,7 +7,6 @@ import 'package:t_store/core/common/view_models/circular_icon_view_model.dart';
 import 'package:t_store/core/common/view_models/product_price_text_view_model.dart';
 import 'package:t_store/core/common/view_models/product_title_text_view_model.dart';
 import 'package:t_store/core/common/view_models/rounded_image_view_model.dart';
-import 'package:t_store/core/common/widgets/add_to_cart_container.dart';
 import 'package:t_store/core/common/widgets/brand_title_with_verification.dart';
 import 'package:t_store/core/common/widgets/circular_container.dart';
 import 'package:t_store/core/common/widgets/circular_icon.dart';
@@ -17,9 +17,13 @@ import 'package:t_store/core/common/widgets/sale_tag.dart';
 import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/shadow_styles.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
+import 'package:t_store/core/utils/formatters/formatter.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
+import 'package:t_store/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:t_store/features/cart/presentation/cubit/cart_state.dart';
 import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 import 'package:t_store/features/shop/presentation/views/product_details_view.dart';
+import 'package:t_store/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 
 class VerticalProductCard extends StatelessWidget {
   const VerticalProductCard({super.key, required this.product});
@@ -27,6 +31,11 @@ class VerticalProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    // Never crash on imageless rows: fall back to a neutral tile.
+    final image = product.images.isNotEmpty
+        ? product.images.first
+        : (product.thumbnail ?? '');
+    final saved = context.watch<WishlistCubit>().isInWishlist(product.id);
     return GestureDetector(
       onTap: () {
         THelperFunctions.navigateToScreen(
@@ -54,30 +63,46 @@ class VerticalProductCard extends StatelessWidget {
                 color: dark ? TColors.dark : TColors.light,
                 child: Stack(
                   children: [
-                    RoundedImage(
-                      roundedImageModel: RoundedImageModel(
-                        isNetworkImage: true,
-                        backgroundColor: dark ? TColors.dark : TColors.light,
-                        image: product.images.first,
-                        onTap: () {},
-                        applyImageRadius: true,
+                    if (image.isEmpty)
+                      const Center(
+                        child: Icon(
+                          Iconsax.image,
+                          size: 48,
+                          color: Colors.grey,
+                        ),
+                      )
+                    else
+                      RoundedImage(
+                        roundedImageModel: RoundedImageModel(
+                          isNetworkImage: true,
+                          backgroundColor: dark ? TColors.dark : TColors.light,
+                          image: image,
+                          onTap: () {},
+                          applyImageRadius: true,
+                        ),
                       ),
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SaleTag(discountPercentage: product.discountPercentage),
+                        if (product.hasDiscount)
+                          SaleTag(
+                            discountPercentage: product.discountPercentage,
+                          )
+                        else
+                          const SizedBox(width: TSizes.iconLg * 1.2),
                         CircularIcon(
                           circularIconModel: CircularIconModel(
                             height: TSizes.iconLg * 1.2,
                             width: TSizes.iconLg * 1.2,
                             iconSize: TSizes.iconMd,
-                            icon: Iconsax.heart5,
+                            icon: saved ? Iconsax.heart5 : Iconsax.heart,
                             color: Colors.red,
                             backgroundColor: dark
                                 ? TColors.darkerGrey
                                 : TColors.white,
-                            onPressed: () {},
+                            onPressed: () => context
+                                .read<WishlistCubit>()
+                                .toggleWishlist(product.id),
                           ),
                         ),
                       ],
@@ -109,14 +134,38 @@ class VerticalProductCard extends StatelessWidget {
                       Expanded(
                         child: ProductPriceText(
                           productPriceTextModel: ProductPriceTextModel(
-                            currencySymbol: "\$",
-                            price: product.price.toString(),
+                            price: TFormatter.formatAmount(
+                              product.effectivePrice,
+                            ),
                             maxLines: 1,
                             smallSize: true,
                           ),
                         ),
                       ),
-                      const AddToCartContainer(),
+                      BlocListener<CartCubit, CartState>(
+                        listener: (context, state) {
+                          if (state is CartItemAdded) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Added to cart'),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
+                          }
+                        },
+                        child: IconButton(
+                          iconSize: TSizes.iconMd,
+                          color: TColors.white,
+                          style: IconButton.styleFrom(
+                            backgroundColor: TColors.primary,
+                          ),
+                          tooltip: 'Add to cart',
+                          icon: const Icon(Iconsax.add),
+                          onPressed: () => context.read<CartCubit>().addToCart(
+                            productId: product.id,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],

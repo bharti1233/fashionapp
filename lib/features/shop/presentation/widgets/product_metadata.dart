@@ -8,6 +8,7 @@ import 'package:t_store/core/common/widgets/product_title_text.dart';
 import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/features/shop/domain/entities/product_entity.dart';
+import 'package:t_store/core/utils/formatters/formatter.dart';
 
 /// Real product identity block: price, title, stock state and brand name
 /// all come from [product]. No static catalog values.
@@ -48,7 +49,7 @@ class ProductMetadata extends StatelessWidget {
             ],
             if (product.salePrice != null)
               Text(
-                ' ₹${product.price.toStringAsFixed(2)}',
+                ' ${TFormatter.formatPrice(product.price)}',
                 style: Theme.of(context).textTheme.titleSmall!.apply(
                   decoration: TextDecoration.lineThrough,
                 ),
@@ -56,7 +57,7 @@ class ProductMetadata extends StatelessWidget {
             const SizedBox(width: TSizes.spaceBtwItems),
             ProductPriceText(
               productPriceTextModel: ProductPriceTextModel(
-                price: product.effectivePrice.toStringAsFixed(2),
+                price: TFormatter.formatAmount(product.effectivePrice),
                 smallSize: false,
               ),
             ),

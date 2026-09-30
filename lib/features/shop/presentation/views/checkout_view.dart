@@ -12,6 +12,7 @@ import 'package:t_store/core/enums/status.dart';
 import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/image_strings.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
+import 'package:t_store/core/utils/formatters/formatter.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/core/utils/logging/app_log_entry.dart';
 import 'package:t_store/core/utils/logging/app_logger.dart';
@@ -24,6 +25,7 @@ import 'package:t_store/features/orders/presentation/cubit/orders_state.dart';
 import 'package:t_store/features/personalization/domain/entities/address_entity.dart';
 import 'package:t_store/features/personalization/presentation/cubit/addresses_cubit.dart';
 import 'package:t_store/features/personalization/presentation/cubit/addresses_state.dart';
+import 'package:t_store/features/personalization/presentation/views/add_new_addresses_view.dart';
 import 'package:t_store/features/personalization/presentation/views/user_addresses_view.dart';
 import 'package:t_store/features/shop/domain/entities/coupon_entity.dart';
 import 'package:t_store/features/shop/domain/usecases/validate_coupon_usecase.dart';
@@ -267,11 +269,20 @@ class _CheckoutViewState extends State<CheckoutView> {
                                       : null;
                                   return BillingAddressSection(
                                     address: address,
-                                    onChange: () {
-                                      THelperFunctions.navigateToScreen(
-                                        context,
-                                        const UserAddressesView(),
+                                    onChange: () async {
+                                      await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              const UserAddressesView(
+                                                selectMode: true,
+                                              ),
+                                        ),
                                       );
+                                      if (context.mounted) {
+                                        context
+                                            .read<AddressesCubit>()
+                                            .getAddresses();
+                                      }
                                     },
                                   );
                                 },
@@ -286,6 +297,21 @@ class _CheckoutViewState extends State<CheckoutView> {
                           final address = addressState is AddressesLoaded
                               ? _defaultOrFirst(addressState.addresses)
                               : null;
+                          if (address == null && canOrder && !_placingOrder) {
+                            return ElevatedButton(
+                              onPressed: () async {
+                                await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const AddNewAddressesView(),
+                                  ),
+                                );
+                                if (context.mounted) {
+                                  context.read<AddressesCubit>().getAddresses();
+                                }
+                              },
+                              child: const Text('Add a delivery address'),
+                            );
+                          }
                           final ready =
                               canOrder && address != null && !_placingOrder;
                           return ElevatedButton(
@@ -303,7 +329,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                                 : Text(
                                     address == null
                                         ? 'Add a delivery address first'
-                                        : 'Place Order ₹${total.toStringAsFixed(2)}',
+                                        : 'Place Order ${TFormatter.formatPrice(total)}',
                                   ),
                           );
                         },

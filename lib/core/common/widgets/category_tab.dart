@@ -24,7 +24,12 @@ class CategoryTab extends StatelessWidget {
         .toList();
 
     return Padding(
-      padding: const EdgeInsets.all(TSizes.defaultSpace),
+      padding: const EdgeInsets.fromLTRB(
+        TSizes.defaultSpace,
+        TSizes.spaceBtwItems,
+        TSizes.defaultSpace,
+        TSizes.defaultSpace,
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [

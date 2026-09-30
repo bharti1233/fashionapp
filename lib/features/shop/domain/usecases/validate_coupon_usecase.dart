@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:t_store/core/usecases/usecase.dart';
 import 'package:t_store/features/shop/domain/entities/coupon_entity.dart';
 import 'package:t_store/features/shop/domain/repositories/coupon_repository.dart';
+import 'package:t_store/core/utils/formatters/formatter.dart';
 
 /// Validates a coupon code against the live `coupons` table and computes
 /// the concrete discount for [ValidateCouponParams.subtotal].
@@ -35,7 +36,7 @@ class ValidateCouponUsecase
       if (params.subtotal < coupon.minOrderAmount) {
         return Left(
           'This coupon needs a minimum order of '
-          '₹${coupon.minOrderAmount.toStringAsFixed(2)}',
+          '${TFormatter.formatPrice(coupon.minOrderAmount)}',
         );
       }
       final double raw;

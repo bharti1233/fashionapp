@@ -7,6 +7,7 @@ import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/features/orders/domain/entities/order_entity.dart';
+import 'package:t_store/core/utils/formatters/formatter.dart';
 
 /// One real order row. All values come from [OrderEntity] (Supabase).
 /// Cancel is only offered when [OrderEntity.canCancel] allows it.
@@ -99,7 +100,7 @@ class OrderListItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                             Text(
-                              '₹${order.total.toStringAsFixed(2)}',
+                              '${TFormatter.formatPrice(order.total)}',
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                           ],

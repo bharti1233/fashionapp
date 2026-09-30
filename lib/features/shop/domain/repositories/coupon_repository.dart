@@ -6,4 +6,7 @@ import 'package:t_store/features/shop/domain/entities/coupon_entity.dart';
 /// real row or validation fails.
 abstract class CouponRepository {
   Future<Either<String, CouponEntity>> getCouponByCode(String code);
+
+  /// All currently active coupons for the "My Coupons" list.
+  Future<Either<String, List<CouponEntity>>> getActiveCoupons();
 }

@@ -113,8 +113,8 @@ class _BottomAddToCartState extends State<BottomAddToCart> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(TSizes.md),
-                backgroundColor: TColors.black,
-                side: const BorderSide(color: TColors.black),
+                backgroundColor: TColors.primary,
+                side: const BorderSide(color: TColors.primary),
               ),
               onPressed: inStock ? _addToCart : null,
               child: Text(inStock ? 'Add To Cart' : 'Out of Stock'),

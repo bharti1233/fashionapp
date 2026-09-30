@@ -20,8 +20,14 @@ import 'package:t_store/features/personalization/presentation/widgets/single_add
 /// Renders the user's real addresses (name, phone, full address from the
 /// backend). Loading / empty / error (with retry) states are honest —
 /// no placeholder identities or phone numbers.
+///
+/// In [selectMode] (used from checkout), tapping an address marks it as
+/// the default delivery address and closes the screen with `true`, so
+/// the caller can refresh.
 class UserAddressesView extends StatefulWidget {
-  const UserAddressesView({super.key});
+  final bool selectMode;
+
+  const UserAddressesView({super.key, this.selectMode = false});
 
   @override
   State<UserAddressesView> createState() => _UserAddressesViewState();
@@ -43,6 +49,37 @@ class _UserAddressesViewState extends State<UserAddressesView> {
       operation: 'loadAddresses',
     );
     context.read<AddressesCubit>().getAddresses();
+  }
+
+  /// Select-mode tap: mark the tapped address as default (updating the
+  /// SAME record — never inserting a duplicate) and return to checkout.
+  /// Failures remain visible as the cubit's error state and are logged;
+  /// checkout reloads authoritative state on return either way.
+  Future<void> _selectAddress(AddressEntity address) async {
+    if (address.isDefault) {
+      if (mounted) Navigator.of(context).pop(true);
+      return;
+    }
+    AppLogger.instance.info(
+      message: 'Default address selection started',
+      category: LogCategory.addresses,
+      event: 'ADDRESS_SELECT_START',
+      screen: 'UserAddressesView',
+      operation: 'selectAddress',
+    );
+    await context.read<AddressesCubit>().updateAddress(
+      id: address.id,
+      fullName: address.fullName,
+      phone: address.phone,
+      addressLine1: address.addressLine1,
+      addressLine2: address.addressLine2,
+      city: address.city,
+      state: address.state,
+      postalCode: address.postalCode,
+      country: address.country,
+      isDefault: true,
+    );
+    if (mounted) Navigator.of(context).pop(true);
   }
 
   @override
@@ -95,17 +132,31 @@ class _UserAddressesViewState extends State<UserAddressesView> {
                 padding: const EdgeInsets.all(TSizes.defaultSpace),
                 child: Column(
                   children: [
+                    if (widget.selectMode)
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: TSizes.spaceBtwItems),
+                        child: Text(
+                          'Tap an address to use it for this order.',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
                     for (final address in addresses)
                       Padding(
                         padding: const EdgeInsets.only(
                           bottom: TSizes.spaceBtwItems,
                         ),
-                        child: SingleAddress(
-                          singleAddressModel: SingleAddressModel(
-                            name: address.fullName,
-                            phoneNumber: address.phone,
-                            address: address.fullAddress,
-                            isSelected: address.isDefault,
+                        child: GestureDetector(
+                          onTap: widget.selectMode
+                              ? () => _selectAddress(address)
+                              : null,
+                          behavior: HitTestBehavior.opaque,
+                          child: SingleAddress(
+                            singleAddressModel: SingleAddressModel(
+                              name: address.fullName,
+                              phoneNumber: address.phone,
+                              address: address.fullAddress,
+                              isSelected: address.isDefault,
+                            ),
                           ),
                         ),
                       ),

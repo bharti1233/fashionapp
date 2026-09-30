@@ -18,7 +18,9 @@ class SaleTag extends StatelessWidget {
         borderRadius: TSizes.sm,
         color: TColors.secondary.withValues(alpha: .8),
         child: Text(
-          '$discountPercentage%',
+          // Rounded whole percent ("23% OFF"); callers hide the badge
+          // entirely when there is no discount (never "0% OFF").
+          '${discountPercentage.round()}% OFF',
           style: Theme.of(
             context,
           ).textTheme.labelLarge!.apply(color: TColors.black),

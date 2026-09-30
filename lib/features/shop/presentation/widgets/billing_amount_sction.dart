@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
+import 'package:t_store/core/utils/formatters/formatter.dart';
 
 /// Real order amounts computed from the cart and validated coupon.
 /// Shipping is free (₹0.00) — shown honestly, never invented.
@@ -26,7 +27,7 @@ class BillingAmountSection extends StatelessWidget {
           children: [
             Text('Subtotal', style: Theme.of(context).textTheme.bodyMedium),
             Text(
-              '₹${subtotal.toStringAsFixed(2)}',
+              '${TFormatter.formatPrice(subtotal)}',
               style: Theme.of(context).textTheme.labelLarge,
             ),
           ],
@@ -39,7 +40,7 @@ class BillingAmountSection extends StatelessWidget {
             Text(
               shippingCost == 0
                   ? 'Free'
-                  : '₹${shippingCost.toStringAsFixed(2)}',
+                  : '${TFormatter.formatPrice(shippingCost)}',
               style: Theme.of(context).textTheme.labelLarge,
             ),
           ],
@@ -54,7 +55,7 @@ class BillingAmountSection extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Text(
-                '-₹${discount.toStringAsFixed(2)}',
+                '-${TFormatter.formatPrice(discount)}',
                 style: Theme.of(
                   context,
                 ).textTheme.labelLarge?.copyWith(color: Colors.green),
@@ -68,7 +69,7 @@ class BillingAmountSection extends StatelessWidget {
           children: [
             Text('Order Total', style: Theme.of(context).textTheme.bodyMedium),
             Text(
-              '₹${total.toStringAsFixed(2)}',
+              '${TFormatter.formatPrice(total)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],

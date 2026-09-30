@@ -11,6 +11,7 @@ import 'package:t_store/core/common/widgets/product_title_text.dart';
 import 'package:t_store/core/common/widgets/section_heading.dart';
 import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
+import 'package:t_store/core/utils/formatters/formatter.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 
@@ -67,7 +68,8 @@ class _ProductAttributesState extends State<ProductAttributes> {
       children: [
         CircularContainer(
           circularContainerModel: CircularContainerModel(
-            color: dark ? TColors.darkerGrey : TColors.grey,
+            color: dark ? TColors.black : TColors.white,
+            showBorder: true,
             padding: const EdgeInsets.all(TSizes.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +96,7 @@ class _ProductAttributesState extends State<ProductAttributes> {
                             ),
                             if (product.salePrice != null)
                               Text(
-                                ' ₹${product.price.toStringAsFixed(2)}',
+                                ' ${TFormatter.formatPrice(product.price)}',
                                 style: Theme.of(context).textTheme.titleSmall!
                                     .apply(
                                       decoration: TextDecoration.lineThrough,
@@ -103,8 +105,8 @@ class _ProductAttributesState extends State<ProductAttributes> {
                             const SizedBox(width: TSizes.spaceBtwItems),
                             ProductPriceText(
                               productPriceTextModel: ProductPriceTextModel(
-                                price: product.effectivePrice.toStringAsFixed(
-                                  2,
+                                price: TFormatter.formatAmount(
+                                  product.effectivePrice,
                                 ),
                                 smallSize: true,
                               ),
@@ -121,7 +123,10 @@ class _ProductAttributesState extends State<ProductAttributes> {
                             ),
                             Text(
                               inStock ? 'In Stock' : 'Out of Stock',
-                              style: Theme.of(context).textTheme.titleMedium,
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
+                                    color: inStock ? Colors.green : Colors.red,
+                                  ),
                             ),
                           ],
                         ),
