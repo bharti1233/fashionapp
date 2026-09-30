@@ -53,4 +53,94 @@ void main() {
       }
     });
   });
+
+  group('Resolution logic (injected values)', () {
+    test('define value wins over .env fallback', () {
+      expect(
+        SupabaseConfig.resolveSupabaseUrl(
+          defineUrl: 'https://define.supabase.co',
+          envUrl: 'https://env.supabase.co',
+        ),
+        'https://define.supabase.co',
+      );
+    });
+
+    test('.env fallback is used when define is empty', () {
+      expect(
+        SupabaseConfig.resolveSupabaseUrl(
+          defineUrl: '',
+          envUrl: 'https://env.supabase.co',
+        ),
+        'https://env.supabase.co',
+      );
+    });
+
+    test('url resolution throws when both sources are empty', () {
+      expect(
+        () => SupabaseConfig.resolveSupabaseUrl(defineUrl: '', envUrl: ''),
+        throwsA(isA<StateError>()),
+      );
+      expect(
+        () => SupabaseConfig.resolveSupabaseUrl(defineUrl: ''),
+        throwsA(isA<StateError>()),
+      );
+    });
+
+    test('preferred define key wins over legacy define key', () {
+      expect(
+        SupabaseConfig.resolveSupabaseKey(
+          defineKey: 'preferred-key',
+          legacyDefineKey: 'legacy-key',
+        ),
+        'preferred-key',
+      );
+    });
+
+    test('legacy define key is used when preferred is empty', () {
+      expect(
+        SupabaseConfig.resolveSupabaseKey(
+          defineKey: '',
+          legacyDefineKey: 'legacy-key',
+        ),
+        'legacy-key',
+      );
+    });
+
+    test('.env keys are used when defines are empty', () {
+      expect(
+        SupabaseConfig.resolveSupabaseKey(
+          defineKey: '',
+          legacyDefineKey: '',
+          envKey: 'env-key',
+        ),
+        'env-key',
+      );
+      expect(
+        SupabaseConfig.resolveSupabaseKey(
+          defineKey: '',
+          legacyDefineKey: '',
+          legacyEnvKey: 'legacy-env-key',
+        ),
+        'legacy-env-key',
+      );
+    });
+
+    test('key resolution throws when every source is empty', () {
+      expect(
+        () => SupabaseConfig.resolveSupabaseKey(
+          defineKey: '',
+          legacyDefineKey: '',
+        ),
+        throwsA(isA<StateError>()),
+      );
+    });
+
+    test('probes report false when unconfigured, never throw', () {
+      // In the unit-test environment no defines/.env exist.
+      expect(() => SupabaseConfig.isUrlConfigured, returnsNormally);
+      expect(() => SupabaseConfig.isKeyConfigured, returnsNormally);
+      expect(SupabaseConfig.isUrlConfigured, isFalse);
+      expect(SupabaseConfig.isKeyConfigured, isFalse);
+    });
+  });
 }

@@ -46,11 +46,19 @@ class AppLogEntry {
   final DateTime timestamp;
   final LogLevel level;
   final LogCategory category;
+
+  /// Machine-readable lifecycle event, e.g. APP_START, CONFIG_RESOLVED,
+  /// SUPABASE_INIT_SUCCESS. Empty when the log call did not name one.
+  final String event;
   final String message;
   final String? errorType;
   final String? stackTrace;
   final String? screen;
   final String? operation;
+
+  /// Launch session this entry belongs to. Used to detect interrupted
+  /// startups and to filter logs by session.
+  final String sessionId;
   final String? appVersion;
   final String? buildNumber;
   final String? platform;
@@ -62,11 +70,13 @@ class AppLogEntry {
     required this.timestamp,
     required this.level,
     required this.category,
+    this.event = '',
     required this.message,
     this.errorType,
     this.stackTrace,
     this.screen,
     this.operation,
+    this.sessionId = '',
     this.appVersion,
     this.buildNumber,
     this.platform,
@@ -78,11 +88,13 @@ class AppLogEntry {
   factory AppLogEntry.create({
     required LogLevel level,
     required LogCategory category,
+    String event = '',
     required String message,
     String? errorType,
     String? stackTrace,
     String? screen,
     String? operation,
+    String sessionId = '',
     String? appVersion,
     String? buildNumber,
     String? platform,
@@ -94,11 +106,13 @@ class AppLogEntry {
       timestamp: DateTime.now(),
       level: level,
       category: category,
+      event: event,
       message: message,
       errorType: errorType,
       stackTrace: stackTrace,
       screen: screen,
       operation: operation,
+      sessionId: sessionId,
       appVersion: appVersion,
       buildNumber: buildNumber,
       platform: platform,
@@ -123,11 +137,13 @@ class AppLogEntry {
       'timestamp': timestamp.toIso8601String(),
       'level': level.name,
       'category': category.name,
+      'event': event,
       'message': message,
       'errorType': errorType,
       'stackTrace': stackTrace,
       'screen': screen,
       'operation': operation,
+      'sessionId': sessionId,
       'appVersion': appVersion,
       'buildNumber': buildNumber,
       'platform': platform,
@@ -150,6 +166,9 @@ class AppLogEntry {
       stackTrace: json['stackTrace'] as String?,
       screen: json['screen'] as String?,
       operation: json['operation'] as String?,
+      // Tolerate logs persisted before event/sessionId existed.
+      event: json['event'] as String? ?? '',
+      sessionId: json['sessionId'] as String? ?? '',
       appVersion: json['appVersion'] as String?,
       buildNumber: json['buildNumber'] as String?,
       platform: json['platform'] as String?,
@@ -275,12 +294,14 @@ class LogFilter {
     }
     if (searchQuery != null && searchQuery!.isNotEmpty) {
       final query = searchQuery!.toLowerCase();
-      if (!entry.message.toLowerCase().contains(query) &&
-          (entry.errorType?.toLowerCase().contains(query) ?? false) &&
-          (entry.stackTrace?.toLowerCase().contains(query) ?? false) &&
-          (entry.screen?.toLowerCase().contains(query) ?? false) &&
-          (entry.operation?.toLowerCase().contains(query) ?? false) &&
-          (entry.errorType?.toLowerCase().contains(query) ?? false)) {
+      final matchesQuery =
+          entry.message.toLowerCase().contains(query) ||
+          entry.event.toLowerCase().contains(query) ||
+          (entry.errorType?.toLowerCase().contains(query) ?? false) ||
+          (entry.stackTrace?.toLowerCase().contains(query) ?? false) ||
+          (entry.screen?.toLowerCase().contains(query) ?? false) ||
+          (entry.operation?.toLowerCase().contains(query) ?? false);
+      if (!matchesQuery) {
         return false;
       }
     }

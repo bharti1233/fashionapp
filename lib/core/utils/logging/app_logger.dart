@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -21,6 +22,21 @@ class AppLogger {
   SharedPreferences? _prefs;
   final List<AppLogEntry> _inMemoryLogs = [];
   bool _initialized = false;
+
+  /// Unique identifier for this app launch. Attached to every entry so
+  /// logs can be filtered by session and interrupted startups detected.
+  final String sessionId = DateTime.now().microsecondsSinceEpoch.toRadixString(
+    36,
+  );
+
+  /// Live broadcast stream of log entries. Screens (e.g. App Logs)
+  /// subscribe to update the moment a new entry is recorded — no restart
+  /// or manual refresh required.
+  final StreamController<AppLogEntry> _logStreamController =
+      StreamController<AppLogEntry>.broadcast();
+
+  /// Live stream of newly recorded log entries.
+  Stream<AppLogEntry> get logStream => _logStreamController.stream;
 
   /// Initialize the logger. Safe to call multiple times.
   Future<void> initialize() async {
@@ -75,6 +91,7 @@ class AppLogger {
   void debug({
     required String message,
     LogCategory category = LogCategory.other,
+    String event = '',
     String? screen,
     String? operation,
     Map<String, dynamic>? context,
@@ -82,6 +99,7 @@ class AppLogger {
     _log(
       level: LogLevel.debug,
       category: category,
+      event: event,
       message: message,
       screen: screen,
       operation: operation,
@@ -93,6 +111,7 @@ class AppLogger {
   void info({
     required String message,
     LogCategory category = LogCategory.other,
+    String event = '',
     String? screen,
     String? operation,
     Map<String, dynamic>? context,
@@ -100,6 +119,7 @@ class AppLogger {
     _log(
       level: LogLevel.info,
       category: category,
+      event: event,
       message: message,
       screen: screen,
       operation: operation,
@@ -111,6 +131,7 @@ class AppLogger {
   void warning({
     required String message,
     LogCategory category = LogCategory.other,
+    String event = '',
     String? screen,
     String? operation,
     Map<String, dynamic>? context,
@@ -118,6 +139,7 @@ class AppLogger {
     _log(
       level: LogLevel.warning,
       category: category,
+      event: event,
       message: message,
       screen: screen,
       operation: operation,
@@ -129,6 +151,7 @@ class AppLogger {
   void error({
     required String message,
     LogCategory category = LogCategory.other,
+    String event = '',
     String? screen,
     String? operation,
     Object? error,
@@ -138,6 +161,7 @@ class AppLogger {
     _log(
       level: LogLevel.error,
       category: category,
+      event: event,
       message: message,
       screen: screen,
       operation: operation,
@@ -151,6 +175,7 @@ class AppLogger {
   void fatal({
     required String message,
     LogCategory category = LogCategory.other,
+    String event = '',
     String? screen,
     String? operation,
     Object? error,
@@ -160,6 +185,7 @@ class AppLogger {
     _log(
       level: LogLevel.fatal,
       category: category,
+      event: event,
       message: message,
       screen: screen,
       operation: operation,
@@ -173,6 +199,7 @@ class AppLogger {
   void _log({
     required LogLevel level,
     required LogCategory category,
+    String event = '',
     required String message,
     String? screen,
     String? operation,
@@ -187,11 +214,13 @@ class AppLogger {
       final entry = AppLogEntry.create(
         level: level,
         category: category,
+        event: event,
         message: message,
         errorType: error?.runtimeType.toString(),
         stackTrace: stackTrace?.toString(),
         screen: screen,
         operation: operation,
+        sessionId: sessionId,
         appVersion: _getAppVersion(),
         buildNumber: _getBuildNumber(),
         platform: _getPlatform(),
@@ -200,6 +229,16 @@ class AppLogger {
       );
 
       _inMemoryLogs.add(entry);
+
+      // Notify live subscribers (e.g. the App Logs screen). Guarded so a
+      // listener problem can never break logging itself.
+      try {
+        if (!_logStreamController.isClosed) {
+          _logStreamController.add(entry);
+        }
+      } catch (_) {
+        // Live stream is best-effort; the persisted entry above is intact.
+      }
 
       // Also print to console in debug mode
       if (kDebugMode) {
@@ -227,8 +266,12 @@ class AppLogger {
       'api_key',
       'apikey',
       'secret',
+      'client_secret',
+      'private_key',
       'authorization',
       'auth',
+      'bearer',
+      'jwt',
       'credential',
       'credentials',
       'otp',
@@ -275,6 +318,7 @@ class AppLogger {
     final q = query.toLowerCase();
     return _inMemoryLogs.where((e) {
       return e.message.toLowerCase().contains(q) ||
+          e.event.toLowerCase().contains(q) ||
           (e.errorType?.toLowerCase().contains(q) ?? false) ||
           (e.stackTrace?.toLowerCase().contains(q) ?? false) ||
           (e.screen?.toLowerCase().contains(q) ?? false) ||
@@ -412,8 +456,9 @@ class AppLogger {
   Future<void> logPreviousSessionCrashIfNeeded() async {
     if (await didPreviousSessionEndUnexpectedly()) {
       warning(
-        message: 'Previous application session may have ended unexpectedly.',
-        category: LogCategory.system,
+        message: 'Previous application session ended before startup completed.',
+        category: LogCategory.startup,
+        event: 'PREVIOUS_STARTUP_INTERRUPTED',
         screen: 'App Startup',
         operation: 'checkPreviousSession',
       );
@@ -435,6 +480,11 @@ class AppLogger {
     buffer.writeln();
     buffer.writeln('Category:');
     buffer.writeln(entry.categoryDisplay);
+    if (entry.event.isNotEmpty) {
+      buffer.writeln();
+      buffer.writeln('Event:');
+      buffer.writeln(entry.event);
+    }
     if (entry.screen != null) {
       buffer.writeln();
       buffer.writeln('Screen:');
@@ -473,6 +523,11 @@ class AppLogger {
     buffer.writeln();
     buffer.writeln('OS Version:');
     buffer.writeln(entry.osVersion ?? 'Unknown');
+    if (entry.sessionId.isNotEmpty) {
+      buffer.writeln();
+      buffer.writeln('Session ID:');
+      buffer.writeln(entry.sessionId);
+    }
     buffer.writeln();
     buffer.writeln('Flutter Version:');
     buffer.writeln(_getFlutterVersion());

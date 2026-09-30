@@ -47,6 +47,8 @@ jobs:
           fi
           echo "SUPABASE_URL configured: YES"
           echo "SUPABASE_PUBLISHABLE_KEY configured: YES"
+          echo "SUPABASE_URL shell variable configured: $([ -n "$SUPABASE_URL" ] && echo YES || echo NO)"
+          echo "SUPABASE_PUBLISHABLE_KEY shell variable configured: $([ -n "$SUPABASE_PUBLISHABLE_KEY" ] && echo YES || echo NO)"
 
       - name: Check formatting
         run: dart format --output=none --set-exit-if-changed .

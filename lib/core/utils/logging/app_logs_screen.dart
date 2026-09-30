@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:t_store/core/utils/logging/app_log_entry.dart';
@@ -16,17 +18,31 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
   final TextEditingController _searchController = TextEditingController();
   LogFilter _filter = const LogFilter();
   List<AppLogEntry> _logs = [];
+  StreamSubscription<AppLogEntry>? _logSubscription;
 
   @override
   void initState() {
     super.initState();
     _loadLogs();
+    // Live updates: refresh the list the moment a new entry is recorded.
+    _logSubscription = AppLogger.instance.logStream.listen(_onNewEntry);
   }
 
   @override
   void dispose() {
+    _logSubscription?.cancel();
     _searchController.dispose();
     super.dispose();
+  }
+
+  /// A new log entry arrived while the screen is open — re-apply the
+  /// current filter and show it immediately.
+  void _onNewEntry(AppLogEntry entry) {
+    if (!mounted) return;
+    if (!_filter.matches(entry)) return;
+    setState(() {
+      _logs = AppLogger.instance.getLogs(filter: _filter);
+    });
   }
 
   void _loadLogs() {
@@ -89,6 +105,15 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
     }
   }
 
+  void _copyAllLogs() {
+    final text = AppLogger.instance.exportLogsAsText();
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('All logs copied to clipboard.'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   void _copyLog(AppLogEntry entry) {
     final report = AppLogger.instance.formatDiagnosticReport(entry);
     Clipboard.setData(ClipboardData(text: report));
@@ -112,6 +137,11 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
       appBar: AppBar(
         title: const Text('App Logs'),
         actions: [
+          IconButton(
+            onPressed: _copyAllLogs,
+            icon: const Icon(Icons.copy_all_outlined),
+            tooltip: 'Copy All Logs',
+          ),
           IconButton(
             onPressed: _clearLogs,
             icon: const Icon(Icons.delete_outline),
@@ -274,7 +304,9 @@ class _LogListTile extends StatelessWidget {
         style: const TextStyle(fontSize: 14),
       ),
       subtitle: Text(
-        '${entry.categoryDisplay} • ${entry.shortTimestamp}',
+        entry.event.isNotEmpty
+            ? '${entry.event} • ${entry.categoryDisplay} • ${entry.shortTimestamp}'
+            : '${entry.categoryDisplay} • ${entry.shortTimestamp}',
         style: const TextStyle(fontSize: 12, color: Colors.grey),
       ),
       trailing: IconButton(
@@ -328,6 +360,8 @@ class LogDetailScreen extends StatelessWidget {
           children: [
             _buildHeader(),
             const SizedBox(height: 24),
+            if (entry.event.isNotEmpty)
+              _buildDetailSection('Event', entry.event),
             _buildDetailSection('Message', entry.message),
             if (entry.errorType != null)
               _buildDetailSection('Error Type', entry.errorType!),
@@ -461,6 +495,7 @@ class LogDetailScreen extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         _buildMetadataRow('Timestamp', entry.formattedTimestamp),
+        _buildMetadataRow('Session ID', entry.sessionId),
         _buildMetadataRow('App Version', entry.appVersion),
         _buildMetadataRow('Build', entry.buildNumber),
         _buildMetadataRow('Platform', entry.platform),

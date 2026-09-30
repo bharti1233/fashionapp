@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:t_store/core/dependency_injection/service_locator.dart';
+import 'package:t_store/core/supabase/supabase_config.dart';
 import 'package:t_store/core/supabase/supabase_service.dart';
 import 'package:t_store/core/utils/logging/app_log_entry.dart';
 import 'package:t_store/core/utils/logging/app_logger.dart';
@@ -24,11 +25,22 @@ void main() async {
   AppLogger.instance.info(
     message: 'Application started',
     category: LogCategory.startup,
+    event: 'APP_START',
     screen: 'main',
     operation: 'appStart',
   );
 
+  // Detect a previous launch that never finished starting up.
+  await AppLogger.instance.logPreviousSessionCrashIfNeeded();
+
   // Load environment variables (optional: CI supplies --dart-define instead).
+  AppLogger.instance.info(
+    message: 'Loading configuration',
+    category: LogCategory.startup,
+    event: 'CONFIG_LOADING',
+    screen: 'main',
+    operation: 'configLoad',
+  );
   try {
     await dotenv.load(fileName: '.env');
   } catch (_) {
@@ -36,7 +48,32 @@ void main() async {
     // from --dart-define. SupabaseConfig fails clearly if both are missing.
   }
 
+  // Report ONLY whether each value is configured — never the values.
+  AppLogger.instance.info(
+    message:
+        'SUPABASE_URL configured: ${SupabaseConfig.isUrlConfigured ? 'YES' : 'NO'}',
+    category: LogCategory.startup,
+    event: 'CONFIG_RESOLVED',
+    screen: 'main',
+    operation: 'configLoad',
+  );
+  AppLogger.instance.info(
+    message:
+        'SUPABASE_PUBLISHABLE_KEY configured: ${SupabaseConfig.isKeyConfigured ? 'YES' : 'NO'}',
+    category: LogCategory.startup,
+    event: 'CONFIG_RESOLVED',
+    screen: 'main',
+    operation: 'configLoad',
+  );
+
   // Initialize Supabase with timeout to prevent indefinite hang
+  AppLogger.instance.info(
+    message: 'Supabase initialization started',
+    category: LogCategory.supabase,
+    event: 'SUPABASE_INIT_START',
+    screen: 'main',
+    operation: 'supabaseInit',
+  );
   try {
     await SupabaseService.initialize().timeout(
       const Duration(seconds: 15),
@@ -47,6 +84,7 @@ void main() async {
     AppLogger.instance.info(
       message: 'Supabase initialization completed',
       category: LogCategory.supabase,
+      event: 'SUPABASE_INIT_SUCCESS',
       screen: 'main',
       operation: 'supabaseInit',
     );
@@ -54,6 +92,7 @@ void main() async {
     AppLogger.instance.error(
       message: 'Supabase initialization failed',
       category: LogCategory.supabase,
+      event: 'SUPABASE_INIT_FAILURE',
       screen: 'main',
       operation: 'supabaseInit',
       error: e,
@@ -65,11 +104,19 @@ void main() async {
   }
 
   // Setup dependency injection (Supabase-based services)
+  AppLogger.instance.info(
+    message: 'Service locator setup started',
+    category: LogCategory.startup,
+    event: 'DI_INIT_START',
+    screen: 'main',
+    operation: 'serviceLocatorInit',
+  );
   try {
     await setupServiceLocator();
     AppLogger.instance.info(
       message: 'Service locator setup completed',
       category: LogCategory.startup,
+      event: 'DI_INIT_SUCCESS',
       screen: 'main',
       operation: 'serviceLocatorInit',
     );
@@ -77,6 +124,7 @@ void main() async {
     AppLogger.instance.error(
       message: 'Service locator setup failed',
       category: LogCategory.startup,
+      event: 'DI_INIT_FAILURE',
       screen: 'main',
       operation: 'serviceLocatorInit',
       error: e,
@@ -96,6 +144,7 @@ void main() async {
   AppLogger.instance.info(
     message: 'Application ready',
     category: LogCategory.startup,
+    event: 'APP_READY',
     screen: 'main',
     operation: 'appReady',
   );
