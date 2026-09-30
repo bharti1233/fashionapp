@@ -19,6 +19,10 @@ class BillingPaymentSection extends StatelessWidget {
 
   static const String cashOnDelivery = 'Cash on Delivery';
 
+  void _onMethodChanged(String? value) {
+    onMethodSelected?.call(value ?? cashOnDelivery);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,8 +38,7 @@ class BillingPaymentSection extends StatelessWidget {
         const SizedBox(height: TSizes.spaceBtwItems / 2),
         RadioGroup<String>(
           groupValue: selectedMethod,
-          onChanged: (value) =>
-              onMethodSelected?.call(value ?? cashOnDelivery),
+          onChanged: _onMethodChanged,
           child: RadioListTile<String>(
             value: cashOnDelivery,
             title: const Text('Cash on Delivery'),

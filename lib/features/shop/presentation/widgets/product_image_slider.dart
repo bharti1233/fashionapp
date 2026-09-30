@@ -9,7 +9,8 @@ import 'package:t_store/core/common/widgets/circular_icon.dart';
 import 'package:t_store/core/common/widgets/curved_widget.dart';
 import 'package:t_store/core/common/widgets/rounded_image.dart';
 import 'package:t_store/core/utils/constants/colors.dart';
-import 'package:t_store/core/utils/helpers/helper_functions.dart';import 'package:t_store/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:t_store/core/utils/helpers/helper_functions.dart';
+import 'package:t_store/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:t_store/features/wishlist/presentation/cubit/wishlist_state.dart';
 
 /// Product image gallery for REAL backend image URLs with the wishlist
@@ -23,6 +24,14 @@ class ProductImageSlider extends StatelessWidget {
     required this.images,
     required this.productId,
   });
+
+  bool _isSaved(BuildContext context) {
+    return context.read<WishlistCubit>().isInWishlist(productId);
+  }
+
+  void _toggleSaved(BuildContext context) {
+    context.read<WishlistCubit>().toggleWishlist(productId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +72,12 @@ class ProductImageSlider extends StatelessWidget {
                 actions: [
                   BlocBuilder<WishlistCubit, WishlistState>(
                     builder: (context, state) {
-                      final saved = context.read<WishlistCubit>().isInWishlist(
-                        productId,
-                      );
+                      final saved = _isSaved(context);
                       return CircularIcon(
                         circularIconModel: CircularIconModel(
                           icon: saved ? Iconsax.heart5 : Iconsax.heart,
                           color: Colors.red,
-                          onPressed: () => context
-                              .read<WishlistCubit>()
-                              .toggleWishlist(productId),
+                          onPressed: () => _toggleSaved(context),
                         ),
                       );
                     },
