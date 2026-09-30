@@ -43,9 +43,7 @@ class BillingAmountSection extends StatelessWidget {
           children: [
             Text('Shipping Fee', style: label),
             Text(
-              shippingCost == 0
-                  ? 'Free'
-                  : TFormatter.formatPrice(shippingCost),
+              shippingCost == 0 ? 'Free' : TFormatter.formatPrice(shippingCost),
               style: value,
             ),
           ],
