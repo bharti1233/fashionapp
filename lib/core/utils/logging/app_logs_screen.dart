@@ -114,6 +114,8 @@ class _AppLogsScreenState extends State<AppLogsScreen> {
         duration: Duration(seconds: 2),
       ),
     );
+  }
+
   void _copyLog(AppLogEntry entry) {
     final report = AppLogger.instance.formatDiagnosticReport(entry);
     Clipboard.setData(ClipboardData(text: report));
