@@ -102,11 +102,17 @@ import 'package:t_store/features/notifications/data/repositories/notification_re
 import 'package:t_store/features/notifications/domain/repositories/notification_repository.dart';
 import 'package:t_store/features/notifications/presentation/cubit/notifications_cubit.dart';
 
+// Navigation (no dependencies; required by the post-login main route)
+import 'package:t_store/core/cubits/navigation_menu_cubit/navigation_menu_cubit.dart';
+
 final sl = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
   // ==================== Core ====================
   sl.registerLazySingleton<SupabaseService>(() => SupabaseService.instance);
+
+  // ==================== Navigation ====================
+  sl.registerFactory(() => NavigationMenuCubit());
 
   // ==================== Auth ====================
   // Repository
