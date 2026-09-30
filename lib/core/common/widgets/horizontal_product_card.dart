@@ -18,7 +18,6 @@ import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
 import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/features/cart/presentation/cubit/cart_cubit.dart';
-import 'package:t_store/features/cart/presentation/cubit/cart_state.dart';
 import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 import 'package:t_store/features/shop/presentation/views/product_details_view.dart';
 import 'package:t_store/features/wishlist/presentation/cubit/wishlist_cubit.dart';

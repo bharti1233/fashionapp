@@ -12,7 +12,6 @@ import 'package:t_store/features/wishlist/domain/usecases/add_to_wishlist_usecas
 import 'package:t_store/features/wishlist/domain/usecases/get_wishlist_usecase.dart';
 import 'package:t_store/features/wishlist/domain/usecases/remove_from_wishlist_usecase.dart';
 import 'package:t_store/features/wishlist/presentation/cubit/wishlist_cubit.dart';
-import 'package:t_store/features/wishlist/presentation/cubit/wishlist_state.dart';
 
 class MockGetWishlistUsecase extends Mock implements GetWishlistUsecase {}
 

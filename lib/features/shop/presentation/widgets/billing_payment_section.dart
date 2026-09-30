@@ -32,15 +32,18 @@ class BillingPaymentSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: TSizes.spaceBtwItems / 2),
-        RadioListTile<String>(
-          value: cashOnDelivery,
+        RadioGroup<String>(
           groupValue: selectedMethod,
-          onChanged: (value) => onMethodSelected?.call(value ?? cashOnDelivery),
-          title: const Text('Cash on Delivery'),
-          subtitle: const Text('Pay when your order arrives'),
-          secondary: const Icon(Iconsax.money),
-          contentPadding: EdgeInsets.zero,
-          dense: true,
+          onChanged: (value) =>
+              onMethodSelected?.call(value ?? cashOnDelivery),
+          child: RadioListTile<String>(
+            value: cashOnDelivery,
+            title: const Text('Cash on Delivery'),
+            subtitle: const Text('Pay when your order arrives'),
+            secondary: const Icon(Iconsax.money),
+            contentPadding: EdgeInsets.zero,
+            dense: true,
+          ),
         ),
         const SizedBox(height: TSizes.spaceBtwItems / 2),
         const Text(

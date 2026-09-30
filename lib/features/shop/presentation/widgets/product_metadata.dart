@@ -7,7 +7,6 @@ import 'package:t_store/core/common/widgets/product_price_text.dart';
 import 'package:t_store/core/common/widgets/product_title_text.dart';
 import 'package:t_store/core/utils/constants/colors.dart';
 import 'package:t_store/core/utils/constants/sizes.dart';
-import 'package:t_store/core/utils/helpers/helper_functions.dart';
 import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 
 /// Real product identity block: price, title, stock state and brand name
@@ -19,7 +18,6 @@ class ProductMetadata extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = THelperFunctions.isDarkMode(context);
     final discount = product.salePrice != null && product.price > 0
         ? ((product.price - product.salePrice!) / product.price * 100).round()
         : 0;

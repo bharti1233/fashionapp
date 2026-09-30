@@ -110,11 +110,6 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   void _placeOrder(List<CartItemEntity> items, AddressEntity address) {
-    final subtotal = items.fold<double>(
-      0,
-      (sum, item) => sum + item.totalPrice,
-    );
-    final total = subtotal - _discount;
     setState(() => _placingOrder = true);
     AppLogger.instance.info(
       message: 'Order placement started (${items.length} items)',
@@ -294,9 +289,9 @@ class _CheckoutViewState extends State<CheckoutView> {
                           final ready =
                               canOrder && address != null && !_placingOrder;
                           return ElevatedButton(
-                            onPressed: ready
-                                ? () => _placeOrder(items, address!)
-                                : null,
+                            onPressed: address == null || !ready
+                                ? null
+                                : () => _placeOrder(items, address),
                             child: _placingOrder
                                 ? const SizedBox(
                                     width: 20,
