@@ -4,6 +4,8 @@ import 'package:t_store/core/supabase/supabase_tables.dart';
 import 'package:t_store/features/shop/data/models/brand_model.dart';
 import 'package:t_store/features/shop/domain/entities/brand_entity.dart';
 import 'package:t_store/features/shop/domain/repositories/brand_repository.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class BrandRepositoryImpl implements BrandRepository {
   final SupabaseService supabaseService;
@@ -24,7 +26,16 @@ class BrandRepositoryImpl implements BrandRepository {
           .toList();
 
       return Right(brands);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Brand getBrands failed',
+        category: LogCategory.products,
+        event: 'GET_BRANDS_FAILURE',
+        screen: 'BrandRepository',
+        operation: 'getBrands',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -39,7 +50,16 @@ class BrandRepositoryImpl implements BrandRepository {
           .single();
 
       return Right(BrandModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Brand getBrandById failed',
+        category: LogCategory.products,
+        event: 'GET_BRAND_BY_ID_FAILURE',
+        screen: 'BrandRepository',
+        operation: 'getBrandById',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -59,7 +79,16 @@ class BrandRepositoryImpl implements BrandRepository {
           .toList();
 
       return Right(brands);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Brand getFeaturedBrands failed',
+        category: LogCategory.products,
+        event: 'GET_FEATURED_BRANDS_FAILURE',
+        screen: 'BrandRepository',
+        operation: 'getFeaturedBrands',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }

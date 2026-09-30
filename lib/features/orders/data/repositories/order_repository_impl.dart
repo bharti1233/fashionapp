@@ -4,6 +4,8 @@ import 'package:t_store/core/supabase/supabase_tables.dart';
 import 'package:t_store/features/orders/data/models/order_model.dart';
 import 'package:t_store/features/orders/domain/entities/order_entity.dart';
 import 'package:t_store/features/orders/domain/repositories/order_repository.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class OrderRepositoryImpl implements OrderRepository {
   final SupabaseService supabaseService;
@@ -30,7 +32,16 @@ class OrderRepositoryImpl implements OrderRepository {
           .toList();
 
       return Right(orders);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Orders getOrders failed',
+        category: LogCategory.orders,
+        event: 'GET_ORDERS_FAILURE',
+        screen: 'OrdersRepository',
+        operation: 'getOrders',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -45,7 +56,16 @@ class OrderRepositoryImpl implements OrderRepository {
           .single();
 
       return Right(OrderModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Orders getOrderById failed',
+        category: LogCategory.orders,
+        event: 'GET_ORDER_BY_ID_FAILURE',
+        screen: 'OrdersRepository',
+        operation: 'getOrderById',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -130,7 +150,16 @@ class OrderRepositoryImpl implements OrderRepository {
 
       // Get full order with items
       return await getOrderById(orderId);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Orders createOrder failed',
+        category: LogCategory.orders,
+        event: 'CREATE_ORDER_FAILURE',
+        screen: 'OrdersRepository',
+        operation: 'createOrder',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -156,7 +185,16 @@ class OrderRepositoryImpl implements OrderRepository {
           .eq('id', orderId);
 
       return await getOrderById(orderId);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Orders cancelOrder failed',
+        category: LogCategory.orders,
+        event: 'CANCEL_ORDER_FAILURE',
+        screen: 'OrdersRepository',
+        operation: 'cancelOrder',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }

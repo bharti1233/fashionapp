@@ -4,6 +4,8 @@ import 'package:t_store/core/supabase/supabase_tables.dart';
 import 'package:t_store/features/personalization/data/models/address_model.dart';
 import 'package:t_store/features/personalization/domain/entities/address_entity.dart';
 import 'package:t_store/features/personalization/domain/repositories/address_repository.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class AddressRepositoryImpl implements AddressRepository {
   final SupabaseService supabaseService;
@@ -31,7 +33,16 @@ class AddressRepositoryImpl implements AddressRepository {
           .toList();
 
       return Right(addresses);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Address getAddresses failed',
+        category: LogCategory.addresses,
+        event: 'GET_ADDRESSES_FAILURE',
+        screen: 'AddressRepository',
+        operation: 'getAddresses',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -46,7 +57,16 @@ class AddressRepositoryImpl implements AddressRepository {
           .single();
 
       return Right(AddressModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Address getAddressById failed',
+        category: LogCategory.addresses,
+        event: 'GET_ADDRESS_BY_ID_FAILURE',
+        screen: 'AddressRepository',
+        operation: 'getAddressById',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -94,7 +114,16 @@ class AddressRepositoryImpl implements AddressRepository {
           .single();
 
       return Right(AddressModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Address addAddress failed',
+        category: LogCategory.addresses,
+        event: 'ADD_ADDRESS_FAILURE',
+        screen: 'AddressRepository',
+        operation: 'addAddress',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -139,7 +168,16 @@ class AddressRepositoryImpl implements AddressRepository {
           .single();
 
       return Right(AddressModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Address updateAddress failed',
+        category: LogCategory.addresses,
+        event: 'UPDATE_ADDRESS_FAILURE',
+        screen: 'AddressRepository',
+        operation: 'updateAddress',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -154,7 +192,16 @@ class AddressRepositoryImpl implements AddressRepository {
           .eq('user_id', _userId);
 
       return const Right(null);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Address deleteAddress failed',
+        category: LogCategory.addresses,
+        event: 'DELETE_ADDRESS_FAILURE',
+        screen: 'AddressRepository',
+        operation: 'deleteAddress',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -175,7 +222,16 @@ class AddressRepositoryImpl implements AddressRepository {
           .eq('id', id);
 
       return const Right(null);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Address setDefaultAddress failed',
+        category: LogCategory.addresses,
+        event: 'SET_DEFAULT_ADDRESS_FAILURE',
+        screen: 'AddressRepository',
+        operation: 'setDefaultAddress',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }

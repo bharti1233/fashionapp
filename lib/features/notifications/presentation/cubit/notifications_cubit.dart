@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:t_store/features/notifications/domain/entities/notification_entity.dart';
 import 'package:t_store/features/notifications/domain/repositories/notification_repository.dart';
 import 'package:t_store/features/notifications/presentation/cubit/notifications_state.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class NotificationsCubit extends Cubit<NotificationsState> {
   final NotificationRepository repository;
@@ -48,24 +50,34 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       limit: _limit,
     );
 
-    result.fold((error) => emit(NotificationsError(error)), (
-      notifications,
-    ) async {
-      _notifications = [..._notifications, ...notifications];
-      _currentPage++;
+    result.fold(
+      (error) {
+        AppLogger.instance.error(
+          message: 'Notifications getNotifications failed: $error',
+          category: LogCategory.notifications,
+          event: 'GET_NOTIFICATIONS_OPERATION_FAILURE',
+          screen: 'NotificationsCubit',
+          operation: 'getNotifications',
+        );
+        emit(NotificationsError(error));
+      },
+      (notifications) async {
+        _notifications = [..._notifications, ...notifications];
+        _currentPage++;
 
-      // Get unread count
-      final unreadResult = await repository.getUnreadCount();
-      _unreadCount = unreadResult.fold((_) => 0, (count) => count);
+        // Get unread count
+        final unreadResult = await repository.getUnreadCount();
+        _unreadCount = unreadResult.fold((_) => 0, (count) => count);
 
-      emit(
-        NotificationsLoaded(
-          notifications: _notifications,
-          unreadCount: _unreadCount,
-          hasReachedMax: notifications.length < _limit,
-        ),
-      );
-    });
+        emit(
+          NotificationsLoaded(
+            notifications: _notifications,
+            unreadCount: _unreadCount,
+            hasReachedMax: notifications.length < _limit,
+          ),
+        );
+      },
+    );
   }
 
   Future<void> loadMoreNotifications() async {

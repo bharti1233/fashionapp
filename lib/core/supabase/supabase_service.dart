@@ -1,5 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:t_store/core/supabase/supabase_config.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/operation_logger.dart';
 
 /// Supabase Service - Singleton class for Supabase operations
 class SupabaseService {
@@ -67,11 +69,16 @@ class SupabaseService {
     required String email,
     required String password,
     Map<String, dynamic>? data,
-  }) async {
-    return await client.auth.signUp(
-      email: email,
-      password: password,
-      data: data,
+  }) {
+    return logSupabaseOperation<AuthResponse>(
+      category: LogCategory.authentication,
+      operation: 'supabaseSignUp',
+      screen: 'SupabaseService',
+      startEvent: 'SUPABASE_SIGN_UP_START',
+      successEvent: 'SUPABASE_SIGN_UP_SUCCESS',
+      failureEvent: 'SUPABASE_SIGN_UP_FAILURE',
+      action: () =>
+          client.auth.signUp(email: email, password: password, data: data),
     );
   }
 
@@ -79,50 +86,87 @@ class SupabaseService {
   Future<AuthResponse> signIn({
     required String email,
     required String password,
-  }) async {
-    return await client.auth.signInWithPassword(
-      email: email,
-      password: password,
+  }) {
+    return logSupabaseOperation<AuthResponse>(
+      category: LogCategory.authentication,
+      operation: 'supabaseSignIn',
+      screen: 'SupabaseService',
+      startEvent: 'SUPABASE_SIGN_IN_START',
+      successEvent: 'SUPABASE_SIGN_IN_SUCCESS',
+      failureEvent: 'SUPABASE_SIGN_IN_FAILURE',
+      action: () =>
+          client.auth.signInWithPassword(email: email, password: password),
     );
   }
 
   /// Sign in with Google
-  Future<bool> signInWithGoogle() async {
-    return await client.auth.signInWithOAuth(
-      OAuthProvider.google,
-      redirectTo: 'io.supabase.tstore://login-callback/',
+  Future<bool> signInWithGoogle() {
+    return logSupabaseOperation<bool>(
+      category: LogCategory.authentication,
+      operation: 'supabaseGoogleSignIn',
+      screen: 'SupabaseService',
+      action: () => client.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: 'io.supabase.tstore://login-callback/',
+      ),
     );
   }
 
   /// Sign in with Facebook
-  Future<bool> signInWithFacebook() async {
-    return await client.auth.signInWithOAuth(
-      OAuthProvider.facebook,
-      redirectTo: 'io.supabase.tstore://login-callback/',
+  Future<bool> signInWithFacebook() {
+    return logSupabaseOperation<bool>(
+      category: LogCategory.authentication,
+      operation: 'supabaseFacebookSignIn',
+      screen: 'SupabaseService',
+      action: () => client.auth.signInWithOAuth(
+        OAuthProvider.facebook,
+        redirectTo: 'io.supabase.tstore://login-callback/',
+      ),
     );
   }
 
   /// Sign in with Apple
-  Future<bool> signInWithApple() async {
-    return await client.auth.signInWithOAuth(
-      OAuthProvider.apple,
-      redirectTo: 'io.supabase.tstore://login-callback/',
+  Future<bool> signInWithApple() {
+    return logSupabaseOperation<bool>(
+      category: LogCategory.authentication,
+      operation: 'supabaseAppleSignIn',
+      screen: 'SupabaseService',
+      action: () => client.auth.signInWithOAuth(
+        OAuthProvider.apple,
+        redirectTo: 'io.supabase.tstore://login-callback/',
+      ),
     );
   }
 
   /// Sign out
-  Future<void> signOut() async {
-    await client.auth.signOut();
+  Future<void> signOut() {
+    return logSupabaseOperation<void>(
+      category: LogCategory.authentication,
+      operation: 'supabaseSignOut',
+      screen: 'SupabaseService',
+      action: () => client.auth.signOut(),
+    );
   }
 
   /// Reset password
-  Future<void> resetPassword(String email) async {
-    await client.auth.resetPasswordForEmail(email);
+  Future<void> resetPassword(String email) {
+    return logSupabaseOperation<void>(
+      category: LogCategory.authentication,
+      operation: 'supabaseResetPassword',
+      screen: 'SupabaseService',
+      action: () => client.auth.resetPasswordForEmail(email),
+    );
   }
 
   /// Update password
-  Future<UserResponse> updatePassword(String newPassword) async {
-    return await client.auth.updateUser(UserAttributes(password: newPassword));
+  Future<UserResponse> updatePassword(String newPassword) {
+    return logSupabaseOperation<UserResponse>(
+      category: LogCategory.authentication,
+      operation: 'supabaseUpdatePassword',
+      screen: 'SupabaseService',
+      action: () =>
+          client.auth.updateUser(UserAttributes(password: newPassword)),
+    );
   }
 
   /// Update user data
@@ -130,15 +174,25 @@ class SupabaseService {
     String? email,
     String? password,
     Map<String, dynamic>? data,
-  }) async {
-    return await client.auth.updateUser(
-      UserAttributes(email: email, password: password, data: data),
+  }) {
+    return logSupabaseOperation<UserResponse>(
+      category: LogCategory.authentication,
+      operation: 'supabaseUpdateUser',
+      screen: 'SupabaseService',
+      action: () => client.auth.updateUser(
+        UserAttributes(email: email, password: password, data: data),
+      ),
     );
   }
 
   /// Resend confirmation email
-  Future<ResendResponse> resendConfirmation(String email) async {
-    return await client.auth.resend(type: OtpType.signup, email: email);
+  Future<ResendResponse> resendConfirmation(String email) {
+    return logSupabaseOperation<ResendResponse>(
+      category: LogCategory.authentication,
+      operation: 'supabaseResendConfirmation',
+      screen: 'SupabaseService',
+      action: () => client.auth.resend(type: OtpType.signup, email: email),
+    );
   }
 
   // ============== DATABASE METHODS ==============
@@ -152,51 +206,59 @@ class SupabaseService {
     bool ascending = true,
     int? limit,
     int? offset,
-  }) async {
-    var query = client.from(table).select(select ?? '*');
+  }) {
+    return logSupabaseOperation<List<Map<String, dynamic>>>(
+      category: LogCategory.database,
+      operation: 'supabaseGetAll',
+      screen: 'SupabaseService',
+      action: () async {
+        var query = client.from(table).select(select ?? '*');
 
-    if (filters != null) {
-      filters.forEach((key, value) {
-        query = query.eq(key, value);
-      });
-    }
+        if (filters != null) {
+          filters.forEach((key, value) {
+            query = query.eq(key, value);
+          });
+        }
 
-    // Chain the transformations
-    dynamic result = query;
+        // Chain the transformations
+        dynamic result = query;
 
-    if (orderBy != null) {
-      result = result.order(orderBy, ascending: ascending);
-    }
+        if (orderBy != null) {
+          result = result.order(orderBy, ascending: ascending);
+        }
 
-    if (limit != null) {
-      result = result.limit(limit);
-    }
+        if (limit != null) {
+          result = result.limit(limit);
+        }
 
-    if (offset != null) {
-      result = result.range(offset, offset + (limit ?? 10) - 1);
-    }
+        if (offset != null) {
+          result = result.range(offset, offset + (limit ?? 10) - 1);
+        }
 
-    final response = await result;
-    return List<Map<String, dynamic>>.from(response);
+        final response = await result;
+        return List<Map<String, dynamic>>.from(response);
+      },
+    );
   }
 
   /// Get single record by ID
-  Future<Map<String, dynamic>?> getById(String table, String id) async {
-    final response = await client
-        .from(table)
-        .select()
-        .eq('id', id)
-        .maybeSingle();
-    return response;
+  Future<Map<String, dynamic>?> getById(String table, String id) {
+    return logSupabaseOperation<Map<String, dynamic>?>(
+      category: LogCategory.database,
+      operation: 'supabaseGetById',
+      screen: 'SupabaseService',
+      action: () => client.from(table).select().eq('id', id).maybeSingle(),
+    );
   }
 
   /// Insert data
-  Future<Map<String, dynamic>> insert(
-    String table,
-    Map<String, dynamic> data,
-  ) async {
-    final response = await client.from(table).insert(data).select().single();
-    return response;
+  Future<Map<String, dynamic>> insert(String table, Map<String, dynamic> data) {
+    return logSupabaseOperation<Map<String, dynamic>>(
+      category: LogCategory.database,
+      operation: 'supabaseInsert',
+      screen: 'SupabaseService',
+      action: () => client.from(table).insert(data).select().single(),
+    );
   }
 
   /// Update data
@@ -204,37 +266,50 @@ class SupabaseService {
     String table,
     String id,
     Map<String, dynamic> data,
-  ) async {
-    final response = await client
-        .from(table)
-        .update(data)
-        .eq('id', id)
-        .select()
-        .single();
-    return response;
+  ) {
+    return logSupabaseOperation<Map<String, dynamic>>(
+      category: LogCategory.database,
+      operation: 'supabaseUpdate',
+      screen: 'SupabaseService',
+      action: () =>
+          client.from(table).update(data).eq('id', id).select().single(),
+    );
   }
 
   /// Upsert data (insert or update)
-  Future<Map<String, dynamic>> upsert(
-    String table,
-    Map<String, dynamic> data,
-  ) async {
-    final response = await client.from(table).upsert(data).select().single();
-    return response;
+  Future<Map<String, dynamic>> upsert(String table, Map<String, dynamic> data) {
+    return logSupabaseOperation<Map<String, dynamic>>(
+      category: LogCategory.database,
+      operation: 'supabaseUpsert',
+      screen: 'SupabaseService',
+      action: () => client.from(table).upsert(data).select().single(),
+    );
   }
 
   /// Delete data
-  Future<void> delete(String table, String id) async {
-    await client.from(table).delete().eq('id', id);
+  Future<void> delete(String table, String id) {
+    return logSupabaseOperation<void>(
+      category: LogCategory.database,
+      operation: 'supabaseDelete',
+      screen: 'SupabaseService',
+      action: () => client.from(table).delete().eq('id', id),
+    );
   }
 
   /// Delete with filter
-  Future<void> deleteWhere(String table, Map<String, dynamic> filters) async {
-    var query = client.from(table).delete();
-    filters.forEach((key, value) {
-      query = query.eq(key, value);
-    });
-    await query;
+  Future<void> deleteWhere(String table, Map<String, dynamic> filters) {
+    return logSupabaseOperation<void>(
+      category: LogCategory.database,
+      operation: 'supabaseDeleteWhere',
+      screen: 'SupabaseService',
+      action: () async {
+        var query = client.from(table).delete();
+        filters.forEach((key, value) {
+          query = query.eq(key, value);
+        });
+        await query;
+      },
+    );
   }
 
   // ============== STORAGE METHODS ==============
@@ -245,15 +320,22 @@ class SupabaseService {
     String path,
     List<int> fileBytes, {
     String? contentType,
-  }) async {
-    await client.storage
-        .from(bucket)
-        .uploadBinary(
-          path,
-          fileBytes as dynamic,
-          fileOptions: FileOptions(contentType: contentType),
-        );
-    return client.storage.from(bucket).getPublicUrl(path);
+  }) {
+    return logSupabaseOperation<String>(
+      category: LogCategory.storage,
+      operation: 'supabaseUploadFile',
+      screen: 'SupabaseService',
+      action: () async {
+        await client.storage
+            .from(bucket)
+            .uploadBinary(
+              path,
+              fileBytes as dynamic,
+              fileOptions: FileOptions(contentType: contentType),
+            );
+        return client.storage.from(bucket).getPublicUrl(path);
+      },
+    );
   }
 
   /// Get public URL
@@ -262,8 +344,13 @@ class SupabaseService {
   }
 
   /// Delete file
-  Future<void> deleteFile(String bucket, String path) async {
-    await client.storage.from(bucket).remove([path]);
+  Future<void> deleteFile(String bucket, String path) {
+    return logSupabaseOperation<void>(
+      category: LogCategory.storage,
+      operation: 'supabaseDeleteFile',
+      screen: 'SupabaseService',
+      action: () => client.storage.from(bucket).remove([path]),
+    );
   }
 
   // ============== REALTIME METHODS ==============
@@ -315,7 +402,12 @@ class SupabaseService {
   }
 
   /// Unsubscribe from channel
-  Future<void> unsubscribe(RealtimeChannel channel) async {
-    await client.removeChannel(channel);
+  Future<void> unsubscribe(RealtimeChannel channel) {
+    return logSupabaseOperation<void>(
+      category: LogCategory.database,
+      operation: 'supabaseUnsubscribe',
+      screen: 'SupabaseService',
+      action: () => client.removeChannel(channel),
+    );
   }
 }

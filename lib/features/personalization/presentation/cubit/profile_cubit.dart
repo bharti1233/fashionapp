@@ -3,6 +3,8 @@ import 'package:t_store/core/usecases/usecase.dart';
 import 'package:t_store/features/personalization/domain/usecases/get_profile_usecase.dart';
 import 'package:t_store/features/personalization/domain/usecases/update_profile_usecase.dart';
 import 'package:t_store/features/personalization/presentation/cubit/profile_state.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   final GetProfileUsecase getProfileUsecase;
@@ -18,10 +20,16 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final result = await getProfileUsecase(const NoParams());
 
-    result.fold(
-      (error) => emit(ProfileError(error)),
-      (user) => emit(ProfileLoaded(user)),
-    );
+    result.fold((error) {
+      AppLogger.instance.error(
+        message: 'Profile getProfile failed: $error',
+        category: LogCategory.profile,
+        event: 'GET_PROFILE_OPERATION_FAILURE',
+        screen: 'ProfileCubit',
+        operation: 'getProfile',
+      );
+      emit(ProfileError(error));
+    }, (user) => emit(ProfileLoaded(user)));
   }
 
   Future<void> updateProfile({String? fullName, String? phone}) async {
@@ -31,9 +39,21 @@ class ProfileCubit extends Cubit<ProfileState> {
       UpdateProfileParams(fullName: fullName, phone: phone),
     );
 
-    result.fold((error) => emit(ProfileError(error)), (user) {
-      emit(ProfileUpdated(user));
-      emit(ProfileLoaded(user));
-    });
+    result.fold(
+      (error) {
+        AppLogger.instance.error(
+          message: 'Profile updateProfile failed: $error',
+          category: LogCategory.profile,
+          event: 'UPDATE_PROFILE_OPERATION_FAILURE',
+          screen: 'ProfileCubit',
+          operation: 'updateProfile',
+        );
+        emit(ProfileError(error));
+      },
+      (user) {
+        emit(ProfileUpdated(user));
+        emit(ProfileLoaded(user));
+      },
+    );
   }
 }

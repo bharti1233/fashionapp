@@ -4,6 +4,8 @@ import 'package:t_store/core/supabase/supabase_tables.dart';
 import 'package:t_store/features/wishlist/data/models/wishlist_item_model.dart';
 import 'package:t_store/features/wishlist/domain/entities/wishlist_item_entity.dart';
 import 'package:t_store/features/wishlist/domain/repositories/wishlist_repository.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class WishlistRepositoryImpl implements WishlistRepository {
   final SupabaseService supabaseService;
@@ -32,7 +34,16 @@ class WishlistRepositoryImpl implements WishlistRepository {
           .toList();
 
       return Right(items);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Wishlist getWishlist failed',
+        category: LogCategory.wishlist,
+        event: 'GET_WISHLIST_FAILURE',
+        screen: 'WishlistRepository',
+        operation: 'getWishlist',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -65,7 +76,16 @@ class WishlistRepositoryImpl implements WishlistRepository {
           .single();
 
       return Right(WishlistItemModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Wishlist addToWishlist failed',
+        category: LogCategory.wishlist,
+        event: 'ADD_TO_WISHLIST_FAILURE',
+        screen: 'WishlistRepository',
+        operation: 'addToWishlist',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -84,7 +104,16 @@ class WishlistRepositoryImpl implements WishlistRepository {
           .eq('product_id', productId);
 
       return const Right(null);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Wishlist removeFromWishlist failed',
+        category: LogCategory.wishlist,
+        event: 'REMOVE_FROM_WISHLIST_FAILURE',
+        screen: 'WishlistRepository',
+        operation: 'removeFromWishlist',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -104,7 +133,16 @@ class WishlistRepositoryImpl implements WishlistRepository {
           .maybeSingle();
 
       return Right(response != null);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Wishlist isInWishlist failed',
+        category: LogCategory.wishlist,
+        event: 'IS_IN_WISHLIST_FAILURE',
+        screen: 'WishlistRepository',
+        operation: 'isInWishlist',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }

@@ -5,6 +5,8 @@ import 'package:t_store/features/wishlist/domain/usecases/get_wishlist_usecase.d
 import 'package:t_store/features/wishlist/domain/usecases/add_to_wishlist_usecase.dart';
 import 'package:t_store/features/wishlist/domain/usecases/remove_from_wishlist_usecase.dart';
 import 'package:t_store/features/wishlist/presentation/cubit/wishlist_state.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class WishlistCubit extends Cubit<WishlistState> {
   final GetWishlistUsecase getWishlistUsecase;
@@ -25,29 +27,65 @@ class WishlistCubit extends Cubit<WishlistState> {
 
     final result = await getWishlistUsecase(const NoParams());
 
-    result.fold((error) => emit(WishlistError(error)), (items) {
-      _items = items;
-      _productIds = items.map((e) => e.productId).toSet();
-      emit(WishlistLoaded(items));
-    });
+    result.fold(
+      (error) {
+        AppLogger.instance.error(
+          message: 'Wishlist getWishlist failed: $error',
+          category: LogCategory.wishlist,
+          event: 'GET_WISHLIST_OPERATION_FAILURE',
+          screen: 'WishlistCubit',
+          operation: 'getWishlist',
+        );
+        emit(WishlistError(error));
+      },
+      (items) {
+        _items = items;
+        _productIds = items.map((e) => e.productId).toSet();
+        emit(WishlistLoaded(items));
+      },
+    );
   }
 
   Future<void> addToWishlist(String productId) async {
     final result = await addToWishlistUsecase(productId);
 
-    result.fold((error) => emit(WishlistError(error)), (item) {
-      emit(WishlistItemAdded(item));
-      getWishlist();
-    });
+    result.fold(
+      (error) {
+        AppLogger.instance.error(
+          message: 'Wishlist addToWishlist failed: $error',
+          category: LogCategory.wishlist,
+          event: 'ADD_TO_WISHLIST_OPERATION_FAILURE',
+          screen: 'WishlistCubit',
+          operation: 'addToWishlist',
+        );
+        emit(WishlistError(error));
+      },
+      (item) {
+        emit(WishlistItemAdded(item));
+        getWishlist();
+      },
+    );
   }
 
   Future<void> removeFromWishlist(String productId) async {
     final result = await removeFromWishlistUsecase(productId);
 
-    result.fold((error) => emit(WishlistError(error)), (_) {
-      emit(WishlistItemRemoved(productId));
-      getWishlist();
-    });
+    result.fold(
+      (error) {
+        AppLogger.instance.error(
+          message: 'Wishlist removeFromWishlist failed: $error',
+          category: LogCategory.wishlist,
+          event: 'REMOVE_FROM_WISHLIST_OPERATION_FAILURE',
+          screen: 'WishlistCubit',
+          operation: 'removeFromWishlist',
+        );
+        emit(WishlistError(error));
+      },
+      (_) {
+        emit(WishlistItemRemoved(productId));
+        getWishlist();
+      },
+    );
   }
 
   Future<void> toggleWishlist(String productId) async {

@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:t_store/core/usecases/usecase.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
@@ -44,6 +46,13 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     result.fold((error) {
+      AppLogger.instance.error(
+        message: 'Sign-in operation failed: $error',
+        category: LogCategory.authentication,
+        event: 'SIGN_IN_OPERATION_FAILURE',
+        screen: 'AuthCubit',
+        operation: 'signIn',
+      );
       if (error.contains('confirm your email') ||
           error.contains('confirm your email')) {
         emit(AuthEmailConfirmationRequired(email));
@@ -61,6 +70,14 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(AuthLoading());
 
+    AppLogger.instance.info(
+      message: 'Create account operation started',
+      category: LogCategory.authentication,
+      event: 'CREATE_ACCOUNT_START',
+      screen: 'AuthCubit',
+      operation: 'signUp',
+    );
+
     final result = await signUpUsecase(
       SignUpParams(
         email: email,
@@ -71,8 +88,26 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     result.fold(
-      (error) => emit(AuthError(error)),
-      (user) => emit(AuthEmailConfirmationRequired(email)),
+      (error) {
+        AppLogger.instance.error(
+          message: 'Create account operation failed: $error',
+          category: LogCategory.authentication,
+          event: 'CREATE_ACCOUNT_FAILURE',
+          screen: 'AuthCubit',
+          operation: 'signUp',
+        );
+        emit(AuthError(error));
+      },
+      (user) {
+        AppLogger.instance.info(
+          message: 'Create account operation succeeded',
+          category: LogCategory.authentication,
+          event: 'CREATE_ACCOUNT_SUCCESS',
+          screen: 'AuthCubit',
+          operation: 'signUp',
+        );
+        emit(AuthEmailConfirmationRequired(email));
+      },
     );
   }
 
@@ -81,10 +116,16 @@ class AuthCubit extends Cubit<AuthState> {
 
     final result = await signOutUsecase(const NoParams());
 
-    result.fold(
-      (error) => emit(AuthError(error)),
-      (_) => emit(AuthUnauthenticated()),
-    );
+    result.fold((error) {
+      AppLogger.instance.error(
+        message: 'Sign-out operation failed: $error',
+        category: LogCategory.authentication,
+        event: 'SIGN_OUT_OPERATION_FAILURE',
+        screen: 'AuthCubit',
+        operation: 'signOut',
+      );
+      emit(AuthError(error));
+    }, (_) => emit(AuthUnauthenticated()));
   }
 
   Future<void> resetPassword(String email) async {
@@ -92,10 +133,16 @@ class AuthCubit extends Cubit<AuthState> {
 
     final result = await resetPasswordUsecase(email);
 
-    result.fold(
-      (error) => emit(AuthError(error)),
-      (_) => emit(AuthPasswordResetSent(email)),
-    );
+    result.fold((error) {
+      AppLogger.instance.error(
+        message: 'Password reset operation failed: $error',
+        category: LogCategory.authentication,
+        event: 'RESET_PASSWORD_OPERATION_FAILURE',
+        screen: 'AuthCubit',
+        operation: 'resetPassword',
+      );
+      emit(AuthError(error));
+    }, (_) => emit(AuthPasswordResetSent(email)));
   }
 
   void clearError() {

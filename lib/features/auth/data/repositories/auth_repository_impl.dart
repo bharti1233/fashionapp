@@ -2,6 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:t_store/core/supabase/supabase_service.dart';
 import 'package:t_store/core/supabase/supabase_tables.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 import 'package:t_store/features/auth/data/models/user_model.dart';
 import 'package:t_store/features/auth/domain/entities/user_entity.dart';
 import 'package:t_store/features/auth/domain/repositories/auth_repository.dart';
@@ -38,7 +40,16 @@ class AuthRepositoryImpl implements AuthRepository {
           fullName: user.userMetadata?['full_name'] as String?,
         ),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Get current user failed',
+        category: LogCategory.authentication,
+        event: 'GET_CURRENT_USER_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'getCurrentUser',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -55,6 +66,13 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       if (response.user == null) {
+        AppLogger.instance.error(
+          message: 'Sign-in failed: Supabase returned no user',
+          category: LogCategory.authentication,
+          event: 'SIGN_IN_FAILURE',
+          screen: 'AuthRepository',
+          operation: 'signIn',
+        );
         return const Left('Login failed');
       }
 
@@ -72,9 +90,27 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(
         UserEntity(id: response.user!.id, email: response.user!.email ?? email),
       );
-    } on AuthException catch (e) {
+    } on AuthException catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Sign-in failed: ${e.message}',
+        category: LogCategory.authentication,
+        event: 'SIGN_IN_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signIn',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(_getAuthErrorMessage(e.message));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Sign-in failed with unexpected error',
+        category: LogCategory.authentication,
+        event: 'SIGN_IN_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signIn',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -94,6 +130,13 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       if (response.user == null) {
+        AppLogger.instance.error(
+          message: 'Sign-up failed: Supabase returned no user',
+          category: LogCategory.authentication,
+          event: 'SIGN_UP_FAILURE',
+          screen: 'AuthRepository',
+          operation: 'signUp',
+        );
         return const Left('Account creation failed');
       }
 
@@ -105,9 +148,28 @@ class AuthRepositoryImpl implements AuthRepository {
           phone: phone,
         ),
       );
-    } on AuthException catch (e) {
+    } on AuthException catch (e, stackTrace) {
+      // Log the TECHNICAL error; the UI receives a friendly message.
+      AppLogger.instance.error(
+        message: 'Sign-up failed: ${e.message}',
+        category: LogCategory.authentication,
+        event: 'SIGN_UP_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signUp',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(_getAuthErrorMessage(e.message));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Sign-up failed with unexpected error',
+        category: LogCategory.authentication,
+        event: 'SIGN_UP_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signUp',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -117,9 +179,27 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final success = await supabaseService.signInWithGoogle();
       return Right(success);
-    } on AuthException catch (e) {
+    } on AuthException catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Google sign-in failed: ${e.message}',
+        category: LogCategory.authentication,
+        event: 'GOOGLE_SIGN_IN_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signInWithGoogle',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(_getAuthErrorMessage(e.message));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Google sign-in failed with unexpected error',
+        category: LogCategory.authentication,
+        event: 'GOOGLE_SIGN_IN_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signInWithGoogle',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -129,9 +209,27 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final success = await supabaseService.signInWithFacebook();
       return Right(success);
-    } on AuthException catch (e) {
+    } on AuthException catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Facebook sign-in failed: ${e.message}',
+        category: LogCategory.authentication,
+        event: 'FACEBOOK_SIGN_IN_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signInWithFacebook',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(_getAuthErrorMessage(e.message));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Facebook sign-in failed with unexpected error',
+        category: LogCategory.authentication,
+        event: 'FACEBOOK_SIGN_IN_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signInWithFacebook',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -141,9 +239,27 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final success = await supabaseService.signInWithApple();
       return Right(success);
-    } on AuthException catch (e) {
+    } on AuthException catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Apple sign-in failed: ${e.message}',
+        category: LogCategory.authentication,
+        event: 'APPLE_SIGN_IN_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signInWithApple',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(_getAuthErrorMessage(e.message));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Apple sign-in failed with unexpected error',
+        category: LogCategory.authentication,
+        event: 'APPLE_SIGN_IN_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signInWithApple',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -153,7 +269,16 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await supabaseService.signOut();
       return const Right(null);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Sign-out failed',
+        category: LogCategory.authentication,
+        event: 'SIGN_OUT_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'signOut',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -163,9 +288,27 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await supabaseService.resetPassword(email);
       return const Right(null);
-    } on AuthException catch (e) {
+    } on AuthException catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Password reset failed: ${e.message}',
+        category: LogCategory.authentication,
+        event: 'RESET_PASSWORD_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'resetPassword',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(_getAuthErrorMessage(e.message));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Password reset failed with unexpected error',
+        category: LogCategory.authentication,
+        event: 'RESET_PASSWORD_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'resetPassword',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -175,9 +318,27 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await supabaseService.updatePassword(newPassword);
       return const Right(null);
-    } on AuthException catch (e) {
+    } on AuthException catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Password update failed: ${e.message}',
+        category: LogCategory.authentication,
+        event: 'UPDATE_PASSWORD_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'updatePassword',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(_getAuthErrorMessage(e.message));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Password update failed with unexpected error',
+        category: LogCategory.authentication,
+        event: 'UPDATE_PASSWORD_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'updatePassword',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -187,9 +348,27 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await supabaseService.resendConfirmation(email);
       return const Right(null);
-    } on AuthException catch (e) {
+    } on AuthException catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Resend confirmation failed: ${e.message}',
+        category: LogCategory.authentication,
+        event: 'RESEND_CONFIRMATION_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'resendConfirmation',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(_getAuthErrorMessage(e.message));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Resend confirmation failed with unexpected error',
+        category: LogCategory.authentication,
+        event: 'RESEND_CONFIRMATION_FAILURE',
+        screen: 'AuthRepository',
+        operation: 'resendConfirmation',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }

@@ -3,6 +3,8 @@ import 'package:t_store/features/reviews/domain/entities/review_entity.dart';
 import 'package:t_store/features/reviews/domain/usecases/get_product_reviews_usecase.dart';
 import 'package:t_store/features/reviews/domain/usecases/add_review_usecase.dart';
 import 'package:t_store/features/reviews/presentation/cubit/reviews_state.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class ReviewsCubit extends Cubit<ReviewsState> {
   final GetProductReviewsUsecase getProductReviewsUsecase;
@@ -38,17 +40,29 @@ class ReviewsCubit extends Cubit<ReviewsState> {
       ),
     );
 
-    result.fold((error) => emit(ReviewsError(error)), (reviews) {
-      _allReviews = [..._allReviews, ...reviews];
-      _currentPage++;
-      emit(
-        ReviewsLoaded(
-          reviews: _allReviews,
-          hasReachedMax: reviews.length < _limit,
-          currentPage: _currentPage,
-        ),
-      );
-    });
+    result.fold(
+      (error) {
+        AppLogger.instance.error(
+          message: 'Reviews getProductReviews failed: $error',
+          category: LogCategory.reviews,
+          event: 'GET_PRODUCT_REVIEWS_OPERATION_FAILURE',
+          screen: 'ReviewsCubit',
+          operation: 'getProductReviews',
+        );
+        emit(ReviewsError(error));
+      },
+      (reviews) {
+        _allReviews = [..._allReviews, ...reviews];
+        _currentPage++;
+        emit(
+          ReviewsLoaded(
+            reviews: _allReviews,
+            hasReachedMax: reviews.length < _limit,
+            currentPage: _currentPage,
+          ),
+        );
+      },
+    );
   }
 
   Future<void> loadMoreReviews(String productId) async {
@@ -78,10 +92,22 @@ class ReviewsCubit extends Cubit<ReviewsState> {
       ),
     );
 
-    result.fold((error) => emit(ReviewsError(error)), (review) {
-      emit(ReviewAdded(review));
-      getProductReviews(productId, refresh: true);
-    });
+    result.fold(
+      (error) {
+        AppLogger.instance.error(
+          message: 'Reviews addReview failed: $error',
+          category: LogCategory.reviews,
+          event: 'ADD_REVIEW_OPERATION_FAILURE',
+          screen: 'ReviewsCubit',
+          operation: 'addReview',
+        );
+        emit(ReviewsError(error));
+      },
+      (review) {
+        emit(ReviewAdded(review));
+        getProductReviews(productId, refresh: true);
+      },
+    );
   }
 
   void resetReviews() {

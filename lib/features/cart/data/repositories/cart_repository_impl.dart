@@ -4,6 +4,8 @@ import 'package:t_store/core/supabase/supabase_tables.dart';
 import 'package:t_store/features/cart/data/models/cart_item_model.dart';
 import 'package:t_store/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:t_store/features/cart/domain/repositories/cart_repository.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class CartRepositoryImpl implements CartRepository {
   final SupabaseService supabaseService;
@@ -30,7 +32,16 @@ class CartRepositoryImpl implements CartRepository {
           .toList();
 
       return Right(items);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Cart getCartItems failed',
+        category: LogCategory.cart,
+        event: 'GET_CART_ITEMS_FAILURE',
+        screen: 'CartRepository',
+        operation: 'getCartItems',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -80,7 +91,16 @@ class CartRepositoryImpl implements CartRepository {
           .single();
 
       return Right(CartItemModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Cart addToCart failed',
+        category: LogCategory.cart,
+        event: 'ADD_TO_CART_FAILURE',
+        screen: 'CartRepository',
+        operation: 'addToCart',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -108,7 +128,16 @@ class CartRepositoryImpl implements CartRepository {
           .single();
 
       return Right(CartItemModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Cart updateCartItem failed',
+        category: LogCategory.cart,
+        event: 'UPDATE_CART_ITEM_FAILURE',
+        screen: 'CartRepository',
+        operation: 'updateCartItem',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -122,7 +151,16 @@ class CartRepositoryImpl implements CartRepository {
           .eq('id', cartItemId);
 
       return const Right(null);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Cart removeFromCart failed',
+        category: LogCategory.cart,
+        event: 'REMOVE_FROM_CART_FAILURE',
+        screen: 'CartRepository',
+        operation: 'removeFromCart',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -140,7 +178,16 @@ class CartRepositoryImpl implements CartRepository {
           .eq('user_id', _userId);
 
       return const Right(null);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Cart clearCart failed',
+        category: LogCategory.cart,
+        event: 'CLEAR_CART_FAILURE',
+        screen: 'CartRepository',
+        operation: 'clearCart',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }

@@ -4,6 +4,8 @@ import 'package:t_store/core/supabase/supabase_tables.dart';
 import 'package:t_store/features/reviews/data/models/review_model.dart';
 import 'package:t_store/features/reviews/domain/entities/review_entity.dart';
 import 'package:t_store/features/reviews/domain/repositories/review_repository.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class ReviewRepositoryImpl implements ReviewRepository {
   final SupabaseService supabaseService;
@@ -34,7 +36,16 @@ class ReviewRepositoryImpl implements ReviewRepository {
           .toList();
 
       return Right(reviews);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Review getProductReviews failed',
+        category: LogCategory.reviews,
+        event: 'GET_PRODUCT_REVIEWS_FAILURE',
+        screen: 'ReviewRepository',
+        operation: 'getProductReviews',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -82,7 +93,16 @@ class ReviewRepositoryImpl implements ReviewRepository {
           .single();
 
       return Right(ReviewModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Review addReview failed',
+        category: LogCategory.reviews,
+        event: 'ADD_REVIEW_FAILURE',
+        screen: 'ReviewRepository',
+        operation: 'addReview',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -110,7 +130,16 @@ class ReviewRepositoryImpl implements ReviewRepository {
           .single();
 
       return Right(ReviewModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Review updateReview failed',
+        category: LogCategory.reviews,
+        event: 'UPDATE_REVIEW_FAILURE',
+        screen: 'ReviewRepository',
+        operation: 'updateReview',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -125,7 +154,16 @@ class ReviewRepositoryImpl implements ReviewRepository {
           .eq('user_id', _userId);
 
       return const Right(null);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Review deleteReview failed',
+        category: LogCategory.reviews,
+        event: 'DELETE_REVIEW_FAILURE',
+        screen: 'ReviewRepository',
+        operation: 'deleteReview',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -167,7 +205,16 @@ class ReviewRepositoryImpl implements ReviewRepository {
           ratingDistribution: distribution,
         ),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Review getProductReviewStats failed',
+        category: LogCategory.reviews,
+        event: 'GET_PRODUCT_REVIEW_STATS_FAILURE',
+        screen: 'ReviewRepository',
+        operation: 'getProductReviewStats',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -187,7 +234,16 @@ class ReviewRepositoryImpl implements ReviewRepository {
           .maybeSingle();
 
       return Right(response != null);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Review hasUserReviewed failed',
+        category: LogCategory.reviews,
+        event: 'HAS_USER_REVIEWED_FAILURE',
+        screen: 'ReviewRepository',
+        operation: 'hasUserReviewed',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -203,7 +259,16 @@ class ReviewRepositoryImpl implements ReviewRepository {
           .limit(1);
 
       return (response as List).isNotEmpty;
-    } catch (_) {
+    } catch (e) {
+      // Purchase check is advisory: on error assume unverified, but trace it.
+      AppLogger.instance.debug(
+        message: 'Verified-purchase check failed, assuming unverified',
+        category: LogCategory.reviews,
+        event: 'CHECK_VERIFIED_PURCHASE_FAILURE',
+        screen: 'ReviewRepository',
+        operation: '_checkVerifiedPurchase',
+        context: {'errorType': e.runtimeType.toString()},
+      );
       return false;
     }
   }

@@ -2,17 +2,22 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:t_store/core/dependency_injection/service_locator.dart';
 import 'package:t_store/core/supabase/supabase_config.dart';
 import 'package:t_store/core/supabase/supabase_service.dart';
+import 'package:t_store/core/utils/logging/app_bloc_observer.dart';
 import 'package:t_store/core/utils/logging/app_log_entry.dart';
 import 'package:t_store/core/utils/logging/app_logger.dart';
 import 'package:t_store/t_store.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  // Global safety net: uncaught cubit/bloc errors reach AppLogger.
+  Bloc.observer = AppBlocObserver();
 
   // Initialize logger first - before anything else
   await AppLogger.instance.initialize();

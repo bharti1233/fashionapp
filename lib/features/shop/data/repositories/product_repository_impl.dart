@@ -4,6 +4,8 @@ import 'package:t_store/core/supabase/supabase_tables.dart';
 import 'package:t_store/features/shop/data/models/product_model.dart';
 import 'package:t_store/features/shop/domain/entities/product_entity.dart';
 import 'package:t_store/features/shop/domain/repositories/product_repository.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final SupabaseService supabaseService;
@@ -51,7 +53,16 @@ class ProductRepositoryImpl implements ProductRepository {
           .toList();
 
       return Right(products);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Product getProducts failed',
+        category: LogCategory.products,
+        event: 'GET_PRODUCTS_FAILURE',
+        screen: 'ProductRepository',
+        operation: 'getProducts',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -66,7 +77,16 @@ class ProductRepositoryImpl implements ProductRepository {
           .single();
 
       return Right(ProductModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Product getProductById failed',
+        category: LogCategory.products,
+        event: 'GET_PRODUCT_BY_ID_FAILURE',
+        screen: 'ProductRepository',
+        operation: 'getProductById',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -88,7 +108,16 @@ class ProductRepositoryImpl implements ProductRepository {
           .toList();
 
       return Right(products);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Product searchProducts failed',
+        category: LogCategory.products,
+        event: 'SEARCH_PRODUCTS_FAILURE',
+        screen: 'ProductRepository',
+        operation: 'searchProducts',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -110,7 +139,16 @@ class ProductRepositoryImpl implements ProductRepository {
           .toList();
 
       return Right(products);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Product getProductsByCategory failed',
+        category: LogCategory.products,
+        event: 'GET_PRODUCTS_BY_CATEGORY_FAILURE',
+        screen: 'ProductRepository',
+        operation: 'getProductsByCategory',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -132,7 +170,16 @@ class ProductRepositoryImpl implements ProductRepository {
           .toList();
 
       return Right(products);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Product getProductsByBrand failed',
+        category: LogCategory.products,
+        event: 'GET_PRODUCTS_BY_BRAND_FAILURE',
+        screen: 'ProductRepository',
+        operation: 'getProductsByBrand',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -153,7 +200,16 @@ class ProductRepositoryImpl implements ProductRepository {
           .toList();
 
       return Right(products);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Product getFeaturedProducts failed',
+        category: LogCategory.products,
+        event: 'GET_FEATURED_PRODUCTS_FAILURE',
+        screen: 'ProductRepository',
+        operation: 'getFeaturedProducts',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }

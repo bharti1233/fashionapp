@@ -4,6 +4,8 @@ import 'package:t_store/core/supabase/supabase_tables.dart';
 import 'package:t_store/features/shop/data/models/banner_model.dart';
 import 'package:t_store/features/shop/domain/entities/banner_entity.dart';
 import 'package:t_store/features/shop/domain/repositories/banner_repository.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class BannerRepositoryImpl implements BannerRepository {
   final SupabaseService supabaseService;
@@ -23,7 +25,16 @@ class BannerRepositoryImpl implements BannerRepository {
           .toList();
 
       return Right(banners);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Banner getBanners failed',
+        category: LogCategory.products,
+        event: 'GET_BANNERS_FAILURE',
+        screen: 'BannerRepository',
+        operation: 'getBanners',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -46,7 +57,16 @@ class BannerRepositoryImpl implements BannerRepository {
           .toList();
 
       return Right(banners);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Banner getActiveBanners failed',
+        category: LogCategory.products,
+        event: 'GET_ACTIVE_BANNERS_FAILURE',
+        screen: 'BannerRepository',
+        operation: 'getActiveBanners',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }

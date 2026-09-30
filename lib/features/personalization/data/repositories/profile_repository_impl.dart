@@ -6,6 +6,8 @@ import 'package:t_store/core/supabase/supabase_tables.dart';
 import 'package:t_store/features/auth/data/models/user_model.dart';
 import 'package:t_store/features/auth/domain/entities/user_entity.dart';
 import 'package:t_store/features/personalization/domain/repositories/profile_repository.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
   final SupabaseService supabaseService;
@@ -44,7 +46,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
       }
 
       return Right(UserModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Profile getProfile failed',
+        category: LogCategory.profile,
+        event: 'GET_PROFILE_FAILURE',
+        screen: 'ProfileRepository',
+        operation: 'getProfile',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -75,7 +86,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
           .single();
 
       return Right(UserModel.fromJson(response));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Profile updateProfile failed',
+        category: LogCategory.profile,
+        event: 'UPDATE_PROFILE_FAILURE',
+        screen: 'ProfileRepository',
+        operation: 'updateProfile',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -109,7 +129,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
           .eq('id', _userId);
 
       return Right(avatarUrl);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Profile uploadAvatar failed',
+        category: LogCategory.profile,
+        event: 'UPLOAD_AVATAR_FAILURE',
+        screen: 'ProfileRepository',
+        operation: 'uploadAvatar',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }
@@ -134,11 +163,27 @@ class ProfileRepositoryImpl implements ProfileRepository {
           'avatar_$_userId.png',
         ]);
       } catch (_) {
-        // Ignore storage errors
+        // Best-effort cleanup: trace but otherwise ignore storage errors.
+        AppLogger.instance.debug(
+          message: 'Avatar storage cleanup skipped after error',
+          category: LogCategory.profile,
+          event: 'DELETE_AVATAR_STORAGE_SKIPPED',
+          screen: 'ProfileRepository',
+          operation: 'deleteAvatar',
+        );
       }
 
       return const Right(null);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.error(
+        message: 'Profile deleteAvatar failed',
+        category: LogCategory.profile,
+        event: 'DELETE_AVATAR_FAILURE',
+        screen: 'ProfileRepository',
+        operation: 'deleteAvatar',
+        error: e,
+        stackTrace: stackTrace,
+      );
       return Left(e.toString());
     }
   }

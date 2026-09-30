@@ -1,0 +1,170 @@
+import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:t_store/core/usecases/usecase.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
+import 'package:t_store/core/utils/logging/operation_logger.dart';
+import 'package:t_store/features/auth/domain/entities/user_entity.dart';
+import 'package:t_store/features/auth/domain/usecases/get_current_user_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/reset_password_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_in_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_out_usecase.dart';
+import 'package:t_store/features/auth/domain/usecases/sign_up_usecase.dart';
+import 'package:t_store/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:t_store/features/auth/presentation/cubit/auth_state.dart';
+
+class MockSignInUsecase extends Mock implements SignInUsecase {}
+
+class MockSignUpUsecase extends Mock implements SignUpUsecase {}
+
+class MockSignOutUsecase extends Mock implements SignOutUsecase {}
+
+class MockResetPasswordUsecase extends Mock implements ResetPasswordUsecase {}
+
+class MockGetCurrentUserUsecase extends Mock implements GetCurrentUserUsecase {}
+
+class FakeSignUpParams extends Fake implements SignUpParams {}
+
+/// Regression test for the reported runtime failure:
+///
+/// Create Account tapped → Supabase returns
+/// "Database error saving new user" → only a red snackbar appeared
+/// while App Logs stayed empty.
+///
+/// Contract under test: a use-case/repository failure MUST be logged
+/// (persisted + live stream) AND still surface the user-facing error.
+void main() {
+  late AuthCubit authCubit;
+  late MockSignUpUsecase mockSignUpUsecase;
+
+  setUpAll(() {
+    registerFallbackValue(FakeSignUpParams());
+  });
+
+  setUp(() {
+    mockSignUpUsecase = MockSignUpUsecase();
+    authCubit = AuthCubit(
+      signInUsecase: MockSignInUsecase(),
+      signUpUsecase: mockSignUpUsecase,
+      signOutUsecase: MockSignOutUsecase(),
+      resetPasswordUsecase: MockResetPasswordUsecase(),
+      getCurrentUserUsecase: MockGetCurrentUserUsecase(),
+    );
+  });
+
+  tearDown(() {
+    authCubit.close();
+  });
+
+  // Mirrors the real Supabase failure string from the bug report.
+  const dbFailure = 'Database error saving new user';
+
+  group('Create account failure logging', () {
+    blocTest<AuthCubit, AuthState>(
+      'emits AuthError so the user-facing snackbar still shows',
+      build: () {
+        when(
+          () => mockSignUpUsecase(any()),
+        ).thenAnswer((_) async => const Left(dbFailure));
+        return authCubit;
+      },
+      act: (cubit) => cubit.signUp(
+        email: 'new@example.com',
+        password: 'password123',
+        fullName: 'New User',
+      ),
+      expect: () => [isA<AuthLoading>(), isA<AuthError>()],
+    );
+
+    test(
+      'failure is logged, persisted, and published on the live stream',
+      () async {
+        when(
+          () => mockSignUpUsecase(any()),
+        ).thenAnswer((_) async => const Left(dbFailure));
+
+        final streamExpectation = expectLater(
+          AppLogger.instance.logStream,
+          emitsThrough(
+            isA<AppLogEntry>()
+                .having((e) => e.level, 'level', LogLevel.error)
+                .having(
+                  (e) => e.category,
+                  'category',
+                  LogCategory.authentication,
+                )
+                .having((e) => e.operation, 'operation', 'signUp')
+                .having((e) => e.event, 'event', 'CREATE_ACCOUNT_FAILURE'),
+          ),
+        );
+
+        await authCubit.signUp(
+          email: 'new@example.com',
+          password: 'password123',
+          fullName: 'New User',
+        );
+        await streamExpectation;
+
+        // Persisted: searchable in App Logs history after the fact.
+        final persisted = AppLogger.instance.searchLogs(
+          'Create account operation failed',
+        );
+        expect(persisted, isNotEmpty);
+        expect(persisted.last.operation, 'signUp');
+        expect(persisted.last.level, LogLevel.error);
+
+        // Copyable: full diagnostic report renders from the entry.
+        final report = AppLogger.instance.formatDiagnosticReport(
+          persisted.last,
+        );
+        expect(report, contains('CREATE_ACCOUNT_FAILURE'));
+      },
+    );
+  });
+
+  group('logSupabaseOperation guard', () {
+    test('success returns the value and logs the trail', () async {
+      final value = await logSupabaseOperation<String>(
+        category: LogCategory.database,
+        operation: 'guardProbeSuccess',
+        action: () async => 'ok',
+      );
+      expect(value, 'ok');
+      expect(
+        AppLogger.instance.searchLogs('guardProbeSuccess succeeded'),
+        isNotEmpty,
+      );
+    });
+
+    test('failure logs the error with stack and rethrows', () async {
+      final failure = StateError('probe failure');
+      final streamExpectation = expectLater(
+        AppLogger.instance.logStream,
+        emitsThrough(
+          isA<AppLogEntry>()
+              .having((e) => e.level, 'level', LogLevel.error)
+              .having((e) => e.operation, 'operation', 'guardProbeFailure'),
+        ),
+      );
+
+      await expectLater(
+        logSupabaseOperation<String>(
+          category: LogCategory.database,
+          operation: 'guardProbeFailure',
+          action: () => throw failure,
+        ),
+        throwsA(same(failure)),
+      );
+      await streamExpectation;
+
+      final persisted = AppLogger.instance.searchLogs(
+        'guardProbeFailure failed',
+      );
+      expect(persisted, isNotEmpty);
+      expect(persisted.last.errorType, 'StateError');
+      expect(persisted.last.stackTrace, isNotNull);
+    });
+  });
+}

@@ -6,6 +6,8 @@ import 'package:t_store/features/orders/domain/usecases/get_order_by_id_usecase.
 import 'package:t_store/features/orders/domain/usecases/create_order_usecase.dart';
 import 'package:t_store/features/orders/domain/usecases/cancel_order_usecase.dart';
 import 'package:t_store/features/orders/presentation/cubit/orders_state.dart';
+import 'package:t_store/core/utils/logging/app_log_entry.dart';
+import 'package:t_store/core/utils/logging/app_logger.dart';
 
 class OrdersCubit extends Cubit<OrdersState> {
   final GetOrdersUsecase getOrdersUsecase;
@@ -25,10 +27,16 @@ class OrdersCubit extends Cubit<OrdersState> {
 
     final result = await getOrdersUsecase(const NoParams());
 
-    result.fold(
-      (error) => emit(OrdersError(error)),
-      (orders) => emit(OrdersLoaded(orders)),
-    );
+    result.fold((error) {
+      AppLogger.instance.error(
+        message: 'Orders getOrders failed: $error',
+        category: LogCategory.orders,
+        event: 'GET_ORDERS_OPERATION_FAILURE',
+        screen: 'OrdersCubit',
+        operation: 'getOrders',
+      );
+      emit(OrdersError(error));
+    }, (orders) => emit(OrdersLoaded(orders)));
   }
 
   Future<void> getOrderById(String id) async {
@@ -36,10 +44,16 @@ class OrdersCubit extends Cubit<OrdersState> {
 
     final result = await getOrderByIdUsecase(id);
 
-    result.fold(
-      (error) => emit(OrdersError(error)),
-      (order) => emit(OrderDetailLoaded(order)),
-    );
+    result.fold((error) {
+      AppLogger.instance.error(
+        message: 'Orders getOrderById failed: $error',
+        category: LogCategory.orders,
+        event: 'GET_ORDER_BY_ID_OPERATION_FAILURE',
+        screen: 'OrdersCubit',
+        operation: 'getOrderById',
+      );
+      emit(OrdersError(error));
+    }, (order) => emit(OrderDetailLoaded(order)));
   }
 
   Future<void> createOrder({
@@ -65,10 +79,16 @@ class OrdersCubit extends Cubit<OrdersState> {
       ),
     );
 
-    result.fold(
-      (error) => emit(OrdersError(error)),
-      (order) => emit(OrderCreated(order)),
-    );
+    result.fold((error) {
+      AppLogger.instance.error(
+        message: 'Orders createOrder failed: $error',
+        category: LogCategory.orders,
+        event: 'CREATE_ORDER_OPERATION_FAILURE',
+        screen: 'OrdersCubit',
+        operation: 'createOrder',
+      );
+      emit(OrdersError(error));
+    }, (order) => emit(OrderCreated(order)));
   }
 
   Future<void> cancelOrder(String orderId) async {
@@ -76,9 +96,15 @@ class OrdersCubit extends Cubit<OrdersState> {
 
     final result = await cancelOrderUsecase(orderId);
 
-    result.fold(
-      (error) => emit(OrdersError(error)),
-      (order) => emit(OrderCancelled(order)),
-    );
+    result.fold((error) {
+      AppLogger.instance.error(
+        message: 'Orders cancelOrder failed: $error',
+        category: LogCategory.orders,
+        event: 'CANCEL_ORDER_OPERATION_FAILURE',
+        screen: 'OrdersCubit',
+        operation: 'cancelOrder',
+      );
+      emit(OrdersError(error));
+    }, (order) => emit(OrderCancelled(order)));
   }
 }
