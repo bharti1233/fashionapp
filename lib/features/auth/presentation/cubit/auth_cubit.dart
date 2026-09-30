@@ -70,50 +70,56 @@ class AuthCubit extends Cubit<AuthState> {
       },
       (stream) {
         _authSubscription = stream.listen(
-          (user) {
-            if (isClosed) return;
-            final current = state;
-            if (user != null) {
-              if (current is AuthAuthenticated &&
-                  current.user.id == user.id) {
-                return;
-              }
-              AppLogger.instance.info(
-                message: 'Auth state changed: user signed in',
-                category: LogCategory.authentication,
-                event: 'AUTH_STATE_SIGNED_IN',
-                screen: 'AuthCubit',
-                operation: 'listenToAuthState',
-              );
-              emit(AuthAuthenticated(user));
-            } else {
-              if (current is AuthUnauthenticated ||
-                  current is AuthInitial) {
-                return;
-              }
-              AppLogger.instance.info(
-                message: 'Auth state changed: user signed out',
-                category: LogCategory.authentication,
-                event: 'AUTH_STATE_SIGNED_OUT',
-                screen: 'AuthCubit',
-                operation: 'listenToAuthState',
-              );
-              emit(AuthUnauthenticated());
-            }
-          },
-          onError: (Object error, StackTrace stackTrace) {
-            AppLogger.instance.error(
-              message: 'Auth state stream error',
-              category: LogCategory.authentication,
-              event: 'AUTH_STATE_STREAM_FAILURE',
-              screen: 'AuthCubit',
-              operation: 'listenToAuthState',
-              error: error,
-              stackTrace: stackTrace,
-            );
-          },
+          _onAuthStateEvent,
+          onError: _onAuthStateError,
         );
       },
+    );
+  }
+
+  void _onAuthStateEvent(UserEntity? user) {
+    if (isClosed) return;
+    if (user == null) {
+      _onSignedOut();
+      return;
+    }
+    final current = state;
+    if (current is AuthAuthenticated) {
+      if (current.user.id == user.id) return;
+    }
+    AppLogger.instance.info(
+      message: 'Auth state changed: user signed in',
+      category: LogCategory.authentication,
+      event: 'AUTH_STATE_SIGNED_IN',
+      screen: 'AuthCubit',
+      operation: 'listenToAuthState',
+    );
+    emit(AuthAuthenticated(user));
+  }
+
+  void _onSignedOut() {
+    final current = state;
+    if (current is AuthUnauthenticated) return;
+    if (current is AuthInitial) return;
+    AppLogger.instance.info(
+      message: 'Auth state changed: user signed out',
+      category: LogCategory.authentication,
+      event: 'AUTH_STATE_SIGNED_OUT',
+      screen: 'AuthCubit',
+      operation: 'listenToAuthState',
+    );
+    emit(AuthUnauthenticated());
+  }
+
+  void _onAuthStateError(Object error, StackTrace stackTrace) {
+    AppLogger.instance.error(
+      message: 'Auth state stream error',
+      category: LogCategory.authentication,
+      event: 'AUTH_STATE_STREAM_FAILURE',
+      screen: 'AuthCubit',
+      operation: 'listenToAuthState',
+      error: error,
+      stackTrace: stackTrace,
     );
   }
 

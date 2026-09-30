@@ -37,8 +37,7 @@ class MockResendConfirmationUsecase extends Mock
 
 class MockUpdatePasswordUsecase extends Mock implements UpdatePasswordUsecase {}
 
-class MockWatchAuthStateUsecase extends Mock
-    implements WatchAuthStateUsecase {}
+class MockWatchAuthStateUsecase extends Mock implements WatchAuthStateUsecase {}
 
 class MockGetCurrentUserUsecase extends Mock implements GetCurrentUserUsecase {}
 

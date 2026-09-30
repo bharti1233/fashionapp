@@ -37,17 +37,12 @@ void main() {
       final result = await repository.signInWithGoogle();
 
       expect(result.isLeft(), isTrue);
-      result.fold(
-        (message) {
-          expect(message, contains('not available yet'));
-          expect(message, isNot(contains('validation_failed')));
-        },
-        (_) => fail('expected Left'),
-      );
+      result.fold((message) {
+        expect(message, contains('not available yet'));
+        expect(message, isNot(contains('validation_failed')));
+      }, (_) => fail('expected Left'));
 
-      final logged = AppLogger.instance.searchLogs(
-        'GOOGLE_SIGN_IN_FAILURE',
-      );
+      final logged = AppLogger.instance.searchLogs('GOOGLE_SIGN_IN_FAILURE');
       expect(logged, isNotEmpty);
       expect(logged.last.errorType, 'AuthException');
     },

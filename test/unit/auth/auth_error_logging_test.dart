@@ -41,8 +41,7 @@ class MockResendConfirmationUsecase extends Mock
 
 class MockUpdatePasswordUsecase extends Mock implements UpdatePasswordUsecase {}
 
-class MockWatchAuthStateUsecase extends Mock
-    implements WatchAuthStateUsecase {}
+class MockWatchAuthStateUsecase extends Mock implements WatchAuthStateUsecase {}
 
 class MockGetCurrentUserUsecase extends Mock implements GetCurrentUserUsecase {}
 
@@ -168,7 +167,7 @@ void main() {
         resetPasswordUsecase: MockResetPasswordUsecase(),
         resendConfirmationUsecase: MockResendConfirmationUsecase(),
         updatePasswordUsecase: MockUpdatePasswordUsecase(),
-      watchAuthStateUsecase: MockWatchAuthStateUsecase(),
+        watchAuthStateUsecase: MockWatchAuthStateUsecase(),
         getCurrentUserUsecase: MockGetCurrentUserUsecase(),
       );
 
@@ -264,11 +263,8 @@ void main() {
       controller.add(null);
       await Future<void>.delayed(const Duration(milliseconds: 50));
 
-      expect(
-        emitted.whereType<AuthAuthenticated>(),
-        hasLength(1),
-        reason: 'same-user duplicates must not re-emit',
-      );
+      final authenticated = emitted.whereType<AuthAuthenticated>().toList();
+      expect(authenticated, hasLength(1));
       expect(emitted.last, isA<AuthUnauthenticated>());
 
       await subscription.cancel();
