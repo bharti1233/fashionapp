@@ -230,6 +230,35 @@ void main() {
     });
   });
 
+  group('live auth-state subscription robustness', () {
+    test('throwing stream source is contained, never crashes', () async {
+      final mockWatch = MockWatchAuthStateUsecase();
+      when(
+        () => mockWatch(any()),
+      ).thenThrow(Exception('Supabase not initialized'));
+      final cubit = AuthCubit(
+        signInUsecase: MockSignInUsecase(),
+        signInWithGoogleUsecase: MockSignInWithGoogleUsecase(),
+        signInWithFacebookUsecase: MockSignInWithFacebookUsecase(),
+        signUpUsecase: MockSignUpUsecase(),
+        signOutUsecase: MockSignOutUsecase(),
+        resetPasswordUsecase: MockResetPasswordUsecase(),
+        resendConfirmationUsecase: MockResendConfirmationUsecase(),
+        updatePasswordUsecase: MockUpdatePasswordUsecase(),
+        watchAuthStateUsecase: mockWatch,
+        getCurrentUserUsecase: MockGetCurrentUserUsecase(),
+      );
+
+      await cubit.listenToAuthState();
+      expect(cubit.state, isA<AuthInitial>());
+      expect(
+        AppLogger.instance.searchLogs('AUTH_STATE_SUBSCRIBE_FAILURE'),
+        isNotEmpty,
+      );
+      await cubit.close();
+    });
+  });
+
   group('logSupabaseOperation guard', () {
     test('live auth-state stream drives session transitions once', () async {
       final mockWatch = MockWatchAuthStateUsecase();

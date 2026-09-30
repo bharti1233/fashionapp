@@ -57,24 +57,38 @@ class AuthCubit extends Cubit<AuthState> {
     if (_listeningToAuthState) return;
     _listeningToAuthState = true;
 
-    final result = await watchAuthStateUsecase(const NoParams());
-    result.fold(
-      (error) {
-        AppLogger.instance.error(
-          message: 'Auth state subscription failed: $error',
-          category: LogCategory.authentication,
-          event: 'AUTH_STATE_SUBSCRIBE_FAILURE',
-          screen: 'AuthCubit',
-          operation: 'listenToAuthState',
-        );
-      },
-      (stream) {
-        _authSubscription = stream.listen(
-          _onAuthStateEvent,
-          onError: _onAuthStateError,
-        );
-      },
-    );
+    try {
+      final result = await watchAuthStateUsecase(const NoParams());
+      result.fold(
+        (error) {
+          AppLogger.instance.error(
+            message: 'Auth state subscription failed: $error',
+            category: LogCategory.authentication,
+            event: 'AUTH_STATE_SUBSCRIBE_FAILURE',
+            screen: 'AuthCubit',
+            operation: 'listenToAuthState',
+          );
+        },
+        (stream) {
+          _authSubscription = stream.listen(
+            _onAuthStateEvent,
+            onError: _onAuthStateError,
+          );
+        },
+      );
+    } catch (e, stackTrace) {
+      // The stream source itself threw (e.g. Supabase unavailable):
+      // log and continue without live updates rather than crashing.
+      AppLogger.instance.error(
+        message: 'Auth state subscription failed',
+        category: LogCategory.authentication,
+        event: 'AUTH_STATE_SUBSCRIBE_FAILURE',
+        screen: 'AuthCubit',
+        operation: 'listenToAuthState',
+        error: e,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   void _onAuthStateEvent(UserEntity? user) {
